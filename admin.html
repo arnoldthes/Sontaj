@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yönetim Paneli | Sağlam Sondaj</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: #f6f9fc;
+            color: #0a1a2b;
+            min-height: 100vh;
+            padding: 30px 16px;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark {
+            background: #0b1424;
+            color: #e6edf5;
+        }
+        .admin-container {
+            max-width: 640px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px 36px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+            transition: background 0.3s, border 0.3s;
+        }
+        body.dark .admin-container {
+            background: #132033;
+            border-color: #2a3a4f;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            transition: 0.2s;
+        }
+        .back-link:hover { color: #0a2a44; }
+        body.dark .back-link { color: #94a3b8; }
+        body.dark .back-link:hover { color: #60a5fa; }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .admin-header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0a2a44;
+        }
+        body.dark .admin-header h1 { color: #f1f5f9; }
+        .theme-toggle {
+            background: #f1f5f9;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #0a1a2b;
+        }
+        .theme-toggle:hover { background: #e2e8f0; }
+        body.dark .theme-toggle {
+            background: #2a3a4f;
+            color: #e2e8f0;
+        }
+        body.dark .theme-toggle:hover { background: #3b4a63; }
+        .form-group {
+            margin-bottom: 22px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0a1a2b;
+            margin-bottom: 4px;
+        }
+        body.dark .form-group label { color: #e2e8f0; }
+        .form-group label i {
+            margin-right: 6px;
+            color: #0a2a44;
+        }
+        body.dark .form-group label i { color: #60a5fa; }
+        .form-group input {
+            width: 100%;
+            padding: 13px 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: #fafbfc;
+            color: #0a1a2b;
+            font-size: 15px;
+            transition: 0.2s;
+            outline: none;
+            font-family: inherit;
+        }
+        body.dark .form-group input {
+            background: #2a3a4f;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+        .form-group input:focus {
+            border-color: #0a2a44;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(10, 42, 68, 0.06);
+        }
+        body.dark .form-group input:focus {
+            border-color: #60a5fa;
+            background: #132033;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.08);
+        }
+        .form-group .hint {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        body.dark .form-group .hint { color: #94a3b8; }
+        .btn-save {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 60px;
+            background: #0a2a44;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
+            margin-top: 8px;
+            box-shadow: 0 4px 12px rgba(10, 42, 68, 0.15);
+        }
+        .btn-save:hover {
+            background: #0d3555;
+            transform: scale(1.01);
+        }
+        body.dark .btn-save {
+            background: #3b82f6;
+        }
+        body.dark .btn-save:hover {
+            background: #2563eb;
+        }
+        .success-msg {
+            background: #dcfce7;
+            color: #166534;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+            display: none;
+            font-weight: 500;
+        }
+        body.dark .success-msg {
+            background: #064e3b;
+            color: #86efac;
+        }
+        .success-msg.show {
+            display: block;
+        }
+        @media (max-width: 480px) {
+            .admin-container { padding: 24px 18px; }
+            .admin-header h1 { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+        <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i> Ana Sayfa
+        </a>
+
+        <div class="admin-header">
+            <h1><i class="fas fa-cog" style="margin-right:10px; color:#0a2a44;"></i>Yönetim Paneli</h1>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i> Karanlık Mod
+            </button>
+        </div>
+
+        <form id="adminForm">
+            <div class="form-group">
+                <label><i class="fas fa-calendar-alt"></i> Yıl (Tecrübe)</label>
+                <input type="number" id="yil" min="0" required />
+                <div class="hint">Otomatik hesaplama: 2003'ten itibaren. Manuel değiştirebilirsiniz.</div>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-oil-well"></i> Açılan Kuyu</label>
+                <input type="number" id="kuyu" min="0" required />
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-file-alt"></i> Toplam Randevu</label>
+                <input type="number" id="toplamRandevu" min="0" required />
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-clock"></i> Aktif Randevu</label>
+                <input type="number" id="aktifRandevu" min="0" required />
+            </div>
+            <button type="submit" class="btn-save">
+                <i class="fas fa-save"></i> Kaydet
+            </button>
+        </form>
+
+        <div class="success-msg" id="successMsg">
+            <i class="fas fa-check-circle"></i> Veriler başarıyla güncellendi!
+        </div>
+    </div>
+
+    <script>
+        // ===== VERİ =====
+        function getData() {
+            const defaultData = { yil: 23, kuyu: 0, toplamRandevu: 0, aktifRandevu: 0 };
+            const stored = localStorage.getItem('sontajData');
+            if (stored) {
+                try { return JSON.parse(stored); } catch (e) { return defaultData; }
+            }
+            return defaultData;
+        }
+
+        function saveData(data) {
+            localStorage.setItem('sontajData', JSON.stringify(data));
+        }
+
+        function loadForm() {
+            const data = getData();
+            document.getElementById('yil').value = data.yil;
+            document.getElementById('kuyu').value = data.kuyu;
+            document.getElementById('toplamRandevu').value = data.toplamRandevu;
+            document.getElementById('aktifRandevu').value = data.aktifRandevu;
+        }
+
+        // ===== TEMA =====
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark');
+                document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i> Aydınlık Mod';
+            } else {
+                document.body.classList.remove('dark');
+                document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i> Karanlık Mod';
+            }
+            localStorage.setItem('sontajTheme', theme);
+        }
+
+        function loadTheme() {
+            const theme = localStorage.getItem('sontajTheme') || 'light';
+            applyTheme(theme);
+        }
+
+        // ===== FORM GÖNDER =====
+        document.getElementById('adminForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const data = {
+                yil: parseInt(document.getElementById('yil').value) || 0,
+                kuyu: parseInt(document.getElementById('kuyu').value) || 0,
+                toplamRandevu: parseInt(document.getElementById('toplamRandevu').value) || 0,
+                aktifRandevu: parseInt(document.getElementById('aktifRandevu').value) || 0
+            };
+
+            saveData(data);
+
+            const msg = document.getElementById('successMsg');
+            msg.classList.add('show');
+            setTimeout(() => msg.classList.remove('show'), 3000);
+        });
+
+        // ===== TEMA DEĞİŞTİR =====
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            const current = localStorage.getItem('sontajTheme') || 'light';
+            const next = current === 'light' ? 'dark' : 'light';
+            applyTheme(next);
+        });
+
+        // ===== SAYFA YÜKLENİNCE =====
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            loadForm();
+        });
+    </script>
+
+</body>
+</html>
