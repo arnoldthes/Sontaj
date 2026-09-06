@@ -1,0 +1,9 @@
+{
+    "name": "dorksk-checker",
+    "version": "1.0.0",
+    "type": "module",
+    "dependencies": {
+        "@vercel/node": "^2.0.0",
+        "node-fetch": "^3.3.0"
+    }
+}
