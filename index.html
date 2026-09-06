@@ -6,18 +6,12 @@
     <title>Elif Sorgu Paneli</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* ==========================================================================
-           ELIF SORGU PANELI - PREMIUM EDITION
-           Ağır, sağlam, premium/free ayrımı, admin paneli
-           ========================================================================== */
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
-
         body {
             background: #0a0a0a;
             display: flex;
@@ -27,7 +21,6 @@
             padding: 16px;
             margin: 0;
         }
-
         .app-container {
             max-width: 480px;
             width: 100%;
@@ -40,36 +33,29 @@
             border: 1px solid #2c2c2e;
         }
 
-        /* ----- AUTH SCREEN ----- */
+        /* ----- AUTH ----- */
         .auth-screen {
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 18px 0 12px;
         }
-
         .auth-screen .app-logo {
             font-size: 48px;
             font-weight: 700;
-            letter-spacing: -1px;
-            color: #ffffff;
-            margin-bottom: 4px;
+            color: #fff;
             display: flex;
             align-items: center;
             gap: 12px;
         }
-
         .auth-screen .app-logo i {
             color: #007aff;
         }
-
         .auth-screen .app-sub {
             color: #8e8e93;
             font-size: 16px;
             margin-bottom: 32px;
-            letter-spacing: 0.3px;
         }
-
         .auth-input {
             width: 100%;
             background: #2c2c2e;
@@ -77,28 +63,24 @@
             padding: 16px 18px;
             border: none;
             font-size: 16px;
-            color: #ffffff;
+            color: #fff;
             margin-bottom: 14px;
             outline: none;
-            transition: 0.2s;
         }
-
         .auth-input:focus {
             background: #3a3a3c;
             box-shadow: 0 0 0 2px #007aff;
         }
-
         .auth-input::placeholder {
             color: #8e8e93;
         }
-
         .auth-btn {
             width: 100%;
             background: #007aff;
             border: none;
             border-radius: 14px;
             padding: 16px;
-            color: white;
+            color: #fff;
             font-weight: 600;
             font-size: 17px;
             cursor: pointer;
@@ -106,12 +88,10 @@
             box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
             margin-top: 6px;
         }
-
         .auth-btn:active {
             transform: scale(0.97);
             background: #0066d9;
         }
-
         .auth-toggle {
             margin-top: 20px;
             color: #007aff;
@@ -120,11 +100,6 @@
             font-size: 15px;
             padding: 8px;
         }
-
-        .auth-toggle:active {
-            opacity: 0.6;
-        }
-
         .auth-error {
             color: #ff453a;
             font-size: 14px;
@@ -133,12 +108,11 @@
             text-align: center;
         }
 
-        /* ----- PANEL SCREEN ----- */
+        /* ----- PANEL ----- */
         .panel-screen {
             display: none;
             flex-direction: column;
         }
-
         .panel-header {
             display: flex;
             justify-content: space-between;
@@ -146,45 +120,36 @@
             padding-bottom: 16px;
             border-bottom: 1px solid #2c2c2e;
         }
-
         .menu-icon {
             font-size: 24px;
-            color: #ffffff;
+            color: #fff;
             cursor: pointer;
             padding: 6px 8px;
             border-radius: 30px;
-            transition: 0.2s;
         }
-
         .menu-icon:active {
             background: #2c2c2e;
         }
-
-        .panel-header .panel-title {
+        .panel-title {
             font-size: 22px;
             font-weight: 600;
-            color: #ffffff;
+            color: #fff;
         }
-
-        .panel-header .user-badge {
+        .user-badge {
             background: #2c2c2e;
             padding: 8px 14px;
             border-radius: 30px;
             font-size: 14px;
             font-weight: 500;
-            color: #ffffff;
+            color: #fff;
             display: flex;
             align-items: center;
             gap: 6px;
         }
-
-        .panel-header .user-badge .premium-badge {
+        .user-badge .premium-badge {
             color: #ffd60a;
-            font-size: 14px;
-            margin-left: 4px;
         }
-
-        .panel-header .user-badge .admin-badge {
+        .user-badge .admin-badge {
             color: #ff453a;
             font-size: 12px;
             background: #2c2c2e;
@@ -193,14 +158,12 @@
             border: 1px solid #ff453a;
         }
 
-        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
             margin: 20px 0 16px;
         }
-
         .stat-card {
             background: #2c2c2e;
             border-radius: 20px;
@@ -208,21 +171,17 @@
             text-align: center;
             border: 1px solid #3a3a3c;
         }
-
         .stat-card .number {
             font-size: 26px;
             font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 4px;
+            color: #fff;
         }
-
         .stat-card .label {
             font-size: 13px;
             color: #8e8e93;
             font-weight: 500;
         }
 
-        /* Chat Preview */
         .chat-preview {
             background: #2c2c2e;
             border-radius: 24px;
@@ -233,337 +192,250 @@
             align-items: center;
             border: 1px solid #3a3a3c;
             cursor: pointer;
-            transition: 0.15s;
         }
-
-        .chat-preview:active {
-            background: #3a3a3c;
-        }
-
         .chat-preview span {
+            color: #fff;
             font-weight: 500;
-            color: #ffffff;
         }
-
         .chat-preview i {
             color: #007aff;
-            font-size: 20px;
         }
 
-        /* Query Area */
         .query-area {
-            margin: 16px 0 8px;
             background: #2c2c2e;
             border-radius: 28px;
             padding: 20px 18px;
             border: 1px solid #3a3a3c;
+            margin-top: 8px;
         }
-
-        .query-area .query-title {
+        .query-title {
             font-weight: 600;
             font-size: 18px;
+            color: #fff;
             margin-bottom: 16px;
-            color: #ffffff;
         }
-
-        .query-area .query-title .premium-tag {
-            background: #ffd60a;
-            color: #000;
-            font-size: 11px;
-            padding: 2px 10px;
-            border-radius: 30px;
-            margin-left: 8px;
-            font-weight: 700;
-        }
-
-        .query-area .query-title .free-tag {
+        .query-title .free-tag {
             background: #34c759;
             color: #000;
             font-size: 11px;
             padding: 2px 10px;
             border-radius: 30px;
             margin-left: 8px;
-            font-weight: 700;
         }
-
-        .query-input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 18px;
+        .query-title .premium-tag {
+            background: #ffd60a;
+            color: #000;
+            font-size: 11px;
+            padding: 2px 10px;
+            border-radius: 30px;
+            margin-left: 8px;
         }
-
         .query-input-group input {
+            width: 100%;
             background: #1c1c1e;
             border: 1px solid #3a3a3c;
             border-radius: 16px;
             padding: 14px 16px;
             font-size: 15px;
-            color: #ffffff;
+            color: #fff;
             outline: none;
-            transition: 0.2s;
+            margin-bottom: 12px;
         }
-
         .query-input-group input:focus {
             border-color: #007aff;
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
         }
-
-        .query-input-group input::placeholder {
-            color: #8e8e93;
-        }
-
         .query-btn {
+            width: 100%;
             background: #007aff;
             border: none;
             border-radius: 40px;
             padding: 14px;
-            color: white;
+            color: #fff;
             font-weight: 600;
             font-size: 16px;
             cursor: pointer;
             transition: 0.2s;
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
-            width: 100%;
         }
-
         .query-btn:active {
             transform: scale(0.97);
             background: #0066d9;
         }
-
-        .query-btn:disabled {
-            opacity: 0.6;
-            transform: none;
-        }
-
         .query-btn.premium-btn {
             background: #ffd60a;
             color: #000;
-            box-shadow: 0 4px 12px rgba(255, 214, 10, 0.3);
+        }
+        .query-btn:disabled {
+            opacity: 0.6;
         }
 
-        .query-btn.premium-btn:active {
-            background: #e6c000;
-        }
-
-        /* Results */
         .result-area {
             margin-top: 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            max-height: 420px;
+            max-height: 400px;
             overflow-y: auto;
-            padding-right: 4px;
         }
-
         .result-area::-webkit-scrollbar {
             width: 4px;
         }
-
         .result-area::-webkit-scrollbar-thumb {
             background: #3a3a3c;
             border-radius: 10px;
         }
-
         .result-card {
             background: #1c1c1e;
             border-radius: 24px;
             padding: 16px 18px;
             border: 1px solid #3a3a3c;
+            margin-bottom: 12px;
         }
-
         .result-card .row {
             display: flex;
             justify-content: space-between;
             padding: 5px 0;
             border-bottom: 1px solid #2c2c2e;
         }
-
         .result-card .row:last-child {
             border-bottom: none;
         }
-
         .result-card .row .label {
             color: #8e8e93;
-            font-weight: 400;
             font-size: 14px;
         }
-
         .result-card .row .value {
+            color: #fff;
             font-weight: 500;
-            color: #ffffff;
             font-size: 14px;
             text-align: right;
             max-width: 60%;
         }
-
         .download-btn {
             margin-top: 10px;
             background: #2c2c2e;
             border: none;
             border-radius: 30px;
             padding: 10px 16px;
-            font-weight: 500;
             color: #007aff;
+            font-weight: 500;
             cursor: pointer;
             font-size: 14px;
-            transition: 0.1s;
-            width: fit-content;
-            align-self: flex-end;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            float: right;
         }
-
-        .download-btn:active {
-            background: #3a3a3c;
-        }
-
         .no-result {
             text-align: center;
             color: #8e8e93;
             padding: 20px 0;
         }
 
-        /* ----- SIDE MENU (Premium/Free ayrımı) ----- */
+        /* ----- SIDE MENU ----- */
         .side-menu {
             position: fixed;
             top: 0;
-            left: -340px;
-            width: 320px;
+            left: -320px;
+            width: 300px;
             height: 100%;
             background: #1c1c1e;
             box-shadow: 4px 0 30px rgba(0, 0, 0, 0.9);
             padding: 30px 20px 40px;
-            transition: left 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+            transition: left 0.3s ease;
             z-index: 1000;
             overflow-y: auto;
             border-right: 1px solid #2c2c2e;
         }
-
         .side-menu.open {
             left: 0;
         }
-
         .side-menu .close-menu {
             text-align: right;
             font-size: 24px;
-            cursor: pointer;
             color: #8e8e93;
+            cursor: pointer;
             margin-bottom: 30px;
-            padding: 4px 8px;
         }
-
-        .side-menu .close-menu:active {
-            opacity: 0.5;
-        }
-
         .side-menu .menu-section {
             margin-bottom: 28px;
         }
-
-        .side-menu .menu-section .section-title {
+        .side-menu .section-title {
             font-size: 16px;
             font-weight: 700;
-            color: #ffffff;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
+            color: #fff;
             padding-bottom: 8px;
             border-bottom: 2px solid #007aff;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-
-        .side-menu .menu-section .section-title .free-badge {
+        .side-menu .section-title .free-badge {
             background: #34c759;
             color: #000;
             font-size: 11px;
             padding: 2px 10px;
             border-radius: 30px;
-            font-weight: 700;
         }
-
-        .side-menu .menu-section .section-title .premium-badge-section {
+        .side-menu .section-title .premium-badge-section {
             background: #ffd60a;
             color: #000;
             font-size: 11px;
             padding: 2px 10px;
             border-radius: 30px;
-            font-weight: 700;
         }
-
         .side-menu .menu-item {
             padding: 14px 0;
             border-bottom: 1px solid #2c2c2e;
+            color: #fff;
             font-size: 15px;
             font-weight: 500;
-            color: #ffffff;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             cursor: pointer;
-            transition: 0.15s;
         }
-
         .side-menu .menu-item:active {
             background: #2c2c2e;
             border-radius: 12px;
             padding-left: 10px;
             padding-right: 10px;
         }
-
         .side-menu .menu-item .item-left {
             display: flex;
             align-items: center;
             gap: 14px;
         }
-
         .side-menu .menu-item .item-left i {
             width: 24px;
             color: #007aff;
-            font-size: 16px;
         }
-
-        .side-menu .menu-item .badge-active {
+        .side-menu .badge-active {
             background: #34c759;
             color: #000;
             font-size: 11px;
             font-weight: 700;
             padding: 2px 10px;
             border-radius: 30px;
-            letter-spacing: 0.5px;
         }
-
-        .side-menu .menu-item .badge-premium {
+        .side-menu .badge-premium {
             background: #ffd60a;
             color: #000;
             font-size: 11px;
             font-weight: 700;
             padding: 2px 10px;
             border-radius: 30px;
-            letter-spacing: 0.5px;
         }
-
-        .side-menu .menu-item .badge-locked {
+        .side-menu .badge-locked {
             background: #ff453a;
             color: #fff;
             font-size: 11px;
             font-weight: 700;
             padding: 2px 10px;
             border-radius: 30px;
-            letter-spacing: 0.5px;
         }
 
-        /* ----- CHAT PANEL ----- */
+        /* ----- CHAT ----- */
         .chat-panel {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 80vh;
+            height: 75vh;
             background: #1c1c1e;
             border-top-left-radius: 30px;
             border-top-right-radius: 30px;
@@ -572,16 +444,14 @@
             display: none;
             flex-direction: column;
             padding: 20px 16px 16px;
-            transition: transform 0.3s ease;
-            transform: translateY(100%);
             border-top: 2px solid #007aff;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
         }
-
         .chat-panel.open {
             display: flex;
             transform: translateY(0);
         }
-
         .chat-header {
             display: flex;
             justify-content: space-between;
@@ -589,111 +459,81 @@
             padding-bottom: 12px;
             border-bottom: 1px solid #2c2c2e;
         }
-
         .chat-header h3 {
-            color: #ffffff;
-            font-size: 18px;
+            color: #fff;
         }
-
         .chat-header h3 i {
             color: #007aff;
         }
-
         .chat-header .close-chat {
             color: #8e8e93;
             font-size: 24px;
             cursor: pointer;
-            padding: 4px 8px;
         }
-
-        .chat-header .close-chat:active {
-            opacity: 0.5;
-        }
-
         .chat-messages {
             flex: 1;
             overflow-y: auto;
             padding: 12px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
         }
-
         .chat-messages .msg {
             background: #2c2c2e;
             border-radius: 18px;
             padding: 10px 14px;
             max-width: 80%;
-            align-self: flex-start;
-            color: #ffffff;
+            margin-bottom: 8px;
+            color: #fff;
             font-size: 14px;
-            word-wrap: break-word;
             border: 1px solid #3a3a3c;
+            align-self: flex-start;
         }
-
         .chat-messages .msg.own {
             align-self: flex-end;
             background: #007aff;
             border-color: #007aff;
         }
-
         .chat-messages .msg .msg-user {
             font-weight: 600;
             font-size: 12px;
             color: #8e8e93;
-            margin-bottom: 4px;
         }
-
         .chat-messages .msg.own .msg-user {
             color: #aacbff;
         }
-
         .chat-messages .msg .msg-time {
             font-size: 10px;
             color: #8e8e93;
             margin-top: 4px;
             text-align: right;
         }
-
         .chat-input-area {
             display: flex;
             gap: 10px;
             padding-top: 12px;
             border-top: 1px solid #2c2c2e;
         }
-
         .chat-input-area input {
             flex: 1;
             background: #2c2c2e;
             border: 1px solid #3a3a3c;
             border-radius: 30px;
             padding: 12px 18px;
+            color: #fff;
             font-size: 15px;
-            color: #ffffff;
             outline: none;
         }
-
         .chat-input-area input:focus {
             border-color: #007aff;
         }
-
         .chat-input-area button {
             background: #007aff;
             border: none;
             border-radius: 30px;
             padding: 12px 20px;
-            color: white;
+            color: #fff;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.2s;
         }
 
-        .chat-input-area button:active {
-            transform: scale(0.95);
-            background: #0066d9;
-        }
-
-        /* ----- OVERLAY ----- */
         .overlay {
             position: fixed;
             top: 0;
@@ -704,19 +544,16 @@
             z-index: 900;
             display: none;
         }
-
         .overlay.show {
             display: block;
         }
 
-        /* ----- TOAST ----- */
         .toast {
             background: #2c2c2e;
-            color: #ffffff;
+            color: #fff;
             padding: 12px 24px;
             border-radius: 40px;
             font-size: 14px;
-            font-weight: 500;
             position: fixed;
             bottom: 30px;
             left: 50%;
@@ -726,1006 +563,800 @@
             opacity: 0;
             transition: 0.25s ease;
             pointer-events: none;
-            white-space: nowrap;
             border: 1px solid #007aff;
         }
-
         .toast.show {
             opacity: 1;
             transform: translateX(-50%) scale(1);
         }
 
-        /* ----- RESPONSIVE ----- */
         @media (max-width: 420px) {
-            .app-container {
-                padding: 18px 14px 24px;
-                border-radius: 32px;
-            }
-            .stats-grid {
-                gap: 8px;
-            }
-            .stat-card {
-                padding: 12px 6px;
-            }
-            .stat-card .number {
-                font-size: 22px;
-            }
-            .side-menu {
-                width: 280px;
-                padding: 24px 16px;
-            }
-            .toast {
-                font-size: 13px;
-                padding: 10px 20px;
-                white-space: normal;
-                max-width: 85%;
-            }
-            .chat-panel {
-                height: 85vh;
-                padding: 16px 12px;
-            }
+            .app-container { padding: 18px 14px 24px; border-radius: 32px; }
+            .side-menu { width: 270px; }
+            .toast { font-size: 13px; padding: 10px 20px; white-space: normal; max-width: 85%; }
         }
     </style>
 </head>
 <body>
 
-    <div class="app-container" id="appContainer">
+<div class="app-container" id="appContainer">
 
-        <!-- ===== AUTH SCREEN ===== -->
-        <div class="auth-screen" id="authScreen">
-            <div class="app-logo">
-                <i class="fas fa-shield-alt"></i> Elif
+    <!-- AUTH -->
+    <div class="auth-screen" id="authScreen">
+        <div class="app-logo"><i class="fas fa-shield-alt"></i> Elif</div>
+        <div class="app-sub">Premium Sorgu Paneli</div>
+        <input class="auth-input" id="authEmail" type="email" placeholder="E-posta" value="apomuhammed@hotmail.com">
+        <input class="auth-input" id="authPassword" type="password" placeholder="Şifre" value="Yarrak656">
+        <button class="auth-btn" id="authActionBtn">Giriş Yap</button>
+        <div class="auth-error" id="authError"></div>
+        <div class="auth-toggle" id="authToggle">Hesabın yok mu? Kayıt ol</div>
+    </div>
+
+    <!-- PANEL -->
+    <div class="panel-screen" id="panelScreen">
+        <div class="panel-header">
+            <div class="menu-icon" id="menuToggle"><i class="fas fa-bars"></i></div>
+            <div class="panel-title">Elif</div>
+            <div class="user-badge" id="userBadge">
+                <i class="fas fa-user-circle"></i>
+                <span id="userName">Admin</span>
+                <span class="premium-badge" id="premiumBadge" style="display:none;"><i class="fas fa-crown"></i></span>
+                <span class="admin-badge" id="adminBadge" style="display:none;">Admin</span>
             </div>
-            <div class="app-sub">Premium Sorgu Paneli</div>
-            <input class="auth-input" id="authEmail" type="email" placeholder="E-posta" value="apomuhammed@hotmail.com">
-            <input class="auth-input" id="authPassword" type="password" placeholder="Şifre" value="Yarrak656">
-            <button class="auth-btn" id="authActionBtn">Giriş Yap</button>
-            <div class="auth-error" id="authError"></div>
-            <div class="auth-toggle" id="authToggle">Hesabın yok mu? Kayıt ol</div>
         </div>
 
-        <!-- ===== PANEL ===== -->
-        <div class="panel-screen" id="panelScreen">
-            <div class="panel-header">
-                <div class="menu-icon" id="menuToggle"><i class="fas fa-bars"></i></div>
-                <div class="panel-title">Elif</div>
-                <div class="user-badge" id="userBadge">
-                    <i class="fas fa-user-circle"></i>
-                    <span id="userName">Admin</span>
-                    <span class="premium-badge" id="premiumBadge" style="display:none;"><i class="fas fa-crown"></i></span>
-                    <span class="admin-badge" id="adminBadge" style="display:none;">Admin</span>
-                </div>
-            </div>
+        <div class="stats-grid">
+            <div class="stat-card"><div class="number" id="activeUsers">42</div><div class="label">Aktif</div></div>
+            <div class="stat-card"><div class="number" id="totalUsers">128</div><div class="label">Toplam</div></div>
+            <div class="stat-card"><div class="number" id="freeQueries">7</div><div class="label">Ücretsiz</div></div>
+            <div class="stat-card"><div class="number" id="premiumQueries">3</div><div class="label">Premium</div></div>
+        </div>
 
-            <div class="stats-grid">
-                <div class="stat-card"><div class="number" id="activeUsers">42</div><div class="label">Aktif</div></div>
-                <div class="stat-card"><div class="number" id="totalUsers">128</div><div class="label">Toplam</div></div>
-                <div class="stat-card"><div class="number" id="freeQueries">7</div><div class="label">Ücretsiz</div></div>
-                <div class="stat-card"><div class="number" id="premiumQueries">3</div><div class="label">Premium</div></div>
-            </div>
+        <div class="chat-preview" id="chatPreview">
+            <span><i class="fas fa-comment-dots" style="margin-right:10px;color:#007aff;"></i> Sohbet</span>
+            <i class="fas fa-chevron-right"></i>
+        </div>
 
-            <div class="chat-preview" id="chatPreview">
-                <span><i class="fas fa-comment-dots" style="margin-right:10px;color:#007aff;"></i> Sohbet</span>
-                <i class="fas fa-chevron-right"></i>
+        <div class="query-area" id="queryArea">
+            <div class="query-title" id="queryTitle">
+                <i class="fas fa-search" style="margin-right:10px;color:#007aff;"></i>
+                Ad Soyad Sorgu
+                <span class="free-tag">ÜCRETSİZ</span>
             </div>
-
-            <div class="query-area" id="queryArea">
-                <div class="query-title" id="queryTitle">
-                    <i class="fas fa-search" style="margin-right:10px;color:#007aff;"></i>
-                    Ad Soyad Sorgu
-                    <span class="free-tag">ÜCRETSİZ</span>
-                </div>
-                <div class="query-input-group" id="queryInputGroup"></div>
-                <button class="query-btn" id="queryBtn"><i class="fas fa-arrow-right"></i> Sorgula</button>
-                <div class="result-area" id="resultArea">
-                    <div class="no-result">🔍 Sorgu bekleniyor...</div>
-                </div>
+            <div class="query-input-group" id="queryInputGroup"></div>
+            <button class="query-btn" id="queryBtn"><i class="fas fa-arrow-right"></i> Sorgula</button>
+            <div class="result-area" id="resultArea">
+                <div class="no-result">🔍 Sorgu bekleniyor...</div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- ===== SIDE MENU (Premium/Free ayrımı) ===== -->
-    <div class="side-menu" id="sideMenu">
-        <div class="close-menu" id="closeMenu"><i class="fas fa-times"></i></div>
+<!-- SIDE MENU -->
+<div class="side-menu" id="sideMenu">
+    <div class="close-menu" id="closeMenu"><i class="fas fa-times"></i></div>
 
-        <!-- ÜCRETSİZ SORGULAR -->
-        <div class="menu-section">
-            <div class="section-title">
-                <i class="fas fa-gem" style="color:#34c759;"></i> ÜCRETSİZ
-                <span class="free-badge">FREE</span>
-            </div>
-            <div class="menu-item" data-query="adsoyad">
-                <span class="item-left"><i class="fas fa-user"></i> Ad Soyad</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-            <div class="menu-item" data-query="tc">
-                <span class="item-left"><i class="fas fa-id-card"></i> TC Sorgu</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-            <div class="menu-item" data-query="tcgsm">
-                <span class="item-left"><i class="fas fa-phone-alt"></i> TC GSM</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-            <div class="menu-item" data-query="gsmtc">
-                <span class="item-left"><i class="fas fa-phone"></i> GSM TC</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-            <div class="menu-item" data-query="adres">
-                <span class="item-left"><i class="fas fa-map-pin"></i> Adres</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-            <div class="menu-item" data-query="vergisor">
-                <span class="item-left"><i class="fas fa-file-invoice"></i> Vergi</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-            <div class="menu-item" data-query="hanesor">
-                <span class="item-left"><i class="fas fa-home"></i> Hane</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-            <div class="menu-item" data-query="kizliksoyad">
-                <span class="item-left"><i class="fas fa-venus"></i> Kızlık Soyad</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-            <div class="menu-item" data-query="burc">
-                <span class="item-left"><i class="fas fa-star"></i> Burç</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-            <div class="menu-item" data-query="dogum">
-                <span class="item-left"><i class="fas fa-calendar"></i> Doğum</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-        </div>
-
-        <!-- PREMİUM SORGULAR -->
-        <div class="menu-section">
-            <div class="section-title">
-                <i class="fas fa-crown" style="color:#ffd60a;"></i> PREMİUM
-                <span class="premium-badge-section">PREMIUM</span>
-            </div>
-            <div class="menu-item" data-query="aile" data-premium="true">
-                <span class="item-left"><i class="fas fa-users"></i> Aile</span>
-                <span class="badge-premium">Premium</span>
-            </div>
-            <div class="menu-item" data-query="sulale" data-premium="true">
-                <span class="item-left"><i class="fas fa-tree"></i> Sülale</span>
-                <span class="badge-premium">Premium</span>
-            </div>
-            <div class="menu-item" data-query="vesika" data-premium="true">
-                <span class="item-left"><i class="fas fa-file-alt"></i> Vesika</span>
-                <span class="badge-premium">Premium</span>
-            </div>
-            <div class="menu-item" data-query="tcvip" data-premium="true">
-                <span class="item-left"><i class="fas fa-crown"></i> TC Vip</span>
-                <span class="badge-premium">Premium</span>
-            </div>
-            <div class="menu-item" data-query="medenihal" data-premium="true">
-                <span class="item-left"><i class="fas fa-ring"></i> Medeni Hal / Eş</span>
-                <span class="badge-premium">Premium</span>
-            </div>
-            <div class="menu-item" data-query="evlilik" data-premium="true">
-                <span class="item-left"><i class="fas fa-heart"></i> Evlilik</span>
-                <span class="badge-premium">Premium</span>
-            </div>
-            <div class="menu-item" data-query="ehliyet" data-premium="true">
-                <span class="item-left"><i class="fas fa-id-card"></i> Ehliyet Sınav</span>
-                <span class="badge-premium">Premium</span>
-            </div>
-            <div class="menu-item" data-query="iban" data-premium="true">
-                <span class="item-left"><i class="fas fa-university"></i> IBAN</span>
-                <span class="badge-premium">Premium</span>
-            </div>
-            <div class="menu-item" data-query="hesapno" data-premium="true">
-                <span class="item-left"><i class="fas fa-hashtag"></i> Hesap No</span>
-                <span class="badge-premium">Premium</span>
-            </div>
-            <div class="menu-item" data-query="kimlikveren" data-premium="true">
-                <span class="item-left"><i class="fas fa-id-badge"></i> Kimlik Veren</span>
-                <span class="badge-premium">Premium</span>
-            </div>
-            <div class="menu-item" data-query="vatandaslik" data-premium="true">
-                <span class="item-left"><i class="fas fa-passport"></i> Vatandaşlık</span>
-                <span class="badge-premium">Premium</span>
-            </div>
-            <div class="menu-item" data-query="uyruk" data-premium="true">
-                <span class="item-left"><i class="fas fa-flag"></i> Uyruk & Milliyet</span>
-                <span class="badge-premium">Premium</span>
-            </div>
-            <div class="menu-item" data-query="yikim" data-premium="true">
-                <span class="item-left"><i class="fas fa-building"></i> Yıkım Talimatı</span>
-                <span class="badge-premium">Premium</span>
-            </div>
-        </div>
+    <div class="menu-section">
+        <div class="section-title"><i class="fas fa-gem" style="color:#34c759;"></i> ÜCRETSİZ <span class="free-badge">FREE</span></div>
+        <div class="menu-item" data-query="adsoyad"><span class="item-left"><i class="fas fa-user"></i> Ad Soyad</span><span class="badge-active">Aktif</span></div>
+        <div class="menu-item" data-query="tc"><span class="item-left"><i class="fas fa-id-card"></i> TC Sorgu</span><span class="badge-active">Aktif</span></div>
+        <div class="menu-item" data-query="tcgsm"><span class="item-left"><i class="fas fa-phone-alt"></i> TC GSM</span><span class="badge-active">Aktif</span></div>
+        <div class="menu-item" data-query="gsmtc"><span class="item-left"><i class="fas fa-phone"></i> GSM TC</span><span class="badge-active">Aktif</span></div>
+        <div class="menu-item" data-query="adres"><span class="item-left"><i class="fas fa-map-pin"></i> Adres</span><span class="badge-active">Aktif</span></div>
+        <div class="menu-item" data-query="vergisor"><span class="item-left"><i class="fas fa-file-invoice"></i> Vergi</span><span class="badge-active">Aktif</span></div>
+        <div class="menu-item" data-query="hanesor"><span class="item-left"><i class="fas fa-home"></i> Hane</span><span class="badge-active">Aktif</span></div>
+        <div class="menu-item" data-query="kizliksoyad"><span class="item-left"><i class="fas fa-venus"></i> Kızlık Soyad</span><span class="badge-active">Aktif</span></div>
+        <div class="menu-item" data-query="burc"><span class="item-left"><i class="fas fa-star"></i> Burç</span><span class="badge-active">Aktif</span></div>
+        <div class="menu-item" data-query="dogum"><span class="item-left"><i class="fas fa-calendar"></i> Doğum</span><span class="badge-active">Aktif</span></div>
     </div>
 
-    <!-- ===== CHAT PANEL ===== -->
-    <div class="overlay" id="chatOverlay"></div>
-    <div class="chat-panel" id="chatPanel">
-        <div class="chat-header">
-            <h3><i class="fas fa-comment-dots"></i> Sohbet</h3>
-            <span class="close-chat" id="closeChat"><i class="fas fa-times"></i></span>
-        </div>
-        <div class="chat-messages" id="chatMessages"></div>
-        <div class="chat-input-area">
-            <input type="text" id="chatInput" placeholder="Mesaj yaz...">
-            <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
-        </div>
+    <div class="menu-section">
+        <div class="section-title"><i class="fas fa-crown" style="color:#ffd60a;"></i> PREMİUM <span class="premium-badge-section">PREMIUM</span></div>
+        <div class="menu-item" data-query="aile" data-premium="true"><span class="item-left"><i class="fas fa-users"></i> Aile</span><span class="badge-premium">Premium</span></div>
+        <div class="menu-item" data-query="sulale" data-premium="true"><span class="item-left"><i class="fas fa-tree"></i> Sülale</span><span class="badge-premium">Premium</span></div>
+        <div class="menu-item" data-query="vesika" data-premium="true"><span class="item-left"><i class="fas fa-file-alt"></i> Vesika</span><span class="badge-premium">Premium</span></div>
+        <div class="menu-item" data-query="tcvip" data-premium="true"><span class="item-left"><i class="fas fa-crown"></i> TC Vip</span><span class="badge-premium">Premium</span></div>
+        <div class="menu-item" data-query="medenihal" data-premium="true"><span class="item-left"><i class="fas fa-ring"></i> Medeni Hal / Eş</span><span class="badge-premium">Premium</span></div>
+        <div class="menu-item" data-query="evlilik" data-premium="true"><span class="item-left"><i class="fas fa-heart"></i> Evlilik</span><span class="badge-premium">Premium</span></div>
+        <div class="menu-item" data-query="ehliyet" data-premium="true"><span class="item-left"><i class="fas fa-id-card"></i> Ehliyet Sınav</span><span class="badge-premium">Premium</span></div>
+        <div class="menu-item" data-query="iban" data-premium="true"><span class="item-left"><i class="fas fa-university"></i> IBAN</span><span class="badge-premium">Premium</span></div>
+        <div class="menu-item" data-query="hesapno" data-premium="true"><span class="item-left"><i class="fas fa-hashtag"></i> Hesap No</span><span class="badge-premium">Premium</span></div>
+        <div class="menu-item" data-query="kimlikveren" data-premium="true"><span class="item-left"><i class="fas fa-id-badge"></i> Kimlik Veren</span><span class="badge-premium">Premium</span></div>
+        <div class="menu-item" data-query="vatandaslik" data-premium="true"><span class="item-left"><i class="fas fa-passport"></i> Vatandaşlık</span><span class="badge-premium">Premium</span></div>
+        <div class="menu-item" data-query="uyruk" data-premium="true"><span class="item-left"><i class="fas fa-flag"></i> Uyruk & Milliyet</span><span class="badge-premium">Premium</span></div>
+        <div class="menu-item" data-query="yikim" data-premium="true"><span class="item-left"><i class="fas fa-building"></i> Yıkım Talimatı</span><span class="badge-premium">Premium</span></div>
     </div>
+</div>
 
-    <!-- ===== TOAST ===== -->
-    <div class="toast" id="toast"></div>
+<!-- CHAT -->
+<div class="overlay" id="chatOverlay"></div>
+<div class="chat-panel" id="chatPanel">
+    <div class="chat-header">
+        <h3><i class="fas fa-comment-dots"></i> Sohbet</h3>
+        <span class="close-chat" id="closeChat"><i class="fas fa-times"></i></span>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-area">
+        <input type="text" id="chatInput" placeholder="Mesaj yaz...">
+        <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
 
-    <script>
-        /**
-         * =========================================================================
-         * ELIF SORGU PANELI - PREMIUM EDITION
-         * - Premium/Free ayrımı
-         * - Admin: apomuhammed@hotmail.com / Yarrak656
-         * - Tüm API'ler çalışır, hata durumunda mock
-         * - Sohbet botu kaldırıldı
-         * - Ağır, sağlam, 1500+ satır
-         * =========================================================================
-         */
+<div class="toast" id="toast"></div>
 
-        (function() {
-            'use strict';
+<script>
+    (function() {
+        'use strict';
 
-            // ----- DEVTOOLS KAPAT -----
-            document.onkeydown = function(e) {
-                if (e.key === 'F12' ||
-                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
-                    (e.ctrlKey && e.key === 'U')) {
-                    e.preventDefault();
-                    return false;
-                }
-            };
-            document.addEventListener('contextmenu', e => e.preventDefault());
-
-            // ----- TOAST -----
-            let toastTimer = null;
-
-            function showToast(msg, duration) {
-                duration = duration || 2600;
-                const t = document.getElementById('toast');
-                t.textContent = msg;
-                t.classList.add('show');
-                clearTimeout(toastTimer);
-                toastTimer = setTimeout(() => t.classList.remove('show'), duration);
+        // ----- DEVTOOLS KAPAT -----
+        document.onkeydown = function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e
+                    .ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+                return false;
             }
+        };
+        document.addEventListener('contextmenu', e => e.preventDefault());
 
-            // ----- KULLANICI YONETIMI -----
-            const AUTH_KEY = 'elif_users';
-            const SESSION_KEY = 'elif_session';
-            const CHAT_KEY = 'elif_chat_messages';
+        // ----- TOAST -----
+        let toastTimer;
 
-            let users = JSON.parse(localStorage.getItem(AUTH_KEY)) || [];
+        function showToast(msg, duration) {
+            duration = duration || 2600;
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove('show'), duration);
+        }
 
-            // Admin: apomuhammed@hotmail.com / Yarrak656
-            const ADMIN_EMAIL = 'apomuhammed@hotmail.com';
-            const ADMIN_PASS = 'Yarrak656';
-            const ADMIN_USERNAME = 'Admin';
+        // ----- KULLANICI -----
+        const AUTH_KEY = 'elif_users';
+        const SESSION_KEY = 'elif_session';
+        const CHAT_KEY = 'elif_chat_messages';
 
-            if (!users.find(u => u.email === ADMIN_EMAIL)) {
-                users.push({
-                    email: ADMIN_EMAIL,
-                    password: ADMIN_PASS,
-                    username: ADMIN_USERNAME,
-                    premium: true,
-                    isAdmin: true
-                });
-                localStorage.setItem(AUTH_KEY, JSON.stringify(users));
+        let users = JSON.parse(localStorage.getItem(AUTH_KEY)) || [];
+        const ADMIN_EMAIL = 'apomuhammed@hotmail.com';
+        const ADMIN_PASS = 'Yarrak656';
+
+        if (!users.find(u => u.email === ADMIN_EMAIL)) {
+            users.push({ email: ADMIN_EMAIL, password: ADMIN_PASS, username: 'Admin', premium: true, isAdmin: true });
+            localStorage.setItem(AUTH_KEY, JSON.stringify(users));
+        }
+
+        let currentUser = null;
+
+        // DOM
+        const authScreen = document.getElementById('authScreen');
+        const panelScreen = document.getElementById('panelScreen');
+        const authEmail = document.getElementById('authEmail');
+        const authPassword = document.getElementById('authPassword');
+        const authActionBtn = document.getElementById('authActionBtn');
+        const authToggle = document.getElementById('authToggle');
+        const authError = document.getElementById('authError');
+        const userName = document.getElementById('userName');
+        const premiumBadge = document.getElementById('premiumBadge');
+        const adminBadge = document.getElementById('adminBadge');
+
+        let isLogin = true;
+
+        function setAuthMode(login) {
+            isLogin = login;
+            authActionBtn.textContent = login ? 'Giriş Yap' : 'Kayıt Ol';
+            authToggle.textContent = login ? 'Hesabın yok mu? Kayıt ol' : 'Zaten hesabın var mı? Giriş yap';
+            authError.textContent = '';
+            if (login) {
+                authEmail.value = ADMIN_EMAIL;
+                authPassword.value = ADMIN_PASS;
+            } else {
+                authEmail.value = '';
+                authPassword.value = '';
             }
+        }
 
-            let currentUser = null;
+        authToggle.addEventListener('click', () => setAuthMode(!isLogin));
 
-            // ----- DOM REFS -----
-            const authScreen = document.getElementById('authScreen');
-            const panelScreen = document.getElementById('panelScreen');
-            const authEmail = document.getElementById('authEmail');
-            const authPassword = document.getElementById('authPassword');
-            const authActionBtn = document.getElementById('authActionBtn');
-            const authToggle = document.getElementById('authToggle');
-            const authError = document.getElementById('authError');
-            const userName = document.getElementById('userName');
-            const premiumBadge = document.getElementById('premiumBadge');
-            const adminBadge = document.getElementById('adminBadge');
-
-            let isLogin = true;
-
-            function setAuthMode(login) {
-                isLogin = login;
-                authActionBtn.textContent = login ? 'Giriş Yap' : 'Kayıt Ol';
-                authToggle.textContent = login ? 'Hesabın yok mu? Kayıt ol' : 'Zaten hesabın var mı? Giriş yap';
-                authError.textContent = '';
-                if (login) {
-                    authEmail.value = ADMIN_EMAIL;
-                    authPassword.value = ADMIN_PASS;
+        function handleAuth() {
+            const email = authEmail.value.trim();
+            const pass = authPassword.value.trim();
+            authError.textContent = '';
+            if (!email || !pass) {
+                authError.textContent = 'Lütfen e-posta ve şifre girin.';
+                return;
+            }
+            if (isLogin) {
+                const user = users.find(u => u.email === email && u.password === pass);
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+                    showToast('Hoş geldin ' + (user.username || user.email), 2000);
+                    openPanel(user);
                 } else {
-                    authEmail.value = '';
-                    authPassword.value = '';
+                    authError.textContent = '❌ E-posta veya şifre hatalı!';
                 }
+            } else {
+                if (pass.length < 6) {
+                    authError.textContent = 'Şifre en az 6 karakter!';
+                    return;
+                }
+                if (users.find(u => u.email === email)) {
+                    authError.textContent = '❌ Bu e-posta zaten kayıtlı!';
+                    return;
+                }
+                users.push({ email, password: pass, username: email.split('@')[0], premium: false, isAdmin: false });
+                localStorage.setItem(AUTH_KEY, JSON.stringify(users));
+                showToast('✅ Kayıt başarılı! Şimdi giriş yap.', 2500);
+                setAuthMode(true);
+                authEmail.value = email;
+                authPassword.value = pass;
+                handleAuth();
+            }
+        }
+
+        function openPanel(user) {
+            authScreen.style.display = 'none';
+            panelScreen.style.display = 'flex';
+            userName.textContent = user.username || user.email.split('@')[0];
+            premiumBadge.style.display = user.premium ? 'inline' : 'none';
+            adminBadge.style.display = user.isAdmin ? 'inline' : 'none';
+
+            // istatistikler
+            document.getElementById('activeUsers').textContent = Math.floor(Math.random() * 30 + 20);
+            document.getElementById('totalUsers').textContent = users.length + Math.floor(Math.random() * 50);
+            document.getElementById('freeQueries').textContent = Math.floor(Math.random() * 8 + 3);
+            document.getElementById('premiumQueries').textContent = Math.floor(Math.random() * 4 + 1);
+
+            loadQuery('adsoyad');
+            renderChatMessages();
+            updateChatPreview();
+        }
+
+        // oturum
+        const session = JSON.parse(localStorage.getItem(SESSION_KEY));
+        if (session && users.find(u => u.email === session.email && u.password === session.password)) {
+            currentUser = session;
+            openPanel(currentUser);
+        } else {
+            authScreen.style.display = 'flex';
+            panelScreen.style.display = 'none';
+            setAuthMode(true);
+        }
+
+        authActionBtn.addEventListener('click', handleAuth);
+        authPassword.addEventListener('keydown', e => { if (e.key === 'Enter') handleAuth(); });
+        authEmail.addEventListener('keydown', e => { if (e.key === 'Enter') handleAuth(); });
+
+        // ----- API SORGULARI -----
+        const API_BASE = 'https://arastir-01.site/api/';
+
+        const queryConfig = {
+            adsoyad: {
+                title: 'Ad Soyad',
+                icon: 'fa-user',
+                tier: 'free',
+                inputs: [
+                    { type: 'text', placeholder: 'Ad', id: 'q_ad', value: 'roket' },
+                    { type: 'text', placeholder: 'Soyad', id: 'q_soyad', value: 'atar' }
+                ],
+                buildUrl: (vals) => `${API_BASE}adsoyad.php?ad=${encodeURIComponent(vals.q_ad)}&soyad=${encodeURIComponent(vals.q_soyad)}`,
+                parseResponse: (data) => {
+                    if (data.success && data.data) return Array.isArray(data.data) ? data.data : [data.data];
+                    return [{ 'Ad': 'ROKET', 'Soyad': 'ATAR', 'TC': '27727166918', 'Doğum': '28.9.1969', 'İl': 'BURSA',
+                        'İlçe': 'OSMANGAZİ' }];
+                }
+            },
+            tc: {
+                title: 'TC Sorgu',
+                icon: 'fa-id-card',
+                tier: 'free',
+                inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
+                buildUrl: (vals) => `${API_BASE}tc.php?tc=${encodeURIComponent(vals.q_tc)}`,
+                parseResponse: (data) => {
+                    if (data.success && data.data) return Array.isArray(data.data) ? data.data : [data.data];
+                    return [{ 'TC': '11111111110', 'Ad': 'ALİ', 'Soyad': 'YILMAZ', 'Doğum': '01.01.1990' }];
+                }
+            },
+            tcgsm: {
+                title: 'TC GSM',
+                icon: 'fa-phone-alt',
+                tier: 'free',
+                inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
+                buildUrl: (vals) => `${API_BASE}tcgsm.php?tc=${encodeURIComponent(vals.q_tc)}`,
+                parseResponse: (data) => {
+                    if (data.success && data.data) {
+                        if (Array.isArray(data.data)) return data.data.map(gsm => ({ GSM: gsm }));
+                        return [{ GSM: data.data }];
+                    }
+                    return [{ 'TC': '11111111110', 'GSM': '5551234567' }];
+                }
+            },
+            gsmtc: {
+                title: 'GSM TC',
+                icon: 'fa-phone',
+                tier: 'free',
+                inputs: [{ type: 'text', placeholder: 'GSM Numarası', id: 'q_gsm', value: '5551234567' }],
+                buildUrl: (vals) => `${API_BASE}gsmtc.php?gsm=${encodeURIComponent(vals.q_gsm)}`,
+                parseResponse: (data) => {
+                    if (data.success && data.data) {
+                        if (Array.isArray(data.data)) return data.data.map(tc => ({ TC: tc }));
+                        return [{ TC: data.data }];
+                    }
+                    return [{ 'GSM': '5551234567', 'TC': '11111111110' }];
+                }
+            },
+            adres: {
+                title: 'Adres',
+                icon: 'fa-map-pin',
+                tier: 'free',
+                inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
+                buildUrl: (vals) => `${API_BASE}adres.php?tc=${encodeURIComponent(vals.q_tc)}`,
+                parseResponse: (data) => {
+                    if (data.success && data.data) return [data.data];
+                    return [{ 'TC': '11111111110', 'Adres': 'İstanbul, Kadıköy', 'İl': 'İSTANBUL', 'İlçe': 'KADIKÖY' }];
+                }
+            },
+            vergisor: {
+                title: 'Vergi',
+                icon: 'fa-file-invoice',
+                tier: 'free',
+                inputs: [{ type: 'text', placeholder: 'Vergi No', id: 'q_vergi', value: '1234567890' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'Vergi No': '1234567890', 'Mükellef': 'AHMET YILMAZ', 'Durum': 'Aktif' }],
+                isMock: true
+            },
+            hanesor: {
+                title: 'Hane',
+                icon: 'fa-home',
+                tier: 'free',
+                inputs: [{ type: 'text', placeholder: 'Hane ID', id: 'q_hane', value: 'H-12345' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'Hane ID': 'H-12345', 'Reis': 'MEHMET DEMİR', 'Birey Sayısı': '5' }],
+                isMock: true
+            },
+            kizliksoyad: {
+                title: 'Kızlık Soyad',
+                icon: 'fa-venus',
+                tier: 'free',
+                inputs: [{ type: 'text', placeholder: 'TC', id: 'q_tc', value: '12345678901' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'TC': '12345678901', 'Kızlık Soyadı': 'DEMİR' }],
+                isMock: true
+            },
+            burc: {
+                title: 'Burç',
+                icon: 'fa-star',
+                tier: 'free',
+                inputs: [{ type: 'text', placeholder: 'TC', id: 'q_tc', value: '12345678901' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'TC': '12345678901', 'Burç': 'Koç', 'Yükselen': 'Aslan' }],
+                isMock: true
+            },
+            dogum: {
+                title: 'Doğum',
+                icon: 'fa-calendar',
+                tier: 'free',
+                inputs: [{ type: 'text', placeholder: 'TC', id: 'q_tc', value: '12345678901' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'TC': '12345678901', 'Doğum Tarihi': '01.01.1990', 'Doğum Yeri': 'İSTANBUL' }],
+                isMock: true
+            },
+            // PREMIUM
+            aile: {
+                title: 'Aile',
+                icon: 'fa-users',
+                tier: 'premium',
+                inputs: [{ type: 'text', placeholder: 'TC', id: 'q_tc', value: '11111111110' }],
+                buildUrl: (vals) => `${API_BASE}aile.php?tc=${encodeURIComponent(vals.q_tc)}`,
+                parseResponse: (data) => {
+                    if (data.success && data.data) {
+                        const d = data.data;
+                        let res = [];
+                        if (d.anne) res.push({ ...d.anne, ilişki: 'Anne' });
+                        if (d.baba) res.push({ ...d.baba, ilişki: 'Baba' });
+                        if (d.kardesler) d.kardesler.forEach(k => res.push({ ...k, ilişki: 'Kardeş' }));
+                        return res;
+                    }
+                    return [{ 'TC': '11111111110', 'İlişki': 'Kendisi', 'Ad': 'ALİ', 'Soyad': 'YILMAZ' }];
+                }
+            },
+            sulale: {
+                title: 'Sülale',
+                icon: 'fa-tree',
+                tier: 'premium',
+                inputs: [{ type: 'text', placeholder: 'TC', id: 'q_tc', value: '11111111110' }],
+                buildUrl: (vals) => `${API_BASE}sulale.php?tc=${encodeURIComponent(vals.q_tc)}`,
+                parseResponse: (data) => {
+                    if (data.success && data.data) {
+                        const d = data.data;
+                        let res = [];
+                        if (d.kendisi) res.push({ ...d.kendisi, ilişki: 'Kendisi' });
+                        if (d.anne) res.push({ ...d.anne, ilişki: 'Anne' });
+                        if (d.baba) res.push({ ...d.baba, ilişki: 'Baba' });
+                        if (d.anneanne) res.push({ ...d.anneanne, ilişki: 'Anneanne' });
+                        if (d.dede_anne_tarafi) res.push({ ...d.dede_anne_tarafi, ilişki: 'Dede (Anne)' });
+                        if (d.kardesler) d.kardesler.forEach(k => res.push({ ...k, ilişki: 'Kardeş' }));
+                        return res;
+                    }
+                    return [{ 'TC': '11111111110', 'İlişki': 'Kendisi', 'Ad': 'ALİ', 'Soyad': 'YILMAZ' }];
+                }
+            },
+            vesika: {
+                title: 'Vesika',
+                icon: 'fa-file-alt',
+                tier: 'premium',
+                inputs: [{ type: 'text', placeholder: 'TC', id: 'q_tc', value: '11111111110' }],
+                buildUrl: (vals) => `${API_BASE}vesika.php?tc=${encodeURIComponent(vals.q_tc)}`,
+                parseResponse: (data) => {
+                    if (data.success && data.data) return Array.isArray(data.data) ? data.data : [data.data];
+                    return [{ 'TC': '11111111110', 'Fotoğraf': 'Mevcut', 'Durum': 'Aktif' }];
+                }
+            },
+            tcvip: {
+                title: 'TC Vip',
+                icon: 'fa-crown',
+                tier: 'premium',
+                inputs: [{ type: 'text', placeholder: 'TC', id: 'q_tc', value: '12345678901' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'TC': '12345678901', 'Ad': 'ALİ', 'Soyad': 'YILMAZ', 'Vip': 'Evet' }],
+                isMock: true
+            },
+            medenihal: {
+                title: 'Medeni Hal / Eş',
+                icon: 'fa-ring',
+                tier: 'premium',
+                inputs: [{ type: 'text', placeholder: 'TC', id: 'q_tc', value: '12345678901' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'TC': '12345678901', 'Medeni Hal': 'Evli', 'Eş Adı': 'AYŞE YILMAZ' }],
+                isMock: true
+            },
+            evlilik: {
+                title: 'Evlilik',
+                icon: 'fa-heart',
+                tier: 'premium',
+                inputs: [{ type: 'text', placeholder: 'TC', id: 'q_tc', value: '12345678901' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'TC': '12345678901', 'Evlilik Tarihi': '10.10.2010', 'Eş': 'AYŞE YILMAZ' }],
+                isMock: true
+            },
+            ehliyet: {
+                title: 'Ehliyet Sınav',
+                icon: 'fa-id-card',
+                tier: 'premium',
+                inputs: [{ type: 'text', placeholder: 'TC', id: 'q_tc', value: '12345678901' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'TC': '12345678901', 'Sınav Tarihi': '20.05.2023', 'Sonuç': 'Başarılı' }],
+                isMock: true
+            },
+            iban: {
+                title: 'IBAN',
+                icon: 'fa-university',
+                tier: 'premium',
+                inputs: [{ type: 'text', placeholder: 'IBAN', id: 'q_iban', value: 'TR12 3456 7890 1234 5678 90' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'IBAN': 'TR12 3456 7890 1234 5678 90', 'Banka': 'ZİRAAT',
+                    'Hesap Sahibi': 'MEHMET YILMAZ' }],
+                isMock: true
+            },
+            hesapno: {
+                title: 'Hesap No',
+                icon: 'fa-hashtag',
+                tier: 'premium',
+                inputs: [{ type: 'text', placeholder: 'Hesap No', id: 'q_hesap', value: '123456789' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'Hesap No': '123456789', 'Banka': 'İŞ BANKASI', 'Bakiye': '₺15.200' }],
+                isMock: true
+            },
+            kimlikveren: {
+                title: 'Kimlik Veren',
+                icon: 'fa-id-badge',
+                tier: 'premium',
+                inputs: [{ type: 'text', placeholder: 'TC', id: 'q_tc', value: '12345678901' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'TC': '12345678901', 'Veren Kurum': 'NÜFUS MÜDÜRLÜĞÜ',
+                    'Veriş Tarihi': '12.08.2005' }],
+                isMock: true
+            },
+            vatandaslik: {
+                title: 'Vatandaşlık',
+                icon: 'fa-passport',
+                tier: 'premium',
+                inputs: [{ type: 'text', placeholder: 'TC', id: 'q_tc', value: '12345678901' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'TC': '12345678901', 'Vatandaşlık': 'T.C.', 'Durum': 'Aktif' }],
+                isMock: true
+            },
+            uyruk: {
+                title: 'Uyruk & Milliyet',
+                icon: 'fa-flag',
+                tier: 'premium',
+                inputs: [{ type: 'text', placeholder: 'TC', id: 'q_tc', value: '12345678901' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'TC': '12345678901', 'Uyruk': 'Türkiye', 'Milliyet': 'Türk' }],
+                isMock: true
+            },
+            yikim: {
+                title: 'Yıkım Talimatı',
+                icon: 'fa-building',
+                tier: 'premium',
+                inputs: [{ type: 'text', placeholder: 'Adres / Parsel', id: 'q_yikim', value: 'Parsel 123' }],
+                buildUrl: null,
+                parseResponse: () => [{ 'Parsel': 'Parsel 123', 'Durum': 'Yıkım Onaylı', 'Tarih': '01.02.2024' }],
+                isMock: true
+            }
+        };
+
+        // ----- SORGU YÜKLE -----
+        const queryInputGroup = document.getElementById('queryInputGroup');
+        const queryTitle = document.getElementById('queryTitle');
+        const resultArea = document.getElementById('resultArea');
+        const queryBtn = document.getElementById('queryBtn');
+
+        function loadQuery(queryKey) {
+            const config = queryConfig[queryKey];
+            if (!config) return;
+
+            // premium kontrol
+            if (config.tier === 'premium' && !currentUser?.premium) {
+                showToast('⛔ Bu sorgu PREMİUM kullanıcılara özeldir!', 3000);
+                return;
             }
 
-            authToggle.addEventListener('click', () => {
-                setAuthMode(!isLogin);
+            const tag = config.tier === 'premium' ?
+                '<span class="premium-tag">PREMİUM</span>' :
+                '<span class="free-tag">ÜCRETSİZ</span>';
+
+            queryTitle.innerHTML =
+                `<i class="fas ${config.icon}" style="margin-right:10px;color:#007aff;"></i> ${config.title} ${tag}`;
+
+            let html = '';
+            config.inputs.forEach(inp => {
+                html +=
+                    `<input type="${inp.type}" class="query-input" id="${inp.id}" placeholder="${inp.placeholder}" value="${inp.value || ''}">`;
+            });
+            queryInputGroup.innerHTML = html;
+
+            resultArea.innerHTML = '<div class="no-result">🔍 Sorgu bekleniyor...</div>';
+
+            queryBtn.className = 'query-btn' + (config.tier === 'premium' ? ' premium-btn' : '');
+            queryBtn.onclick = function() { executeQuery(queryKey); };
+            document.querySelectorAll('.query-input').forEach(inp => {
+                inp.addEventListener('keydown', e => { if (e.key === 'Enter') queryBtn.click(); });
+            });
+        }
+
+        async function executeQuery(queryKey) {
+            const config = queryConfig[queryKey];
+            if (!config) return;
+
+            if (config.tier === 'premium' && !currentUser?.premium) {
+                showToast('⛔ Bu sorgu PREMİUM kullanıcılara özeldir!', 3000);
+                return;
+            }
+
+            const values = {};
+            document.querySelectorAll('.query-input').forEach(inp => {
+                values[inp.id] = inp.value.trim();
             });
 
-            function handleAuth() {
-                const email = authEmail.value.trim();
-                const pass = authPassword.value.trim();
-                authError.textContent = '';
-
-                if (!email || !pass) {
-                    authError.textContent = 'Lütfen e-posta ve şifre girin.';
+            for (let id in values) {
+                if (!values[id]) {
+                    showToast('⚠️ Tüm alanları doldurun!', 2500);
                     return;
                 }
+            }
 
-                if (isLogin) {
-                    const user = users.find(u => u.email === email && u.password === pass);
-                    if (user) {
-                        currentUser = user;
-                        localStorage.setItem(SESSION_KEY, JSON.stringify(user));
-                        showToast('✨ Hoş geldin, ' + (user.username || user.email), 2000);
-                        openPanel(user);
-                    } else {
-                        authError.textContent = '❌ E-posta veya şifre hatalı!';
-                    }
+            try {
+                queryBtn.disabled = true;
+                queryBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sorgulanıyor...';
+
+                let data;
+                let fromMock = false;
+
+                if (config.isMock) {
+                    data = config.parseResponse(values);
+                    fromMock = true;
                 } else {
-                    // Kayıt
-                    if (pass.length < 6) {
-                        authError.textContent = 'Şifre en az 6 karakter olmalı!';
-                        return;
-                    }
-                    if (users.find(u => u.email === email)) {
-                        authError.textContent = '❌ Bu e-posta zaten kayıtlı!';
-                        return;
-                    }
-                    const newUser = { email, password: pass, username: email.split('@')[0], premium: false, isAdmin: false };
-                    users.push(newUser);
-                    localStorage.setItem(AUTH_KEY, JSON.stringify(users));
-                    showToast('✅ Kayıt başarılı! Şimdi giriş yap.', 2500);
-                    setAuthMode(true);
-                    authEmail.value = email;
-                    authPassword.value = pass;
-                    handleAuth();
-                }
-            }
-
-            function openPanel(user) {
-                authScreen.style.display = 'none';
-                panelScreen.style.display = 'flex';
-                userName.textContent = user.username || user.email.split('@')[0];
-
-                if (user.premium) {
-                    premiumBadge.style.display = 'inline';
-                } else {
-                    premiumBadge.style.display = 'none';
-                }
-
-                if (user.isAdmin) {
-                    adminBadge.style.display = 'inline';
-                } else {
-                    adminBadge.style.display = 'none';
-                }
-
-                // İstatistikler
-                document.getElementById('activeUsers').textContent = Math.floor(Math.random() * 30 + 20);
-                document.getElementById('totalUsers').textContent = users.length + Math.floor(Math.random() * 50);
-                document.getElementById('freeQueries').textContent = Math.floor(Math.random() * 8 + 3);
-                document.getElementById('premiumQueries').textContent = Math.floor(Math.random() * 4 + 1);
-
-                loadQuery('adsoyad');
-                renderChatMessages();
-                updateChatPreview();
-            }
-
-            // Oturum kontrolü
-            const session = JSON.parse(localStorage.getItem(SESSION_KEY));
-            if (session && users.find(u => u.email === session.email && u.password === session.password)) {
-                currentUser = session;
-                openPanel(currentUser);
-            } else {
-                authScreen.style.display = 'flex';
-                panelScreen.style.display = 'none';
-                setAuthMode(true);
-            }
-
-            authActionBtn.addEventListener('click', handleAuth);
-            authPassword.addEventListener('keydown', e => { if (e.key === 'Enter') handleAuth(); });
-            authEmail.addEventListener('keydown', e => { if (e.key === 'Enter') handleAuth(); });
-
-            // ----- API SORGULARI -----
-            const API_BASE = 'https://arastir-01.site/api/';
-
-            // Free sorgular
-            const freeQueries = ['adsoyad', 'tc', 'tcgsm', 'gsmtc', 'adres', 'vergisor', 'hanesor', 'kizliksoyad', 'burc',
-                'dogum'
-            ];
-
-            // Premium sorgular
-            const premiumQueries = ['aile', 'sulale', 'vesika', 'tcvip', 'medenihal', 'evlilik', 'ehliyet', 'iban', 'hesapno',
-                'kimlikveren', 'vatandaslik', 'uyruk', 'yikim'
-            ];
-
-            const queryConfig = {
-                adsoyad: {
-                    title: 'Ad Soyad',
-                    icon: 'fa-user',
-                    tier: 'free',
-                    inputs: [
-                        { type: 'text', placeholder: 'Ad', id: 'q_ad', value: 'roket' },
-                        { type: 'text', placeholder: 'Soyad', id: 'q_soyad', value: 'atar' }
-                    ],
-                    buildUrl: (vals) =>
-                    `${API_BASE}adsoyad.php?ad=${encodeURIComponent(vals.q_ad)}&soyad=${encodeURIComponent(vals.q_soyad)}`,
-                    parseResponse: (data) => {
-                        if (data.success && data.data) {
-                            return Array.isArray(data.data) ? data.data : [data.data];
-                        }
-                        return [{ 'Ad': vals?.q_ad || 'roket', 'Soyad': vals?.q_soyad || 'atar', 'TC': '27727166918',
-                            'Doğum': '28.9.1969', 'İl': 'BURSA', 'İlçe': 'OSMANGAZİ' }];
-                    }
-                },
-                tc: {
-                    title: 'TC Sorgu',
-                    icon: 'fa-id-card',
-                    tier: 'free',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
-                    buildUrl: (vals) => `${API_BASE}tc.php?tc=${encodeURIComponent(vals.q_tc)}`,
-                    parseResponse: (data) => {
-                        if (data.success && data.data) {
-                            return Array.isArray(data.data) ? data.data : [data.data];
-                        }
-                        return [{ 'TC': vals?.q_tc || '11111111110', 'Ad': 'ALİ', 'Soyad': 'YILMAZ',
-                            'Doğum': '01.01.1990' }];
-                    }
-                },
-                tcgsm: {
-                    title: 'TC GSM',
-                    icon: 'fa-phone-alt',
-                    tier: 'free',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
-                    buildUrl: (vals) => `${API_BASE}tcgsm.php?tc=${encodeURIComponent(vals.q_tc)}`,
-                    parseResponse: (data) => {
-                        if (data.success && data.data) {
-                            if (Array.isArray(data.data)) {
-                                return data.data.map(gsm => ({ GSM: gsm }));
-                            }
-                            return [{ GSM: data.data }];
-                        }
-                        return [{ 'TC': vals?.q_tc || '11111111110', 'GSM': '5551234567' }];
-                    }
-                },
-                gsmtc: {
-                    title: 'GSM TC',
-                    icon: 'fa-phone',
-                    tier: 'free',
-                    inputs: [{ type: 'text', placeholder: 'GSM Numarası', id: 'q_gsm', value: '5551234567' }],
-                    buildUrl: (vals) => `${API_BASE}gsmtc.php?gsm=${encodeURIComponent(vals.q_gsm)}`,
-                    parseResponse: (data) => {
-                        if (data.success && data.data) {
-                            if (Array.isArray(data.data)) {
-                                return data.data.map(tc => ({ TC: tc }));
-                            }
-                            return [{ TC: data.data }];
-                        }
-                        return [{ 'GSM': vals?.q_gsm || '5551234567', 'TC': '11111111110' }];
-                    }
-                },
-                adres: {
-                    title: 'Adres',
-                    icon: 'fa-map-pin',
-                    tier: 'free',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
-                    buildUrl: (vals) => `${API_BASE}adres.php?tc=${encodeURIComponent(vals.q_tc)}`,
-                    parseResponse: (data) => {
-                        if (data.success && data.data) {
-                            return [data.data];
-                        }
-                        return [{ 'TC': vals?.q_tc || '11111111110', 'Adres': 'İstanbul, Kadıköy',
-                            'İl': 'İSTANBUL', 'İlçe': 'KADIKÖY' }];
-                    }
-                },
-                vergisor: {
-                    title: 'Vergi',
-                    icon: 'fa-file-invoice',
-                    tier: 'free',
-                    inputs: [{ type: 'text', placeholder: 'Vergi Numarası', id: 'q_vergi', value: '1234567890' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'Vergi No': '1234567890', 'Mükellef': 'AHMET YILMAZ', 'Durum': 'Aktif' }],
-                    isMock: true
-                },
-                hanesor: {
-                    title: 'Hane',
-                    icon: 'fa-home',
-                    tier: 'free',
-                    inputs: [{ type: 'text', placeholder: 'Hane ID', id: 'q_hane', value: 'H-12345' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'Hane ID': 'H-12345', 'Reis': 'MEHMET DEMİR', 'Birey Sayısı': '5' }],
-                    isMock: true
-                },
-                kizliksoyad: {
-                    title: 'Kızlık Soyad',
-                    icon: 'fa-venus',
-                    tier: 'free',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'TC': '12345678901', 'Kızlık Soyadı': 'DEMİR' }],
-                    isMock: true
-                },
-                burc: {
-                    title: 'Burç',
-                    icon: 'fa-star',
-                    tier: 'free',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'TC': '12345678901', 'Burç': 'Koç', 'Yükselen': 'Aslan' }],
-                    isMock: true
-                },
-                dogum: {
-                    title: 'Doğum',
-                    icon: 'fa-calendar',
-                    tier: 'free',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'TC': '12345678901', 'Doğum Tarihi': '01.01.1990', 'Doğum Yeri': 'İSTANBUL' }],
-                    isMock: true
-                },
-                // ----- PREMIUM SORGULAR -----
-                aile: {
-                    title: 'Aile',
-                    icon: 'fa-users',
-                    tier: 'premium',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
-                    buildUrl: (vals) => `${API_BASE}aile.php?tc=${encodeURIComponent(vals.q_tc)}`,
-                    parseResponse: (data) => {
-                        if (data.success && data.data) {
-                            const result = [];
-                            const d = data.data;
-                            if (d.anne) result.push({ ...d.anne, ilişki: 'Anne' });
-                            if (d.baba) result.push({ ...d.baba, ilişki: 'Baba' });
-                            if (d.kardesler && Array.isArray(d.kardesler)) {
-                                d.kardesler.forEach(k => result.push({ ...k, ilişki: 'Kardeş' }));
-                            }
-                            return result;
-                        }
-                        return [{ 'TC': vals?.q_tc || '11111111110', 'İlişki': 'Kendisi', 'Ad': 'ALİ',
-                            'Soyad': 'YILMAZ' }];
-                    }
-                },
-                sulale: {
-                    title: 'Sülale',
-                    icon: 'fa-tree',
-                    tier: 'premium',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
-                    buildUrl: (vals) => `${API_BASE}sulale.php?tc=${encodeURIComponent(vals.q_tc)}`,
-                    parseResponse: (data) => {
-                        if (data.success && data.data) {
-                            const result = [];
-                            const d = data.data;
-                            if (d.kendisi) result.push({ ...d.kendisi, ilişki: 'Kendisi' });
-                            if (d.anne) result.push({ ...d.anne, ilişki: 'Anne' });
-                            if (d.baba) result.push({ ...d.baba, ilişki: 'Baba' });
-                            if (d.anneanne) result.push({ ...d.anneanne, ilişki: 'Anneanne' });
-                            if (d.dede_anne_tarafi) result.push({ ...d.dede_anne_tarafi,
-                            ilişki: 'Dede (Anne Tarafı)' });
-                            if (d.kardesler && Array.isArray(d.kardesler)) {
-                                d.kardesler.forEach(k => result.push({ ...k, ilişki: 'Kardeş' }));
-                            }
-                            return result;
-                        }
-                        return [{ 'TC': vals?.q_tc || '11111111110', 'İlişki': 'Kendisi', 'Ad': 'ALİ',
-                            'Soyad': 'YILMAZ' }];
-                    }
-                },
-                vesika: {
-                    title: 'Vesika',
-                    icon: 'fa-file-alt',
-                    tier: 'premium',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
-                    buildUrl: (vals) => `${API_BASE}vesika.php?tc=${encodeURIComponent(vals.q_tc)}`,
-                    parseResponse: (data) => {
-                        if (data.success && data.data) {
-                            return Array.isArray(data.data) ? data.data : [data.data];
-                        }
-                        return [{ 'TC': vals?.q_tc || '11111111110', 'Fotoğraf': 'Mevcut', 'Durum': 'Aktif' }];
-                    }
-                },
-                tcvip: {
-                    title: 'TC Vip',
-                    icon: 'fa-crown',
-                    tier: 'premium',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'TC': '12345678901', 'Ad': 'ALİ', 'Soyad': 'YILMAZ', 'Vip': 'Evet' }],
-                    isMock: true
-                },
-                medenihal: {
-                    title: 'Medeni Hal / Eş',
-                    icon: 'fa-ring',
-                    tier: 'premium',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'TC': '12345678901', 'Medeni Hal': 'Evli', 'Eş Adı': 'AYŞE YILMAZ' }],
-                    isMock: true
-                },
-                evlilik: {
-                    title: 'Evlilik',
-                    icon: 'fa-heart',
-                    tier: 'premium',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'TC': '12345678901', 'Evlilik Tarihi': '10.10.2010', 'Eş': 'AYŞE YILMAZ' }],
-                    isMock: true
-                },
-                ehliyet: {
-                    title: 'Ehliyet Sınav',
-                    icon: 'fa-id-card',
-                    tier: 'premium',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'TC': '12345678901', 'Sınav Tarihi': '20.05.2023', 'Sonuç': 'Başarılı' }],
-                    isMock: true
-                },
-                iban: {
-                    title: 'IBAN',
-                    icon: 'fa-university',
-                    tier: 'premium',
-                    inputs: [{ type: 'text', placeholder: 'IBAN No', id: 'q_iban', value: 'TR12 3456 7890 1234 5678 90' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'IBAN': 'TR12 3456 7890 1234 5678 90', 'Banka': 'ZİRAAT', 'Hesap Sahibi': 'MEHMET YILMAZ' }],
-                    isMock: true
-                },
-                hesapno: {
-                    title: 'Hesap No',
-                    icon: 'fa-hashtag',
-                    tier: 'premium',
-                    inputs: [{ type: 'text', placeholder: 'Hesap Numarası', id: 'q_hesap', value: '123456789' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'Hesap No': '123456789', 'Banka': 'İŞ BANKASI', 'Bakiye': '₺15.200' }],
-                    isMock: true
-                },
-                kimlikveren: {
-                    title: 'Kimlik Veren',
-                    icon: 'fa-id-badge',
-                    tier: 'premium',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'TC': '12345678901', 'Veren Kurum': 'NÜFUS MÜDÜRLÜĞÜ', 'Veriş Tarihi': '12.08.2005' }],
-                    isMock: true
-                },
-                vatandaslik: {
-                    title: 'Vatandaşlık',
-                    icon: 'fa-passport',
-                    tier: 'premium',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'TC': '12345678901', 'Vatandaşlık': 'T.C.', 'Durum': 'Aktif' }],
-                    isMock: true
-                },
-                uyruk: {
-                    title: 'Uyruk & Milliyet',
-                    icon: 'fa-flag',
-                    tier: 'premium',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'TC': '12345678901', 'Uyruk': 'Türkiye', 'Milliyet': 'Türk' }],
-                    isMock: true
-                },
-                yikim: {
-                    title: 'Yıkım Talimatı',
-                    icon: 'fa-building',
-                    tier: 'premium',
-                    inputs: [{ type: 'text', placeholder: 'Adres / Parsel', id: 'q_yikim', value: 'Parsel 123' }],
-                    buildUrl: () => null,
-                    parseResponse: () => [{ 'Parsel': 'Parsel 123', 'Durum': 'Yıkım Onaylı', 'Tarih': '01.02.2024' }],
-                    isMock: true
-                }
-            };
-
-            // ----- SORGU YUKLEYICI -----
-            const queryInputGroup = document.getElementById('queryInputGroup');
-            const queryTitle = document.getElementById('queryTitle');
-            const resultArea = document.getElementById('resultArea');
-            const queryBtn = document.getElementById('queryBtn');
-            let currentQueryKey = 'adsoyad';
-
-            function loadQuery(queryKey) {
-                currentQueryKey = queryKey;
-                const config = queryConfig[queryKey];
-                if (!config) return;
-
-                // Premium kontrolü
-                const isPremium = config.tier === 'premium';
-                if (isPremium && !currentUser?.premium) {
-                    showToast('⛔ Bu sorgu PREMİUM kullanıcılara özeldir!', 3000);
-                    return;
-                }
-
-                const tag = isPremium ?
-                    '<span class="premium-tag">PREMİUM</span>' :
-                    '<span class="free-tag">ÜCRETSİZ</span>';
-
-                queryTitle.innerHTML =
-                    `<i class="fas ${config.icon}" style="margin-right:10px;color:#007aff;"></i> ${config.title} ${tag}`;
-
-                let html = '';
-                config.inputs.forEach(inp => {
-                    html +=
-                        `<input type="${inp.type}" class="query-input" id="${inp.id}" placeholder="${inp.placeholder}" value="${inp.value || ''}">`;
-                });
-                queryInputGroup.innerHTML = html;
-
-                resultArea.innerHTML = '<div class="no-result">🔍 Sorgu bekleniyor...</div>';
-
-                // Buton stilini güncelle
-                queryBtn.className = 'query-btn' + (isPremium ? ' premium-btn' : '');
-
-                queryBtn.onclick = function() {
-                    executeQuery(queryKey);
-                };
-                document.querySelectorAll('.query-input').forEach(inp => {
-                    inp.addEventListener('keydown', function(e) {
-                        if (e.key === 'Enter') queryBtn.click();
-                    });
-                });
-            }
-
-            async function executeQuery(queryKey) {
-                const config = queryConfig[queryKey];
-                if (!config) return;
-
-                // Premium kontrolü
-                if (config.tier === 'premium' && !currentUser?.premium) {
-                    showToast('⛔ Bu sorgu PREMİUM kullanıcılara özeldir!', 3000);
-                    return;
-                }
-
-                const values = {};
-                document.querySelectorAll('.query-input').forEach(inp => {
-                    values[inp.id] = inp.value.trim();
-                });
-
-                for (let id in values) {
-                    if (!values[id]) {
-                        showToast('⚠️ Tüm alanları doldurun!', 2500);
-                        return;
-                    }
-                }
-
-                try {
-                    queryBtn.disabled = true;
-                    queryBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sorgulanıyor...';
-
-                    let data;
-                    let fromMock = false;
-
-                    if (config.isMock) {
+                    const url = config.buildUrl(values);
+                    if (!url) throw new Error('API URL yok');
+                    try {
+                        const res = await fetch(url, { mode: 'cors' });
+                        if (!res.ok) throw new Error('HTTP ' + res.status);
+                        const json = await res.json();
+                        data = config.parseResponse(json);
+                    } catch (e) {
+                        console.warn('API hatası, mock:', e.message);
                         data = config.parseResponse(values);
                         fromMock = true;
-                    } else {
-                        const url = config.buildUrl(values);
-                        if (!url) throw new Error('API URL oluşturulamadı');
-                        try {
-                            const response = await fetch(url, { mode: 'cors' });
-                            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                            const json = await response.json();
-                            data = config.parseResponse(json);
-                        } catch (fetchErr) {
-                            console.warn('API hatası, mock:', fetchErr.message);
-                            data = config.parseResponse(values);
-                            fromMock = true;
-                            showToast('⚠️ API bağlantı hatası, örnek veri gösteriliyor.', 3000);
-                        }
+                        showToast('⚠️ API bağlantı hatası, örnek veri.', 3000);
                     }
-
-                    if (data && data.length > 0) {
-                        renderResults(data);
-                        const msg = fromMock ? '📌 Örnek veri (API yanıt vermedi)' :
-                            `✅ ${data.length} kayıt bulundu`;
-                        showToast(msg, 2500);
-                    } else {
-                        resultArea.innerHTML = '<div class="no-result">😕 Sonuç bulunamadı.</div>';
-                        showToast('Sonuç yok', 1800);
-                    }
-                } catch (err) {
-                    resultArea.innerHTML =
-                        `<div class="no-result" style="color:#ff453a;">⛔ Hata: ${err.message}</div>`;
-                    showToast('⚠️ Sorgu hatası', 2500);
-                } finally {
-                    queryBtn.disabled = false;
-                    queryBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Sorgula';
                 }
-            }
 
-            function renderResults(people) {
-                let html = '';
-                people.forEach(p => {
-                    let rows = '';
-                    for (let key in p) {
-                        if (p[key] !== null && p[key] !== undefined) {
-                            rows +=
-                                `<div class="row"><span class="label">${key}</span><span class="value">${p[key]}</span></div>`;
-                        }
+                if (data && data.length > 0) {
+                    renderResults(data);
+                    showToast(fromMock ? '📌 Örnek veri (API yanıt vermedi)' : `✅ ${data.length} kayıt`, 2500);
+                } else {
+                    resultArea.innerHTML = '<div class="no-result">😕 Sonuç bulunamadı.</div>';
+                    showToast('Sonuç yok', 1800);
+                }
+            } catch (err) {
+                resultArea.innerHTML =
+                `<div class="no-result" style="color:#ff453a;">⛔ Hata: ${err.message}</div>`;
+                showToast('⚠️ Sorgu hatası', 2500);
+            } finally {
+                queryBtn.disabled = false;
+                queryBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Sorgula';
+            }
+        }
+
+        function renderResults(people) {
+            let html = '';
+            people.forEach(p => {
+                let rows = '';
+                for (let key in p) {
+                    if (p[key] !== null && p[key] !== undefined) {
+                        rows +=
+                            `<div class="row"><span class="label">${key}</span><span class="value">${p[key]}</span></div>`;
                     }
-                    html += `
-                        <div class="result-card">
-                            ${rows}
-                            <button class="download-btn" data-data='${JSON.stringify(p)}'>
-                                <i class="fas fa-download"></i> TXT İndir
-                            </button>
-                        </div>
-                    `;
+                }
+                html += `
+                    <div class="result-card">
+                        ${rows}
+                        <button class="download-btn" data-data='${JSON.stringify(p)}'>
+                            <i class="fas fa-download"></i> TXT İndir
+                        </button>
+                    </div>
+                `;
+            });
+            resultArea.innerHTML = html;
+
+            document.querySelectorAll('.download-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const data = JSON.parse(this.dataset.data);
+                    let content = '';
+                    for (let key in data) {
+                        if (data[key] !== null && data[key] !== undefined)
+                            content += `${key}: ${data[key]}\n`;
+                    }
+                    content += `\n--- Elif Sorgu ---\nTarih: ${new Date().toLocaleString()}`;
+                    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `sorgu_${Date.now()}.txt`;
+                    link.click();
+                    URL.revokeObjectURL(link.href);
+                    showToast('✅ TXT indirildi', 1500);
                 });
-                resultArea.innerHTML = html;
+            });
+        }
 
-                document.querySelectorAll('.download-btn').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const data = JSON.parse(this.dataset.data);
-                        let content = '';
-                        for (let key in data) {
-                            if (data[key] !== null && data[key] !== undefined) {
-                                content += `${key}: ${data[key]}\n`;
-                            }
-                        }
-                        content += `\n--- Elif Sorgu Paneli ---\nTarih: ${new Date().toLocaleString()}`;
-                        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-                        const link = document.createElement('a');
-                        link.href = URL.createObjectURL(blob);
-                        link.download = `sorgu_${Date.now()}.txt`;
-                        link.click();
-                        URL.revokeObjectURL(link.href);
-                        showToast('✅ TXT indirildi', 1500);
-                    });
-                });
+        // ----- MENU -----
+        const menuToggle = document.getElementById('menuToggle');
+        const sideMenu = document.getElementById('sideMenu');
+        const closeMenu = document.getElementById('closeMenu');
+
+        function toggleMenu(open) {
+            if (open !== undefined) sideMenu.classList.toggle('open', open);
+            else sideMenu.classList.toggle('open');
+        }
+
+        menuToggle.addEventListener('click', () => toggleMenu(true));
+        closeMenu.addEventListener('click', () => toggleMenu(false));
+        document.addEventListener('click', (e) => {
+            if (sideMenu.classList.contains('open') && !sideMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                toggleMenu(false);
             }
+        });
 
-            // ----- MENU -----
-            const menuToggle = document.getElementById('menuToggle');
-            const sideMenu = document.getElementById('sideMenu');
-            const closeMenu = document.getElementById('closeMenu');
-
-            function toggleMenu(open) {
-                if (open !== undefined) sideMenu.classList.toggle('open', open);
-                else sideMenu.classList.toggle('open');
-            }
-
-            menuToggle.addEventListener('click', () => toggleMenu(true));
-            closeMenu.addEventListener('click', () => toggleMenu(false));
-            document.addEventListener('click', (e) => {
-                if (sideMenu.classList.contains('open') && !sideMenu.contains(e.target) && !menuToggle.contains(e
-                    .target)) {
+        document.querySelectorAll('.side-menu .menu-item[data-query]').forEach(item => {
+            item.addEventListener('click', function() {
+                const q = this.dataset.query;
+                const isPremium = this.dataset.premium === 'true';
+                if (isPremium && !currentUser?.premium) {
+                    showToast('⛔ Bu sorgu PREMİUM kullanıcılara özeldir!', 3000);
                     toggleMenu(false);
-                }
-            });
-
-            document.querySelectorAll('.side-menu .menu-item[data-query]').forEach(item => {
-                item.addEventListener('click', function() {
-                    const q = this.dataset.query;
-                    const isPremium = this.dataset.premium === 'true';
-
-                    if (isPremium && !currentUser?.premium) {
-                        showToast('⛔ Bu sorgu PREMİUM kullanıcılara özeldir!', 3000);
-                        toggleMenu(false);
-                        return;
-                    }
-
-                    if (q && queryConfig[q]) {
-                        loadQuery(q);
-                        toggleMenu(false);
-                        showToast(`📌 ${queryConfig[q].title} seçildi`, 1500);
-                    }
-                });
-            });
-
-            // ----- SOHBET (bot yok, sadece kullanıcılar) -----
-            const chatPanel = document.getElementById('chatPanel');
-            const chatOverlay = document.getElementById('chatOverlay');
-            const chatPreview = document.getElementById('chatPreview');
-            const closeChat = document.getElementById('closeChat');
-            const chatMessages = document.getElementById('chatMessages');
-            const chatInput = document.getElementById('chatInput');
-            const chatSendBtn = document.getElementById('chatSendBtn');
-
-            function openChat() {
-                chatPanel.classList.add('open');
-                chatOverlay.classList.add('show');
-                renderChatMessages();
-                chatInput.focus();
-            }
-
-            function closeChatPanel() {
-                chatPanel.classList.remove('open');
-                chatOverlay.classList.remove('show');
-            }
-
-            chatPreview.addEventListener('click', openChat);
-            closeChat.addEventListener('click', closeChatPanel);
-            chatOverlay.addEventListener('click', closeChatPanel);
-
-            function getChatMessages() {
-                return JSON.parse(localStorage.getItem(CHAT_KEY)) || [];
-            }
-
-            function saveChatMessages(messages) {
-                localStorage.setItem(CHAT_KEY, JSON.stringify(messages));
-            }
-
-            function renderChatMessages() {
-                const messages = getChatMessages();
-                let html = '';
-                messages.forEach(msg => {
-                    const isOwn = (msg.sender === currentUser?.email);
-                    html += `
-                        <div class="msg ${isOwn ? 'own' : ''}">
-                            <div class="msg-user">${msg.username || msg.sender}</div>
-                            ${msg.text}
-                            <div class="msg-time">${msg.time}</div>
-                        </div>
-                    `;
-                });
-                chatMessages.innerHTML = html;
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-
-            function sendChatMessage() {
-                const text = chatInput.value.trim();
-                if (!text) return;
-                if (!currentUser) {
-                    showToast('Lütfen giriş yapın.', 2000);
                     return;
                 }
-                const messages = getChatMessages();
-                messages.push({
-                    sender: currentUser.email,
-                    username: currentUser.username || currentUser.email.split('@')[0],
-                    text: text,
-                    time: new Date().toLocaleString()
-                });
-                saveChatMessages(messages);
-                chatInput.value = '';
-                renderChatMessages();
-                updateChatPreview();
-            }
-
-            chatSendBtn.addEventListener('click', sendChatMessage);
-            chatInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') sendChatMessage();
-            });
-
-            function updateChatPreview() {
-                const messages = getChatMessages();
-                const preview = document.querySelector('.chat-preview span');
-                if (messages.length > 0) {
-                    preview.innerHTML =
-                        `<i class="fas fa-comment-dots" style="margin-right:10px;color:#007aff;"></i> Sohbet (${messages.length})`;
-                } else {
-                    preview.innerHTML =
-                        `<i class="fas fa-comment-dots" style="margin-right:10px;color:#007aff;"></i> Sohbet`;
+                if (q && queryConfig[q]) {
+                    loadQuery(q);
+                    toggleMenu(false);
+                    showToast(`📌 ${queryConfig[q].title} seçildi`, 1500);
                 }
-            }
+            });
+        });
 
-            // ----- BAŞLANGIÇ -----
-            // Admin'i premium yap
-            const adminUser = users.find(u => u.email === ADMIN_EMAIL);
-            if (adminUser) {
-                adminUser.premium = true;
-                adminUser.isAdmin = true;
-                localStorage.setItem(AUTH_KEY, JSON.stringify(users));
-            }
+        // ----- CHAT -----
+        const chatPanel = document.getElementById('chatPanel');
+        const chatOverlay = document.getElementById('chatOverlay');
+        const chatPreview = document.getElementById('chatPreview');
+        const closeChat = document.getElementById('closeChat');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const chatSendBtn = document.getElementById('chatSendBtn');
 
+        function openChat() {
+            chatPanel.classList.add('open');
+            chatOverlay.classList.add('show');
+            renderChatMessages();
+            chatInput.focus();
+        }
+
+        function closeChatPanel() {
+            chatPanel.classList.remove('open');
+            chatOverlay.classList.remove('show');
+        }
+
+        chatPreview.addEventListener('click', openChat);
+        closeChat.addEventListener('click', closeChatPanel);
+        chatOverlay.addEventListener('click', closeChatPanel);
+
+        function getChatMessages() {
+            return JSON.parse(localStorage.getItem(CHAT_KEY)) || [];
+        }
+
+        function saveChatMessages(messages) {
+            localStorage.setItem(CHAT_KEY, JSON.stringify(messages));
+        }
+
+        function renderChatMessages() {
+            const messages = getChatMessages();
+            let html = '';
+            messages.forEach(msg => {
+                const isOwn = (msg.sender === currentUser?.email);
+                html += `
+                    <div class="msg ${isOwn ? 'own' : ''}">
+                        <div class="msg-user">${msg.username || msg.sender}</div>
+                        ${msg.text}
+                        <div class="msg-time">${msg.time}</div>
+                    </div>
+                `;
+            });
+            chatMessages.innerHTML = html;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendChatMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            if (!currentUser) {
+                showToast('Lütfen giriş yapın.', 2000);
+                return;
+            }
+            const messages = getChatMessages();
+            messages.push({
+                sender: currentUser.email,
+                username: currentUser.username || currentUser.email.split('@')[0],
+                text: text,
+                time: new Date().toLocaleString()
+            });
+            saveChatMessages(messages);
+            chatInput.value = '';
+            renderChatMessages();
             updateChatPreview();
+        }
 
-            console.log('Elif Sorgu Paneli Premium Edition çalışıyor.');
-            console.log('Toplam kullanıcı:', users.length);
-            console.log('Admin:', ADMIN_EMAIL);
+        chatSendBtn.addEventListener('click', sendChatMessage);
+        chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendChatMessage(); });
 
-            // ----- KLAN: UZUN KOD (ağır olsun) -----
-            // Buraya kadar 1500+ satır. Daha da uzatabilirim ama bu haliyle
-            // fazlasıyla ağır ve sağlam bir yapı.
+        function updateChatPreview() {
+            const messages = getChatMessages();
+            const preview = document.querySelector('.chat-preview span');
+            preview.innerHTML =
+                `<i class="fas fa-comment-dots" style="margin-right:10px;color:#007aff;"></i> Sohbet (${messages.length})`;
+        }
 
-        })();
-    </script>
+        // ----- BAŞLANGIÇ -----
+        // admin premium
+        const admin = users.find(u => u.email === ADMIN_EMAIL);
+        if (admin) {
+            admin.premium = true;
+            admin.isAdmin = true;
+            localStorage.setItem(AUTH_KEY, JSON.stringify(users));
+        }
 
+        updateChatPreview();
+        console.log('Elif FIXED çalışıyor.');
+
+    })();
+</script>
 </body>
 </html>
