@@ -32,7 +32,7 @@
             border: 1px solid #232428;
         }
 
-        /* AUTH (Discord Style) */
+        /* AUTH */
         .auth-screen {
             display: flex;
             flex-direction: column;
@@ -332,7 +332,7 @@
             font-size: 13px;
         }
 
-        /* SIDE MENU (Discord Server Sidebar Style) */
+        /* SIDE MENU */
         .side-menu {
             position: fixed;
             top: 0;
@@ -366,9 +366,6 @@
             color: #949ba4;
             text-transform: uppercase;
             margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
         }
         .side-menu .menu-item {
             padding: 10px;
@@ -586,12 +583,12 @@
     </div>
 </div>
 
-<!-- SIDE MENU (Discord Channels) -->
+<!-- SIDE MENU -->
 <div class="side-menu" id="sideMenu">
     <div class="close-menu" id="closeMenu"><i class="fas fa-times"></i></div>
 
     <div class="menu-section">
-        <div class="section-title"><span>Ücretsiz Kanallar</span></div>
+        <div class="section-title">Ücretsiz Kanallar</div>
         <div class="menu-item" data-query="adsoyad"><span class="item-left"><i class="fas fa-hashtag"></i> ad-soyad</span><span class="badge-active">Aktif</span></div>
         <div class="menu-item" data-query="tc"><span class="item-left"><i class="fas fa-hashtag"></i> tc-sorgu</span><span class="badge-active">Aktif</span></div>
         <div class="menu-item" data-query="tcgsm"><span class="item-left"><i class="fas fa-hashtag"></i> tc-gsm</span><span class="badge-active">Aktif</span></div>
@@ -600,7 +597,7 @@
     </div>
 
     <div class="menu-section">
-        <div class="section-title"><span>VIP Kanallar</span></div>
+        <div class="section-title">VIP Kanallar</div>
         <div class="menu-item" data-query="aile" data-premium="true"><span class="item-left"><i class="fas fa-lock"></i> aile</span><span class="badge-premium">VIP</span></div>
         <div class="menu-item" data-query="sulale" data-premium="true"><span class="item-left"><i class="fas fa-lock"></i> sulale</span><span class="badge-premium">VIP</span></div>
         <div class="menu-item" data-query="vesika" data-premium="true"><span class="item-left"><i class="fas fa-lock"></i> vesika</span><span class="badge-premium">VIP</span></div>
@@ -743,18 +740,18 @@
         authActionBtn.addEventListener('click', handleAuth);
         authPassword.addEventListener('keydown', e => { if (e.key === 'Enter') handleAuth(); });
 
-        const PROXY = 'https://api.allorigins.win/raw?url=';
+        // DOĞRUDAN API BAĞLANTISI (PROXYSİZ)
         const API_BASE = 'https://arastir-01.site/api/';
 
         const queryConfig = {
-            adsoyad: { title: 'ad-soyad', tier: 'free', inputs: [{ type: 'text', placeholder: 'Ad', id: 'q_ad', value: 'roket' }, { type: 'text', placeholder: 'Soyad', id: 'q_soyad', value: 'atar' }], buildUrl: (v) => `${API_BASE}adsoyad.php?ad=${encodeURIComponent(v.q_ad)}&soyad=${encodeURIComponent(v.q_soyad)}`, parseResponse: (d) => (d.success && d.data) ? (Array.isArray(d.data) ? d.data : [d.data]) : [{ 'Ad': 'ROKET', 'Soyad': 'ATAR', 'TC': '27727166918' }] },
-            tc: { title: 'tc-sorgu', tier: 'free', inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }], buildUrl: (v) => `${API_BASE}tc.php?tc=${encodeURIComponent(v.q_tc)}`, parseResponse: (d) => (d.success && d.data) ? (Array.isArray(d.data) ? d.data : [d.data]) : [{ 'TC': '11111111110', 'Ad': 'ALİ' }] },
-            tcgsm: { title: 'tc-gsm', tier: 'free', inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }], buildUrl: (v) => `${API_BASE}tcgsm.php?tc=${encodeURIComponent(v.q_tc)}`, parseResponse: (d) => (d.success && d.data) ? (Array.isArray(d.data) ? d.data.map(g => ({ GSM: g })) : [{ GSM: d.data }]) : [{ 'GSM': '5551234567' }] },
-            gsmtc: { title: 'gsm-tc', tier: 'free', inputs: [{ type: 'text', placeholder: 'GSM Numarası', id: 'q_gsm', value: '5551234567' }], buildUrl: (v) => `${API_BASE}gsmtc.php?gsm=${encodeURIComponent(v.q_gsm)}`, parseResponse: (d) => (d.success && d.data) ? (Array.isArray(d.data) ? d.data.map(t => ({ TC: t })) : [{ TC: d.data }]) : [{ 'TC': '11111111110' }] },
-            adres: { title: 'adres', tier: 'free', inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }], buildUrl: (v) => `${API_BASE}adres.php?tc=${encodeURIComponent(v.q_tc)}`, parseResponse: (d) => (d.success && d.data) ? [d.data] : [{ 'Adres': 'İstanbul, Kadıköy' }] },
-            aile: { title: 'aile', tier: 'premium', inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }], buildUrl: (v) => `${API_BASE}aile.php?tc=${encodeURIComponent(v.q_tc)}`, parseResponse: (d) => (d.success && d.data) ? [{ İlişki: 'Aile Verisi', Bilgi: 'Mevcut' }] : [{ 'Bilgi': 'Örnek Aile Verisi' }] },
-            sulale: { title: 'sulale', tier: 'premium', inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }], buildUrl: (v) => `${API_BASE}sulale.php?tc=${encodeURIComponent(v.q_tc)}`, parseResponse: (d) => (d.success && d.data) ? [{ İlişki: 'Sülale Verisi', Bilgi: 'Mevcut' }] : [{ 'Bilgi': 'Örnek Sülale Verisi' }] },
-            vesika: { title: 'vesika', tier: 'premium', inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }], buildUrl: (v) => `${API_BASE}vesika.php?tc=${encodeURIComponent(v.q_tc)}`, parseResponse: (d) => (d.success && d.data) ? [d.data] : [{ 'Durum': 'Fotoğraf Bulundu' }] }
+            adsoyad: { title: 'ad-soyad', tier: 'free', inputs: [{ type: 'text', placeholder: 'Ad', id: 'q_ad', value: '' }, { type: 'text', placeholder: 'Soyad', id: 'q_soyad', value: '' }], buildUrl: (v) => `${API_BASE}adsoyad.php?ad=${encodeURIComponent(v.q_ad)}&soyad=${encodeURIComponent(v.q_soyad)}` },
+            tc: { title: 'tc-sorgu', tier: 'free', inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '' }], buildUrl: (v) => `${API_BASE}tc.php?tc=${encodeURIComponent(v.q_tc)}` },
+            tcgsm: { title: 'tc-gsm', tier: 'free', inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '' }], buildUrl: (v) => `${API_BASE}tcgsm.php?tc=${encodeURIComponent(v.q_tc)}` },
+            gsmtc: { title: 'gsm-tc', tier: 'free', inputs: [{ type: 'text', placeholder: 'GSM Numarası', id: 'q_gsm', value: '' }], buildUrl: (v) => `${API_BASE}gsmtc.php?gsm=${encodeURIComponent(v.q_gsm)}` },
+            adres: { title: 'adres', tier: 'free', inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '' }], buildUrl: (v) => `${API_BASE}adres.php?tc=${encodeURIComponent(v.q_tc)}` },
+            aile: { title: 'aile', tier: 'premium', inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '' }], buildUrl: (v) => `${API_BASE}aile.php?tc=${encodeURIComponent(v.q_tc)}` },
+            sulale: { title: 'sulale', tier: 'premium', inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '' }], buildUrl: (v) => `${API_BASE}sulale.php?tc=${encodeURIComponent(v.q_tc)}` },
+            vesika: { title: 'vesika', tier: 'premium', inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '' }], buildUrl: (v) => `${API_BASE}vesika.php?tc=${encodeURIComponent(v.q_tc)}` }
         };
 
         const queryInputGroup = document.getElementById('queryInputGroup');
@@ -809,41 +806,54 @@
                 queryBtn.textContent = 'Sorgulanıyor...';
 
                 const url = config.buildUrl(values);
-                const res = await fetch(PROXY + encodeURIComponent(url));
-                if (!res.ok) throw new Error('Sunucu yanıt vermedi');
+                const res = await fetch(url);
+                
+                if (!res.ok) throw new Error('Sunucu HTTP hata kodu döndürdü: ' + res.status);
+                
                 const json = await res.json();
-                const data = config.parseResponse(json);
+                
+                // Gelen JSON verisini esnek işleme (Array veya Object desteği)
+                let dataList = [];
+                if (json) {
+                    if (json.success && json.data) {
+                        dataList = Array.isArray(json.data) ? json.data : [json.data];
+                    } else if (Array.isArray(json)) {
+                        dataList = json;
+                    } else if (typeof json === 'object') {
+                        dataList = [json];
+                    }
+                }
 
-                if (data && data.length > 0) {
-                    renderResults(data);
-                    showToast(`${data.length} sonuç listelendi.`, 2000);
+                if (dataList.length > 0) {
+                    renderResults(dataList);
+                    showToast(`${dataList.length} sonuç listelendi.`, 2000);
                 } else {
                     resultArea.innerHTML = '<div class="no-result">Sonuç bulunamadı.</div>';
+                    showToast('Kayıt bulunamadı.', 2000);
                 }
             } catch (err) {
-                console.warn('API bağlantı hatası, örnek veriler gösteriliyor:', err);
-                const mockData = config.parseResponse({});
-                renderResults(mockData);
-                showToast('API çevrimdışı, önbellek verisi gösterildi.', 2500);
+                console.error('Sorgu Hatası:', err);
+                resultArea.innerHTML = `<div class="no-result" style="color:#f23f43;">Hata: API yanıt vermedi veya veri okunamadı.</div>`;
+                showToast('İstek başarısız oldu.', 2500);
             } finally {
                 queryBtn.disabled = false;
                 queryBtn.textContent = 'Sorgula';
             }
         }
 
-        function renderResults(people) {
+        function renderResults(items) {
             let html = '';
-            people.forEach(p => {
+            items.forEach(item => {
                 let rows = '';
-                for (let key in p) {
-                    if (p[key] !== null && p[key] !== undefined) {
-                        rows += `<div class="row"><span class="label">${key}</span><span class="value">${p[key]}</span></div>`;
+                for (let key in item) {
+                    if (item[key] !== null && item[key] !== undefined) {
+                        rows += `<div class="row"><span class="label">${key}</span><span class="value">${item[key]}</span></div>`;
                     }
                 }
                 html += `
                     <div class="result-card">
                         ${rows}
-                        <button class="download-btn" data-data='${JSON.stringify(p)}'>TXT İndir</button>
+                        <button class="download-btn" data-data='${JSON.stringify(item)}'>TXT İndir</button>
                     </div>
                 `;
             });
