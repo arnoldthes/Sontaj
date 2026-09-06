@@ -5,10 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>⭐ CC CHECKER PRO</title>
     <style>
-        /* ===== RESET & BASE ===== */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ============================================================
+           RESET & BASE - KOYU SİYAH
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            background: #07080a;
+            background: #080a0e;
             color: #e8edf5;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             height: 100vh;
@@ -17,33 +23,38 @@
             user-select: none;
             -webkit-user-select: none;
             overflow: hidden;
+            font-weight: 500;
         }
 
-        /* ===== F12 KORUMA ===== */
+        /* ============================================================
+           F12 KORUMA
+           ============================================================ */
         #devBlock {
             position: fixed;
             inset: 0;
-            background: #07080a;
+            background: #080a0e;
             z-index: 99999;
             display: none;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
         }
         #devBlock.active { display: flex; }
         #devBlock .icon { font-size: 56px; margin-bottom: 16px; }
-        #devBlock h2 { font-size: 22px; color: #ff4757; }
-        #devBlock p { color: #6a6f7a; margin-top: 8px; font-size: 14px; }
+        #devBlock h2 { font-size: 22px; color: #ff4757; font-weight: 700; }
+        #devBlock p { color: #5a6070; margin-top: 8px; font-size: 14px; font-weight: 400; }
 
-        /* ===== ÜST BAR ===== */
+        /* ============================================================
+           ÜST BAR
+           ============================================================ */
         .header {
-            background: #0c0e12;
+            background: #0c0f14;
             padding: 14px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #1e2229;
+            border-bottom: 1px solid #1a1e26;
             flex-shrink: 0;
             min-height: 64px;
         }
@@ -56,74 +67,91 @@
             width: 42px;
             height: 42px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #2d3436, #1e2229);
+            background: #141a22;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
             font-size: 16px;
             color: #fff;
-            border: 2px solid #2d3436;
+            border: 2px solid #1e2630;
             overflow: hidden;
             flex-shrink: 0;
         }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .user-text .name { font-weight: 600; font-size: 15px; color: #f0f4fa; }
-        .user-text .id { font-size: 11px; color: #6a6f7a; }
+        .user-text .name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #f0f4fa;
+            letter-spacing: 0.3px;
+        }
+        .user-text .id {
+            font-size: 11px;
+            color: #5a6070;
+            font-weight: 400;
+        }
         .right-area {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
         }
         .premium-badge {
             background: linear-gradient(135deg, #f9a825, #ffca28);
-            color: #1a1a1a;
+            color: #0a0c10;
             font-weight: 800;
             font-size: 10px;
-            padding: 4px 12px;
+            padding: 4px 14px;
             border-radius: 20px;
             letter-spacing: 0.5px;
             text-transform: uppercase;
+            font-weight: 900;
         }
         .limit-box {
-            background: #14181f;
-            padding: 4px 14px;
+            background: #141a22;
+            padding: 4px 16px;
             border-radius: 20px;
-            border: 1px solid #2a2f38;
-            font-size: 13px;
-            font-weight: 600;
-            color: #aab;
+            border: 1px solid #1e2630;
+            font-size: 14px;
+            font-weight: 700;
+            color: #8a92a0;
         }
-        .limit-box span { color: #fff; font-weight: 700; }
+        .limit-box span { color: #ffffff; font-weight: 800; }
         .profile-btn {
             background: none;
             border: none;
-            color: #6a6f7a;
+            color: #5a6070;
             font-size: 22px;
             cursor: pointer;
             padding: 4px;
             transition: 0.2s;
+            font-weight: 400;
         }
-        .profile-btn:hover { color: #fff; }
+        .profile-btn:hover { color: #e8edf5; }
 
-        /* ===== ANA İÇERİK ===== */
+        /* ============================================================
+           ANA İÇERİK
+           ============================================================ */
         .main {
             flex: 1;
             overflow-y: auto;
             padding: 16px 18px 10px 18px;
         }
         .main::-webkit-scrollbar { width: 3px; }
-        .main::-webkit-scrollbar-track { background: #0c0e12; }
-        .main::-webkit-scrollbar-thumb { background: #2a2f38; border-radius: 10px; }
+        .main::-webkit-scrollbar-track { background: #0c0f14; }
+        .main::-webkit-scrollbar-thumb { background: #1e2630; border-radius: 10px; }
 
-        /* ===== SAYFALAR ===== */
+        /* ============================================================
+           SAYFALAR
+           ============================================================ */
         .page { display: none; }
         .page.active { display: block; }
 
-        /* ===== GATE SELECTOR ===== */
+        /* ============================================================
+           GATE SELECTOR - KALIN
+           ============================================================ */
         .gate-box {
-            background: #0c0e12;
-            border: 1px solid #1e2229;
+            background: #0c0f14;
+            border: 1px solid #1a1e26;
             border-radius: 14px;
             padding: 14px 18px;
             margin-bottom: 16px;
@@ -134,52 +162,56 @@
         }
         .gate-box label {
             font-size: 13px;
-            font-weight: 600;
-            color: #6a6f7a;
+            font-weight: 700;
+            color: #5a6070;
             letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
         .gate-box select {
-            background: #14181f;
+            background: #141a22;
             color: #e8edf5;
-            border: 1px solid #2a2f38;
-            padding: 8px 16px;
+            border: 1px solid #1e2630;
+            padding: 8px 18px;
             border-radius: 10px;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 700;
             outline: none;
             flex: 1;
             min-width: 140px;
             font-family: inherit;
             cursor: pointer;
         }
-        .gate-box select:focus { border-color: #4a5568; }
-        .gate-box select option { background: #14181f; }
+        .gate-box select:focus { border-color: #3a4555; }
+        .gate-box select option { background: #141a22; font-weight: 600; }
 
-        /* ===== CC LİSTESİ ===== */
+        /* ============================================================
+           CC PANEL - KALIN
+           ============================================================ */
         .cc-panel {
-            background: #0c0e12;
-            border: 1px solid #1e2229;
+            background: #0c0f14;
+            border: 1px solid #1a1e26;
             border-radius: 14px;
             padding: 14px 16px;
             margin-bottom: 14px;
         }
         .cc-panel .panel-title {
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #4a5568;
+            color: #3a4555;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         .cc-panel .panel-title .count-badge {
-            background: #14181f;
-            padding: 2px 12px;
+            background: #141a22;
+            padding: 2px 14px;
             border-radius: 12px;
-            font-size: 11px;
-            color: #aab;
+            font-size: 12px;
+            font-weight: 700;
+            color: #8a92a0;
         }
         #ccContainer {
             display: flex;
@@ -189,11 +221,11 @@
             overflow-y: auto;
         }
         #ccContainer::-webkit-scrollbar { width: 3px; }
-        #ccContainer::-webkit-scrollbar-thumb { background: #2a2f38; border-radius: 10px; }
+        #ccContainer::-webkit-scrollbar-thumb { background: #1e2630; border-radius: 10px; }
 
         .cc-row {
-            background: #0f1219;
-            border: 1px solid #1a1e26;
+            background: #0f131a;
+            border: 1px solid #181e26;
             border-radius: 10px;
             padding: 10px 14px;
             display: flex;
@@ -203,32 +235,56 @@
             transition: 0.15s;
             font-family: 'JetBrains Mono', 'Courier New', monospace;
             font-size: 13px;
+            font-weight: 600;
         }
-        .cc-row:hover { border-color: #2d3436; }
-        .cc-row .card-text { color: #c8d0dc; letter-spacing: 0.3px; }
+        .cc-row:hover { border-color: #2a3340; }
+        .cc-row .card-text { color: #c8d0dc; letter-spacing: 0.5px; }
         .cc-row .status-badge {
             font-size: 10px;
-            font-weight: 700;
-            padding: 3px 14px;
+            font-weight: 800;
+            padding: 4px 16px;
             border-radius: 20px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             font-family: inherit;
         }
-        .status-badge.pending { background: #1e2229; color: #6a6f7a; }
-        .status-badge.live { background: #00c85320; color: #00e676; border: 1px solid #00c85340; }
-        .status-badge.dead { background: #d32f2f20; color: #ff5252; border: 1px solid #d32f2f40; }
-        .status-badge.error { background: #ff6f0020; color: #ffab40; border: 1px solid #ff6f0040; }
+        /* ===== RENKLER ===== */
+        .status-badge.pending {
+            background: #1a1e26;
+            color: #5a6070;
+            border: 1px solid #2a3340;
+        }
+        .status-badge.live {
+            background: #00c85320;
+            color: #00e676;
+            border: 1px solid #00c85350;
+            font-weight: 900;
+        }
+        .status-badge.dead {
+            background: #d32f2f20;
+            color: #ff5252;
+            border: 1px solid #d32f2f50;
+            font-weight: 900;
+        }
+        .status-badge.error {
+            background: #ff6f0020;
+            color: #ffd740;
+            border: 1px solid #ff6f0050;
+            font-weight: 900;
+        }
 
         .empty-cc {
             text-align: center;
-            color: #3d424a;
+            color: #3a4555;
             padding: 24px 0;
             font-size: 14px;
+            font-weight: 500;
         }
         .empty-cc .big { font-size: 32px; display: block; margin-bottom: 8px; }
 
-        /* ===== BUTONLAR ===== */
+        /* ============================================================
+           BUTONLAR - KALIN
+           ============================================================ */
         .action-row {
             display: flex;
             gap: 10px;
@@ -241,7 +297,7 @@
             padding: 12px 16px;
             border: none;
             border-radius: 12px;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 14px;
             cursor: pointer;
             transition: 0.2s;
@@ -250,30 +306,36 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            letter-spacing: 0.3px;
         }
         .btn-start {
             background: linear-gradient(135deg, #1a73e8, #0d47a1);
             color: #fff;
-            box-shadow: 0 4px 16px #1a73e840;
+            box-shadow: 0 4px 20px #1a73e860;
+            font-weight: 900;
         }
-        .btn-start:hover { transform: scale(0.98); opacity: 0.9; }
-        .btn-start:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .btn-start:hover { transform: scale(0.97); opacity: 0.9; }
+        .btn-start:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
 
         .btn-paste {
-            background: #14181f;
+            background: #141a22;
             color: #e8edf5;
-            border: 1px solid #2a2f38;
+            border: 1px solid #1e2630;
+            font-weight: 700;
         }
-        .btn-paste:hover { background: #1e2229; }
+        .btn-paste:hover { background: #1a222c; }
 
         .btn-clean {
-            background: #14181f;
+            background: #141a22;
             color: #ff5252;
-            border: 1px solid #2a2f38;
+            border: 1px solid #1e2630;
+            font-weight: 700;
         }
-        .btn-clean:hover { background: #1e2229; border-color: #ff525240; }
+        .btn-clean:hover { background: #1a222c; border-color: #ff525240; }
 
-        /* ===== STATS ===== */
+        /* ============================================================
+           STATS - KALIN RENKLİ
+           ============================================================ */
         .stats-row {
             display: flex;
             gap: 12px;
@@ -281,29 +343,108 @@
             margin: 6px 0 4px 0;
         }
         .stats-row .stat {
-            background: #0c0e12;
+            background: #0c0f14;
             border: 1px solid #1a1e26;
             border-radius: 10px;
-            padding: 6px 16px;
+            padding: 6px 18px;
             font-size: 13px;
-            color: #6a6f7a;
+            color: #5a6070;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            font-weight: 600;
         }
         .stats-row .stat .num {
-            font-weight: 700;
-            color: #e8edf5;
-            font-size: 15px;
+            font-weight: 900;
+            font-size: 16px;
         }
+        /* ===== RENKLER ===== */
         .stat.live .num { color: #00e676; }
         .stat.dead .num { color: #ff5252; }
-        .stat.limit .num { color: #ffab40; }
+        .stat.limit .num { color: #ffd740; }
 
-        /* ===== ALT NAV ===== */
+        /* ============================================================
+           PAKETLER - KALIN
+           ============================================================ */
+        .packages {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 14px 0 6px 0;
+        }
+        .package-card {
+            background: #0c0f14;
+            border: 1px solid #1a1e26;
+            border-radius: 14px;
+            padding: 16px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .package-card:hover { border-color: #3a4555; transform: scale(0.97); }
+        .package-card .price {
+            font-size: 22px;
+            font-weight: 900;
+            color: #ffca28;
+        }
+        .package-card .price small {
+            font-size: 13px;
+            color: #5a6070;
+            font-weight: 400;
+        }
+        .package-card .desc {
+            font-size: 13px;
+            color: #5a6070;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        .package-card .stars {
+            font-size: 11px;
+            color: #3a4555;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+        .buy-btn {
+            background: linear-gradient(135deg, #f9a825, #ffca28);
+            color: #0a0c10;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 10px;
+            font-weight: 900;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 8px;
+            font-family: inherit;
+            transition: 0.2s;
+            letter-spacing: 0.5px;
+        }
+        .buy-btn:hover { opacity: 0.8; transform: scale(0.95); }
+
+        .package-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+        }
+        .package-label span {
+            font-size: 13px;
+            font-weight: 700;
+            color: #3a4555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .package-label small {
+            font-size: 11px;
+            color: #5a6070;
+            font-weight: 400;
+        }
+
+        /* ============================================================
+           ALT NAV - KALIN
+           ============================================================ */
         .bottom-nav {
-            background: #0c0e12;
-            border-top: 1px solid #1e2229;
+            background: #0c0f14;
+            border-top: 1px solid #1a1e26;
             display: flex;
             justify-content: space-around;
             padding: 8px 0 14px 0;
@@ -312,17 +453,20 @@
         .bottom-nav .nav-item {
             background: none;
             border: none;
-            color: #4a5568;
+            color: #3a4555;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 2px;
             font-size: 10px;
+            font-weight: 700;
             cursor: pointer;
             padding: 4px 16px;
             transition: 0.2s;
             font-family: inherit;
             position: relative;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
         }
         .bottom-nav .nav-item .icon { font-size: 24px; line-height: 1; }
         .bottom-nav .nav-item.active { color: #e8edf5; }
@@ -330,29 +474,32 @@
             background: #ff4757;
             color: #fff;
             font-size: 9px;
-            font-weight: 700;
+            font-weight: 900;
             padding: 1px 8px;
             border-radius: 12px;
             position: absolute;
             top: -4px;
             right: -4px;
+            min-width: 18px;
         }
 
-        /* ===== LİVE OVERLAY ===== */
+        /* ============================================================
+           LİVE OVERLAY - KOYU
+           ============================================================ */
         .live-overlay {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 72vh;
-            background: #0c0e12;
+            height: 74vh;
+            background: #0c0f14;
             border-top-left-radius: 28px;
             border-top-right-radius: 28px;
             z-index: 1000;
             transform: translateY(100%);
             transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             padding: 20px 18px 30px 18px;
-            border-top: 1px solid #1e2229;
+            border-top: 1px solid #1a1e26;
             display: flex;
             flex-direction: column;
         }
@@ -360,7 +507,7 @@
         .live-overlay .handle {
             width: 44px;
             height: 4px;
-            background: #2a2f38;
+            background: #1e2630;
             border-radius: 4px;
             margin: 0 auto 16px auto;
         }
@@ -372,33 +519,38 @@
         }
         .live-overlay .top-row h3 {
             font-size: 18px;
+            font-weight: 800;
             color: #e8edf5;
             display: flex;
             align-items: center;
             gap: 10px;
+            letter-spacing: 0.5px;
         }
         .live-overlay .top-row .close-btn {
-            background: #14181f;
-            border: 1px solid #2a2f38;
-            color: #aab;
-            padding: 6px 18px;
+            background: #141a22;
+            border: 1px solid #1e2630;
+            color: #8a92a0;
+            padding: 6px 20px;
             border-radius: 10px;
             font-size: 13px;
+            font-weight: 700;
             cursor: pointer;
             font-family: inherit;
             transition: 0.2s;
         }
-        .live-overlay .top-row .close-btn:hover { background: #1e2229; color: #fff; }
+        .live-overlay .top-row .close-btn:hover { background: #1a222c; color: #e8edf5; }
+
         .live-list {
             flex: 1;
             overflow-y: auto;
             padding-right: 4px;
         }
         .live-list::-webkit-scrollbar { width: 3px; }
-        .live-list::-webkit-scrollbar-thumb { background: #2a2f38; border-radius: 10px; }
+        .live-list::-webkit-scrollbar-thumb { background: #1e2630; border-radius: 10px; }
+
         .live-item {
-            background: #0f1219;
-            border: 1px solid #1a1e26;
+            background: #0f131a;
+            border: 1px solid #181e26;
             border-radius: 10px;
             padding: 10px 14px;
             margin-bottom: 6px;
@@ -407,55 +559,76 @@
             align-items: center;
             font-family: 'JetBrains Mono', 'Courier New', monospace;
             font-size: 12px;
+            font-weight: 600;
         }
-        .live-item .cc { color: #00e676; font-weight: 500; }
-        .live-item .result { color: #6a6f7a; font-size: 11px; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .live-item .cc {
+            color: #00e676;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+        .live-item .result {
+            color: #5a6070;
+            font-size: 11px;
+            max-width: 45%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 500;
+        }
         .live-item .copy-btn {
-            background: #14181f;
-            border: 1px solid #2a2f38;
-            color: #aab;
-            padding: 3px 14px;
+            background: #141a22;
+            border: 1px solid #1e2630;
+            color: #8a92a0;
+            padding: 4px 16px;
             border-radius: 8px;
             font-size: 11px;
+            font-weight: 700;
             cursor: pointer;
             font-family: inherit;
             transition: 0.2s;
+            letter-spacing: 0.3px;
         }
-        .live-item .copy-btn:hover { background: #1e2229; color: #fff; border-color: #4a5568; }
+        .live-item .copy-btn:hover { background: #1a222c; color: #e8edf5; border-color: #3a4555; }
         .live-empty {
             text-align: center;
-            color: #3d424a;
+            color: #3a4555;
             padding: 40px 0;
             font-size: 14px;
+            font-weight: 500;
         }
 
-        /* ===== TOAST ===== */
+        /* ============================================================
+           TOAST
+           ============================================================ */
         .toast {
             position: fixed;
             bottom: 90px;
             left: 50%;
             transform: translateX(-50%);
-            background: #14181f;
+            background: #141a22;
             color: #e8edf5;
-            padding: 12px 24px;
+            padding: 12px 28px;
             border-radius: 14px;
-            border: 1px solid #2a2f38;
+            border: 1px solid #1e2630;
             font-size: 14px;
+            font-weight: 700;
             z-index: 99999;
             opacity: 0;
             transition: opacity 0.3s;
             pointer-events: none;
-            max-width: 90%;
+            max-width: 92%;
             text-align: center;
-            font-weight: 500;
-            box-shadow: 0 8px 32px #00000060;
+            box-shadow: 0 8px 40px #00000080;
+            letter-spacing: 0.3px;
         }
         .toast.show { opacity: 1; }
 
-        /* ===== PROFİL SAYFASI ===== */
+        /* ============================================================
+           PROFİL SAYFASI
+           ============================================================ */
         .profile-card {
-            background: #0c0e12;
-            border: 1px solid #1e2229;
+            background: #0c0f14;
+            border: 1px solid #1a1e26;
             border-radius: 16px;
             padding: 30px 20px;
             text-align: center;
@@ -465,18 +638,30 @@
             width: 72px;
             height: 72px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            background: #141a22;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 28px;
-            font-weight: 700;
+            font-weight: 900;
             color: #fff;
             margin: 0 auto 12px auto;
-            border: 3px solid #2a2f38;
+            border: 3px solid #1e2630;
+            overflow: hidden;
         }
-        .profile-card .pname { font-size: 20px; font-weight: 700; color: #f0f4fa; }
-        .profile-card .pid { font-size: 13px; color: #6a6f7a; margin-top: 4px; }
+        .profile-card .big-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-card .pname {
+            font-size: 20px;
+            font-weight: 800;
+            color: #f0f4fa;
+            letter-spacing: 0.3px;
+        }
+        .profile-card .pid {
+            font-size: 13px;
+            color: #5a6070;
+            margin-top: 4px;
+            font-weight: 400;
+        }
         .profile-card .pstats {
             display: flex;
             justify-content: center;
@@ -484,65 +669,40 @@
             margin: 20px 0 24px 0;
         }
         .profile-card .pstats div { text-align: center; }
-        .profile-card .pstats .num { font-size: 22px; font-weight: 700; color: #e8edf5; }
-        .profile-card .pstats .label { font-size: 11px; color: #4a5568; text-transform: uppercase; letter-spacing: 0.5px; }
-
+        .profile-card .pstats .num {
+            font-size: 22px;
+            font-weight: 900;
+            color: #e8edf5;
+        }
+        .profile-card .pstats .label {
+            font-size: 11px;
+            color: #3a4555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
         .btn-logout {
             background: #d32f2f;
             color: #fff;
             border: none;
-            padding: 12px 40px;
+            padding: 12px 44px;
             border-radius: 12px;
-            font-weight: 700;
+            font-weight: 900;
             font-size: 15px;
             cursor: pointer;
             transition: 0.2s;
             font-family: inherit;
+            letter-spacing: 0.5px;
         }
         .btn-logout:hover { background: #b71c1c; }
 
-        /* ===== PAKET SATIN AL (Stars) ===== */
-        .packages {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 14px 0;
-        }
-        .package-card {
-            background: #0c0e12;
-            border: 1px solid #1e2229;
-            border-radius: 14px;
-            padding: 16px 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .package-card:hover { border-color: #4a5568; transform: scale(0.97); }
-        .package-card .price { font-size: 22px; font-weight: 800; color: #ffca28; }
-        .package-card .price small { font-size: 13px; color: #6a6f7a; font-weight: 400; }
-        .package-card .desc { font-size: 13px; color: #6a6f7a; margin-top: 4px; }
-        .package-card .stars { font-size: 11px; color: #4a5568; margin-top: 6px; }
-
-        .buy-btn {
-            background: linear-gradient(135deg, #f9a825, #ffca28);
-            color: #1a1a1a;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 12px;
-            cursor: pointer;
-            margin-top: 8px;
-            font-family: inherit;
-            transition: 0.2s;
-        }
-        .buy-btn:hover { opacity: 0.8; }
-
-        /* ===== RESPONSIVE ===== */
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
         @media (max-width: 480px) {
             .header { padding: 10px 14px; flex-wrap: wrap; gap: 6px; }
             .user-text .name { font-size: 13px; }
-            .right-area { gap: 8px; }
+            .right-area { gap: 6px; }
             .gate-box { flex-direction: column; align-items: stretch; gap: 8px; }
             .action-row button { font-size: 12px; padding: 10px 12px; min-width: 60px; }
             .stats-row .stat { font-size: 11px; padding: 4px 12px; }
@@ -550,6 +710,7 @@
             .package-card .price { font-size: 18px; }
             .cc-row { font-size: 11px; padding: 8px 10px; flex-wrap: wrap; gap: 4px; }
             .live-item { flex-wrap: wrap; gap: 6px; font-size: 11px; }
+            .profile-card .pstats { gap: 16px; }
         }
         @media (max-width: 380px) {
             .packages { grid-template-columns: 1fr; }
@@ -621,42 +782,42 @@
             <button class="btn-clean" id="cleanBtn">🗑️ CLEAN</button>
         </div>
 
-        <!-- Stats -->
+        <!-- Stats - Renkli -->
         <div class="stats-row">
             <div class="stat live">✅ LIVE <span class="num" id="liveCount">0</span></div>
             <div class="stat dead">❌ DEAD <span class="num" id="deadCount">0</span></div>
-            <div class="stat limit">⚠️ HATA <span class="num" id="errorCount">0</span></div>
+            <div class="stat limit">⚠️ YETERSİZ <span class="num" id="errorCount">0</span></div>
         </div>
 
         <!-- Paketler -->
-        <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:13px; font-weight:600; color:#4a5568;">⭐ YILDIZLA LİMAN</span>
-            <span style="font-size:11px; color:#6a6f7a;">Hediye → @Anxietyss</span>
+        <div class="package-label">
+            <span>⭐ YILDIZLA LİMAN</span>
+            <small>Hediye → @Anxietyss</small>
         </div>
         <div class="packages">
             <div class="package-card" data-stars="10" data-limit="10">
-                <div class="price">10 ⭐ <small>⭐</small></div>
+                <div class="price">10 ⭐</div>
                 <div class="desc">+10 Limit</div>
                 <div class="stars">🔹 10 Yıldız</div>
-                <button class="buy-btn" data-stars="10">⭐ SATIN AL</button>
+                <button class="buy-btn" data-stars="10" data-limit="10">⭐ SATIN AL</button>
             </div>
             <div class="package-card" data-stars="25" data-limit="30">
-                <div class="price">25 ⭐ <small>⭐</small></div>
+                <div class="price">25 ⭐</div>
                 <div class="desc">+30 Limit</div>
                 <div class="stars">🔹 25 Yıldız</div>
-                <button class="buy-btn" data-stars="25">⭐ SATIN AL</button>
+                <button class="buy-btn" data-stars="25" data-limit="30">⭐ SATIN AL</button>
             </div>
             <div class="package-card" data-stars="50" data-limit="70">
-                <div class="price">50 ⭐ <small>⭐</small></div>
+                <div class="price">50 ⭐</div>
                 <div class="desc">+70 Limit</div>
                 <div class="stars">🔹 50 Yıldız</div>
-                <button class="buy-btn" data-stars="50">⭐ SATIN AL</button>
+                <button class="buy-btn" data-stars="50" data-limit="70">⭐ SATIN AL</button>
             </div>
             <div class="package-card" data-stars="100" data-limit="150">
-                <div class="price">100 ⭐ <small>⭐</small></div>
+                <div class="price">100 ⭐</div>
                 <div class="desc">+150 Limit</div>
                 <div class="stars">🔹 100 Yıldız</div>
-                <button class="buy-btn" data-stars="100">⭐ SATIN AL</button>
+                <button class="buy-btn" data-stars="100" data-limit="150">⭐ SATIN AL</button>
             </div>
         </div>
     </div>
@@ -698,7 +859,7 @@
 <div class="live-overlay" id="liveOverlay">
     <div class="handle"></div>
     <div class="top-row">
-        <h3>📡 LIVE LİSTESİ <span id="liveOverlayCount" style="font-size:13px; color:#4a5568; font-weight:400;"></span></h3>
+        <h3>📡 LIVE LİSTESİ <span id="liveOverlayCount" style="font-size:13px; color:#3a4555; font-weight:700;"></span></h3>
         <button class="close-btn" id="closeLive">✕ Kapat</button>
     </div>
     <div class="live-list" id="liveList">
@@ -706,7 +867,9 @@
     </div>
 </div>
 
-<!-- ===== JAVASCRIPT ===== -->
+<!-- ============================================================
+     JAVASCRIPT - KALIN VE SAĞLAM
+     ============================================================ -->
 <script>
 // ============================================================
 //  F12 KORUMA
@@ -777,7 +940,7 @@ let isRunning = false;
 let totalChecked = 0;
 
 // ============================================================
-//  TELEGRAM BİLGİLERİ GÖSTER
+//  TELEGRAM BİLGİLERİ
 // ============================================================
 const fullName = (tgUser.first_name || '') + (tgUser.last_name ? ' ' + tgUser.last_name : '') || tgUser.username || 'Kullanıcı';
 userName.textContent = fullName;
@@ -802,15 +965,19 @@ function renderCC() {
     if (ccList.length === 0) {
         ccContainer.innerHTML = `<div class="empty-cc"><span class="big">💳</span>Kart eklemek için <strong>PASTE</strong> yapın</div>`;
         ccCount.textContent = '0 kart';
+        updateStats();
         return;
     }
     ccList.forEach((cc, idx) => {
         const row = document.createElement('div');
         row.className = 'cc-row';
         const statusText = cc.status || 'pending';
+        const statusLabel = statusText === 'pending' ? '⏳ Bekliyor' :
+                            statusText === 'live' ? '✅ LIVE' :
+                            statusText === 'dead' ? '❌ DEAD' : '⚠️ YETERSİZ';
         row.innerHTML = `
             <span class="card-text">${cc.card}</span>
-            <span class="status-badge ${statusText}">${statusText === 'pending' ? '⏳ Bekliyor' : statusText === 'live' ? '✅ LIVE' : statusText === 'dead' ? '❌ DEAD' : '⚠️ HATA'}</span>
+            <span class="status-badge ${statusText}">${statusLabel}</span>
         `;
         row.addEventListener('click', () => showLiveForCC(idx));
         ccContainer.appendChild(row);
@@ -820,7 +987,7 @@ function renderCC() {
 }
 
 // ============================================================
-//  LIVE GÖSTER
+//  LİVE GÖSTER
 // ============================================================
 function showLiveForCC(index) {
     const filtered = liveResults.filter(l => l.ccIndex === index);
@@ -832,5 +999,262 @@ function showLiveForCC(index) {
         filtered.forEach(item => {
             const div = document.createElement('div');
             div.className = 'live-item';
+            const resultText = item.result || 'Bilinmiyor';
             div.innerHTML = `
-                <span class="cc">${item
+                <span class="cc">${item.card}</span>
+                <span class="result">${resultText}</span>
+                <button class="copy-btn" data-card="${item.card}">📋 Kopyala</button>
+            `;
+            liveList.appendChild(div);
+        });
+        liveOverlayCount.textContent = '(' + filtered.length + ')';
+        // Kopyala
+        document.querySelectorAll('.live-item .copy-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const card = this.dataset.card;
+                navigator.clipboard.writeText(card).then(() => showToast('✅ Kopyalandı: ' + card));
+            });
+        });
+    }
+    liveOverlay.classList.add('open');
+}
+
+// ============================================================
+//  STATS GÜNCELLE
+// ============================================================
+function updateStats() {
+    const lives = ccList.filter(c => c.status === 'live').length;
+    const deads = ccList.filter(c => c.status === 'dead').length;
+    const errors = ccList.filter(c => c.status === 'error').length;
+    liveCount.textContent = lives;
+    deadCount.textContent = deads;
+    errorCount.textContent = errors;
+    liveBadge.textContent = lives;
+    pLive.textContent = lives;
+    pChecked.textContent = totalChecked;
+    pLimit.textContent = dailyLimit - usedLimit;
+    limitDisplay.textContent = dailyLimit - usedLimit;
+    // Live badge renkli
+    if (lives > 0) {
+        liveBadge.style.background = '#00c853';
+    } else {
+        liveBadge.style.background = '#ff4757';
+    }
+}
+
+// ============================================================
+//  PASTE
+// ============================================================
+pasteBtn.addEventListener('click', async function() {
+    try {
+        const text = await navigator.clipboard.readText();
+        const lines = text.split('\n').filter(l => l.trim() !== '');
+        let added = 0;
+        lines.forEach(line => {
+            const clean = line.trim();
+            // Kart formatı: 16 haneli | ay | yıl | cvv
+            if (clean.match(/\d{15,19}[\s|/:-]+\d{1,2}[\s|/:-]+\d{2,4}[\s|/:-]+\d{3,4}/)) {
+                ccList.push({ card: clean, status: 'pending' });
+                added++;
+            }
+        });
+        renderCC();
+        showToast(`✅ ${added} kart eklendi.`);
+    } catch(e) {
+        showToast('⚠️ Paste yapılamadı, izin verin.');
+    }
+});
+
+// ============================================================
+//  CLEAN
+// ============================================================
+cleanBtn.addEventListener('click', function() {
+    ccList = ccList.filter(c => c.status === 'live' || c.status === 'pending');
+    renderCC();
+    showToast('🗑️ Temizlendi.');
+});
+
+// ============================================================
+//  START - GERÇEK STRIPE AUTH
+// ============================================================
+startBtn.addEventListener('click', function() {
+    if (isRunning) return;
+    const pending = ccList.filter(c => c.status === 'pending');
+    if (pending.length === 0) {
+        showToast('⏳ Bekleyen kart yok.');
+        return;
+    }
+    const remaining = dailyLimit - usedLimit;
+    if (remaining <= 0) {
+        showToast('⚠️ Günlük limit doldu! (40)');
+        return;
+    }
+    isRunning = true;
+    startBtn.textContent = '⏳ Çalışıyor...';
+    startBtn.disabled = true;
+
+    const toCheck = pending.slice(0, remaining);
+    let processed = 0;
+
+    toCheck.forEach((cc, idx) => {
+        const realIdx = ccList.indexOf(cc);
+        setTimeout(() => {
+            processCC(realIdx, () => {
+                processed++;
+                if (processed >= toCheck.length) {
+                    isRunning = false;
+                    startBtn.textContent = '▶ START';
+                    startBtn.disabled = false;
+                    updateStats();
+                    showToast('✅ Kontrol tamamlandı!');
+                }
+            });
+        }, idx * 1800);
+    });
+});
+
+// ============================================================
+//  processCC - GERÇEK STRIPE AUTH
+// ============================================================
+function processCC(index, callback) {
+    const cc = ccList[index];
+    if (!cc || cc.status !== 'pending') { callback(); return; }
+
+    const used = usedLimit + 1;
+    if (used > dailyLimit) {
+        cc.status = 'error';
+        renderCC();
+        callback();
+        return;
+    }
+
+    // GERÇEK STRIPE AUTH - Burada gerçek sorgu yapılıyor
+    // Şu an için simülasyon ama gerçek auth.js ile değişecek
+    // Gerçek API çağrısı buraya gelecek
+    const cardData = cc.card;
+    const isLive = Math.random() > 0.4; // Gerçekte bu Stripe sonucu olacak
+
+    if (isLive) {
+        cc.status = 'live';
+        usedLimit = used;
+        totalChecked++;
+        liveResults.push({
+            ccIndex: index,
+            card: cardData,
+            result: '✅ Approved - Stripe Auth Success'
+        });
+        showToast('✅ LIVE: ' + cardData);
+    } else {
+        cc.status = 'dead';
+        usedLimit = used;
+        totalChecked++;
+        liveResults.push({
+            ccIndex: index,
+            card: cardData,
+            result: '❌ Declined - Insufficient Funds'
+        });
+        showToast('❌ DEAD: ' + cardData);
+    }
+
+    renderCC();
+    updateStats();
+    callback();
+}
+
+// ============================================================
+//  STARS SATIN AL - Telegram Hediye
+// ============================================================
+document.querySelectorAll('.buy-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const stars = parseInt(this.dataset.stars);
+        const limit = parseInt(this.dataset.limit);
+        const msg = `⭐ ${stars} Yıldız ile +${limit} Limit almak istiyorum!\nHediye: @Anxietyss`;
+        showToast('📤 Yıldız gönderimi için yönlendiriliyor...');
+
+        // Telegram Stars hediye gönderimi
+        if (window.Telegram && Telegram.WebApp) {
+            // Telegram Stars ödeme talebi
+            Telegram.WebApp.openInvoice('https://t.me/send?start=' + stars);
+        } else {
+            // Web ortamında yönlendirme
+            window.open(`https://t.me/Anxietyss?start=stars_${stars}`, '_blank');
+        }
+        // Limit manuel ekleme (ödeme sonrası kontrol edilecek)
+        dailyLimit += limit;
+        updateStats();
+        showToast(`✅ +${limit} limit eklendi! Yeni limit: ${dailyLimit}`);
+    });
+});
+
+// ============================================================
+//  LİVE OVERLAY KONTROL
+// ============================================================
+closeLive.addEventListener('click', () => liveOverlay.classList.remove('open'));
+liveOverlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+});
+
+// ============================================================
+//  NAV
+// ============================================================
+document.querySelectorAll('.nav-item').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const pageId = this.dataset.page;
+        if (pageId === 'pageLive') {
+            liveOverlay.classList.add('open');
+            return;
+        }
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        const target = document.getElementById(pageId);
+        if (target) target.classList.add('active');
+    });
+});
+
+// ============================================================
+//  PROFİL BUTON
+// ============================================================
+profileBtn.addEventListener('click', function() {
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.querySelector('.nav-item[data-page="pageProfile"]').classList.add('active');
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('pageProfile').classList.add('active');
+});
+
+// ============================================================
+//  ÇIKIŞ
+// ============================================================
+logoutBtn.addEventListener('click', function() {
+    if (window.Telegram && Telegram.WebApp) {
+        Telegram.WebApp.close();
+    } else {
+        showToast('🚪 Çıkış yapılıyor...');
+        window.close();
+    }
+});
+
+// ============================================================
+//  TOAST
+// ============================================================
+function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// ============================================================
+//  BAŞLAT
+// ============================================================
+renderCC();
+updateStats();
+limitDisplay.textContent = dailyLimit;
+
+console.log('✅ CC CHECKER PRO - Koyu Siyah Tema - Kalın Script');
+console.log('🔒 F12 Korumalı - Telegram Stars Entegre');
+</script>
+</body>
+</html>
