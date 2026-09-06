@@ -1,70 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Dorksk Checker</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
     <div id="app">
-        <!-- GTA Logo -->
-        <div class="logo-container">
-            <img src="https://i.imgur.com/YOUR_GTA_LOGO.png" alt="GTA Logo" id="logo" 
-                 onerror="this.src='https://via.placeholder.com/150x150/000/FFF?text=GTA'">
+        <!-- === GTA LOGO === -->
+        <div class="logo-wrapper">
             <div class="logo-glow"></div>
+            <img src="https://i.imgur.com/3wQkz7M.png" alt="GTA Logo" id="main-logo" 
+                 onerror="this.src='https://via.placeholder.com/150x150/1a1a1a/FFD700?text=GTA'">
         </div>
 
-        <h1 class="title">💎 Dorksk Checker</h1>
-        <p class="subtitle">Premium Card Verification Service</p>
+        <h1 class="brand">Dorksk Checker</h1>
+        <p class="tagline">Premium Card Verification</p>
 
-        <!-- Channel Buttons -->
-        <div class="main-buttons">
-            <button class="btn-primary" onclick="joinChannel()">
+        <!-- === SOSYAL BUTONLAR === -->
+        <div class="social-buttons">
+            <button class="btn-social" onclick="joinChannel()">
                 <span>📢</span> Join Channel
             </button>
-            <button class="btn-primary" onclick="joinChat()">
+            <button class="btn-social" onclick="joinChat()">
                 <span>💬</span> Join Chat
             </button>
         </div>
 
-        <!-- Card Input -->
-        <div class="input-section">
-            <input type="text" id="cc-input" placeholder="4111111111111111|12|26|123" 
-                   class="cc-input" spellcheck="false">
-            <button class="btn-check" onclick="checkCard()">🚀 Check</button>
+        <!-- === KART GİRİŞİ === -->
+        <div class="card-input-area">
+            <input type="text" id="cc-input" placeholder="4111111111111111 | 12 | 26 | 123" 
+                   class="input-cc" autocomplete="off" spellcheck="false" />
+            <button class="btn-check" onclick="checkCard()">Check</button>
         </div>
 
-        <!-- Result -->
+        <!-- === SONUÇ === -->
         <div id="result" class="result-box"></div>
 
-        <!-- Quick Stats -->
-        <div class="stats-container" id="stats">
-            <div class="stat-item approved">
+        <!-- === İSTATİSTİKLER === -->
+        <div class="stats-row" id="stats-row">
+            <div class="stat-card approved">
                 <span class="stat-number" id="approved-count">0</span>
                 <span class="stat-label">✅ Approved</span>
             </div>
-            <div class="stat-item declined">
+            <div class="stat-card declined">
                 <span class="stat-number" id="declined-count">0</span>
                 <span class="stat-label">❌ Declined</span>
             </div>
-            <div class="stat-item insufficient">
+            <div class="stat-card insufficient">
                 <span class="stat-number" id="insufficient-count">0</span>
                 <span class="stat-label">⚠️ Insufficient</span>
             </div>
         </div>
 
-        <!-- Admin Button -->
+        <!-- === ADMIN BUTONU === -->
         <button class="btn-admin" onclick="openAdmin()">🔐 Admin Panel</button>
 
-        <!-- Auth Section (Hidden) -->
+        <!-- === GİZLİ AUTH (sonra açılır) === -->
         <div id="auth-section" style="display:none;">
-            <h2>🎯 Welcome!</h2>
-            <button class="btn-auth" onclick="register()">📝 Register</button>
-            <button class="btn-auth" onclick="login()">🔑 Login</button>
+            <h2>Welcome!</h2>
+            <button class="btn-auth" onclick="register()">Register</button>
+            <button class="btn-auth" onclick="login()">Login</button>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
