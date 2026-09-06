@@ -3,148 +3,319 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Lynx Checker</title>
+    <title>Dorksk Checker</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: #121212;
+            border-radius: 28px;
+            padding: 24px 20px 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            border: 1px solid #1e1e1e;
+        }
+
+        /* ===== LOGO ===== */
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            border: 2px solid #2a2a2a;
+            object-fit: cover;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        .brand {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .sub {
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+            letter-spacing: 1px;
+            margin-bottom: 28px;
+        }
+
+        /* ===== INPUT ===== */
+        .card-input-area {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .card-input-area input {
+            flex: 1;
+            padding: 16px 18px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 14px;
+            color: #fff;
+            font-size: 15px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.5px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .card-input-area input:focus {
+            border-color: #ffd700;
+        }
+
+        .card-input-area input::placeholder {
+            color: #444;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            letter-spacing: 0;
+        }
+
+        .card-input-area button {
+            padding: 16px 28px;
+            background: linear-gradient(135deg, #ffd700, #f57c00);
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .card-input-area button:active {
+            transform: scale(0.95);
+        }
+
+        /* ===== RESULT ===== */
+        .result-box {
+            padding: 16px;
+            border-radius: 14px;
+            background: #1a1a1a;
+            margin: 12px 0 20px;
+            font-weight: 600;
+            font-size: 15px;
+            display: none;
+            word-break: break-all;
+            border-left: 4px solid transparent;
+        }
+
+        .result-box.approved {
+            display: block;
+            border-left-color: #00e676;
+            color: #00e676;
+        }
+
+        .result-box.declined {
+            display: block;
+            border-left-color: #ff1744;
+            color: #ff1744;
+        }
+
+        .result-box.loading {
+            display: block;
+            border-left-color: #ffd700;
+            color: #ffd700;
+            animation: pulse 1.2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ===== STATS (basit) ===== */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0 12px;
+        }
+
+        .stats div {
+            text-align: center;
+        }
+
+        .stats .number {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .stats .label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stats .approved .number { color: #00e676; }
+        .stats .declined .number { color: #ff1744; }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #333;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-
-<!-- ==================== JOIN REQUIRED ==================== -->
-<div id="join-required" class="page active">
-    <div class="join-container">
-        <div class="join-logo">🐆</div>
-        <h1 class="join-title">LYNX</h1>
-        <p class="join-desc">You must join the following to use Lynx Checker.</p>
-        <div class="join-channels">
-            <button class="join-btn" onclick="window.open('https://t.me/your_channel')">
-                <i class="fas fa-lock"></i> Lynx Chat
-            </button>
-            <button class="join-btn" onclick="window.open('https://t.me/your_hits')">
-                <i class="fas fa-chart-bar"></i> Lynx Hits
-            </button>
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo">
+            <img src="https://i.imgur.com/3wQkz7M.png" alt="GTA Logo" 
+                 onerror="this.src='https://via.placeholder.com/100x100/1a1a1a/FFD700?text=GTA'">
         </div>
-        <button class="join-continue" onclick="joinContinue()">
-            <i class="fas fa-check-circle"></i> I've Joined — Continue
-        </button>
-        <p class="join-footer">LYNX CHECKER · TELEGRAM EXCLUSIVE</p>
-    </div>
-</div>
 
-<!-- ==================== MAIN APP ==================== -->
-<div id="main-app" class="page">
-    <!-- HEADER -->
-    <header class="app-header">
-        <div class="header-left">
-            <span class="app-logo">🐆</span>
-            <span class="app-name">LYNX</span>
+        <div class="brand">Dorksk Checker</div>
+        <div class="sub">Premium Card Verification</div>
+
+        <!-- Kart girişi -->
+        <div class="card-input-area">
+            <input type="text" id="cc-input" placeholder="4111111111111111 | 12 | 26 | 123" 
+                   autocomplete="off" spellcheck="false" />
+            <button onclick="checkCard()">Check</button>
         </div>
-        <div class="header-right">
-            <span class="online-badge"><i class="fas fa-circle"></i> <span id="online-count">0</span> online</span>
-        </div>
-    </header>
 
-    <div class="pages-container">
+        <!-- Sonuç -->
+        <div id="result" class="result-box"></div>
 
-        <!-- ========== DASHBOARD ========== -->
-        <div id="page-dashboard" class="page-content active">
-            <div class="dashboard-grid">
-                <div class="user-card">
-                    <div class="user-avatar">🐆</div>
-                    <div class="user-info">
-                        <h3 id="dash-username">Loading...</h3>
-                        <span id="dash-username-tag">@loading</span>
-                    </div>
-                    <div class="user-credits">
-                        <span class="credits-label">CREDITS</span>
-                        <span class="credits-value" id="dash-credits">0</span>
-                        <button class="claim-btn" onclick="claimDaily()">Claim Daily</button>
-                    </div>
-                </div>
-
-                <div class="redeem-section">
-                    <span class="redeem-label">0 available</span>
-                    <div class="redeem-input-group">
-                        <input type="text" id="redeem-input" placeholder="LYNX - XXXX - XXXX" class="redeem-input" />
-                        <button class="redeem-btn" onclick="redeemCode()">Redeem Code</button>
-                    </div>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-box"><span class="stat-number" id="stat-checked">0</span><span class="stat-label">CHECKED</span></div>
-                    <div class="stat-box"><span class="stat-number" id="stat-hits">0</span><span class="stat-label">HITS</span></div>
-                    <div class="stat-box"><span class="stat-number" id="stat-charged">0</span><span class="stat-label">CHARGED</span></div>
-                    <div class="stat-box"><span class="stat-number" id="stat-hitrate">0%</span><span class="stat-label">HIT RATE</span></div>
-                </div>
-
-                <div class="leaderboard">
-                    <h4>LEADERBOARD</h4>
-                    <div id="leaderboard-list"><div class="lb-item">Loading...</div></div>
-                </div>
+        <!-- Basit istatistikler -->
+        <div class="stats">
+            <div class="approved">
+                <div class="number" id="approved-count">0</div>
+                <div class="label">✅ Approved</div>
+            </div>
+            <div class="declined">
+                <div class="number" id="declined-count">0</div>
+                <div class="label">❌ Declined</div>
             </div>
         </div>
 
-        <!-- ========== CHECKER ========== -->
-        <div id="page-checker" class="page-content">
-            <div class="checker-area">
-                <h3>Checker</h3>
-                <p class="checker-desc">Paste cards, pick a gate, go.</p>
-                <textarea id="card-input" class="card-textarea" placeholder="4111111111111111|12|2026|123&#10;5200000000000000|06|2026|456"></textarea>
-                <div class="gate-selector">
-                    <label>Gate</label>
-                    <select id="gate-select" class="gate-select">
-                        <option value="ontraport">Ontraport</option>
-                        <option value="stripe_auth">Stripe Auth</option>
-                    </select>
-                </div>
-                <div class="thread-selector">
-                    <label>Threads — parallel checks</label>
-                    <div class="thread-buttons">
-                        <button class="thread-btn active" data-threads="1">1</button>
-                        <button class="thread-btn" data-threads="2">2</button>
-                        <button class="thread-btn" data-threads="3">3</button>
-                    </div>
-                </div>
-                <button class="start-btn" onclick="startCheck()"><i class="fas fa-play"></i> Start</button>
-                <div id="checker-results" class="checker-results"></div>
-            </div>
-        </div>
-
-        <!-- ========== PROFILE ========== -->
-        <div id="page-profile" class="page-content">
-            <div class="profile-card">
-                <h3>Profile</h3>
-                <div class="profile-avatar">🐆</div>
-                <div class="profile-name" id="profile-name">Loading...</div>
-                <div class="profile-username" id="profile-username">@loading</div>
-                <div class="profile-credits">
-                    <span>Credits</span>
-                    <span id="profile-credits-value">0</span>
-                    <button onclick="claimDaily()" class="claim-profile-btn">Claim Daily</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- ========== SETTINGS ========== -->
-        <div id="page-settings" class="page-content">
-            <div class="settings-card">
-                <h3>Settings</h3>
-                <div class="setting-item" onclick="window.open('https://t.me/your_channel')"><span>Channel</span><span><i class="fas fa-chevron-right"></i></span></div>
-                <div class="setting-item" onclick="window.open('https://t.me/your_hits')"><span>Hits</span><span><i class="fas fa-chevron-right"></i></span></div>
-                <div class="setting-item" onclick="window.open('https://t.me/your_support')"><span>Support</span><span><i class="fas fa-chevron-right"></i></span></div>
-                <div class="setting-item"><span>Version</span><span>1.0.0</span></div>
-            </div>
-        </div>
+        <div class="footer">Telegram Mini App · v1.0</div>
     </div>
 
-    <!-- ====== BOTTOM NAV ====== -->
-    <nav class="bottom-nav">
-        <button class="nav-btn active" data-page="dashboard"><i class="fas fa-home"></i><span>Checker</span></button>
-        <button class="nav-btn" data-page="profile"><i class="fas fa-user"></i><span>Profile</span></button>
-        <button class="nav-btn" data-page="settings"><i class="fas fa-cog"></i><span>Settings</span></button>
-    </nav>
-</div>
+    <script>
+        // ==================== TELEGRAM ====================
+        const tg = window.Telegram.WebApp;
+        tg.expand();
 
-<script src="script.js"></script>
+        const user = tg.initDataUnsafe?.user || { id: 'guest', username: 'Guest' };
+
+        // ==================== DOM REFS ====================
+        const input = document.getElementById('cc-input');
+        const resultDiv = document.getElementById('result');
+        const approvedSpan = document.getElementById('approved-count');
+        const declinedSpan = document.getElementById('declined-count');
+
+        let approvedCount = 0;
+        let declinedCount = 0;
+
+        // ==================== F12 ENGELLEME ====================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) ||
+                (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault();
+                tg.showAlert('🔒 Developer tools disabled.');
+            }
+        });
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+        // ==================== INPUT TEMİZLE ====================
+        input.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9|]/g, '');
+        });
+
+        // ==================== KART KONTROL ====================
+        async function checkCard() {
+            const raw = input.value.trim();
+            if (!raw) {
+                tg.showAlert('⚠️ Enter a card.');
+                return;
+            }
+
+            // Format kontrolü: 15-19 rakam | 1-2 rakam | 2-4 rakam | 3-4 rakam
+            const cleaned = raw.replace(/\s/g, '');
+            const regex = /^(\d{15,19})\|(\d{1,2})\|(\d{2,4})\|(\d{3,4})$/;
+            if (!regex.test(cleaned)) {
+                tg.showAlert('❌ Invalid format. Use: NUMBER|MM|YY|CVV');
+                return;
+            }
+
+            // Loading
+            resultDiv.textContent = '⏳ Processing...';
+            resultDiv.className = 'result-box loading';
+
+            try {
+                const response = await fetch('/api/check', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        cc: cleaned,
+                        user_id: user.id,
+                        user_name: user.username || 'Anonymous'
+                    })
+                });
+
+                const data = await response.json();
+
+                // Sonucu göster
+                resultDiv.textContent = data.result;
+                resultDiv.className = `result-box ${data.status}`;
+
+                // İstatistikleri güncelle
+                if (data.status === 'approved') {
+                    approvedCount++;
+                    approvedSpan.textContent = approvedCount;
+                    tg.showAlert('✅ Card Approved!');
+                } else {
+                    declinedCount++;
+                    declinedSpan.textContent = declinedCount;
+                    tg.showAlert('❌ Card Declined.');
+                }
+
+            } catch (err) {
+                resultDiv.textContent = '❌ Server error. Try again.';
+                resultDiv.className = 'result-box declined';
+                tg.showAlert('⚠️ Connection error.');
+            }
+        }
+
+        // ==================== ENTER İLE GÖNDER ====================
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') checkCard();
+        });
+    </script>
 </body>
 </html>
