@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Dorksk Checker</title>
+    <title>Lynx Checker</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -21,301 +20,517 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 16px;
         }
 
-        .container {
+        .app {
             width: 100%;
-            max-width: 420px;
-            background: #121212;
-            border-radius: 28px;
-            padding: 24px 20px 32px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-            border: 1px solid #1e1e1e;
+            max-width: 440px;
+            background: #0f0f0f;
+            border-radius: 32px;
+            padding: 24px 20px 30px;
+            border: 1px solid #1a1a1a;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
         }
 
-        /* ===== LOGO ===== */
-        .logo {
+        /* HEADER */
+        .header {
             display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .logo img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: #1a1a1a;
-            border: 2px solid #2a2a2a;
-            object-fit: cover;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
         }
 
-        /* ===== TYPOGRAPHY ===== */
-        .brand {
-            text-align: center;
-            font-size: 28px;
+        .header .brand {
+            font-size: 24px;
             font-weight: 800;
             letter-spacing: -0.5px;
             background: linear-gradient(135deg, #ffd700, #ff8c00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
         }
 
-        .sub {
-            text-align: center;
+        .header .online {
             font-size: 13px;
             color: #666;
-            letter-spacing: 1px;
-            margin-bottom: 28px;
         }
 
-        /* ===== INPUT ===== */
-        .card-input-area {
-            display: flex;
-            gap: 10px;
+        .header .online i {
+            color: #00e676;
+            font-size: 8px;
+            margin-right: 4px;
+        }
+
+        /* CARD INPUT */
+        .card-area {
             margin-bottom: 16px;
         }
 
-        .card-input-area input {
-            flex: 1;
-            padding: 16px 18px;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 14px;
-            color: #fff;
-            font-size: 15px;
+        .card-area textarea {
+            width: 100%;
+            padding: 16px;
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 16px;
+            color: #e0e0e0;
+            font-size: 14px;
             font-family: 'Courier New', monospace;
-            letter-spacing: 0.5px;
+            resize: vertical;
+            min-height: 80px;
             outline: none;
             transition: border-color 0.3s;
+            line-height: 1.6;
         }
 
-        .card-input-area input:focus {
+        .card-area textarea:focus {
             border-color: #ffd700;
         }
 
-        .card-input-area input::placeholder {
+        .card-area textarea::placeholder {
             color: #444;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            letter-spacing: 0;
         }
 
-        .card-input-area button {
-            padding: 16px 28px;
-            background: linear-gradient(135deg, #ffd700, #f57c00);
-            border: none;
-            border-radius: 14px;
-            font-weight: 700;
-            font-size: 16px;
-            color: #000;
+        .card-count {
+            text-align: right;
+            font-size: 13px;
+            color: #555;
+            margin-top: 6px;
+        }
+
+        /* GATE SELECTOR */
+        .gate-area {
+            background: #141414;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #1a1a1a;
+        }
+
+        .gate-area .gate-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .gate-area .gate-label span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #aaa;
+        }
+
+        .gate-area .gate-label .status {
+            font-size: 12px;
+            color: #555;
+        }
+
+        .gate-area select {
+            width: 100%;
+            padding: 12px 14px;
+            background: #1a1a1a;
+            border: 1px solid #222;
+            border-radius: 12px;
+            color: #e0e0e0;
+            font-size: 15px;
+            font-weight: 500;
+            outline: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            cursor: pointer;
+        }
+
+        .gate-area select:focus {
+            border-color: #ffd700;
+        }
+
+        /* THREADS */
+        .thread-area {
+            margin-bottom: 20px;
+        }
+
+        .thread-area .thread-label {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+
+        .thread-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .thread-btn {
+            flex: 1;
+            padding: 10px 0;
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 12px;
+            color: #666;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            white-space: nowrap;
         }
 
-        .card-input-area button:active {
+        .thread-btn.active {
+            background: #ffd700;
+            border-color: #ffd700;
+            color: #000;
+        }
+
+        .thread-btn:active {
             transform: scale(0.95);
         }
 
-        /* ===== RESULT ===== */
-        .result-box {
+        /* START BUTTON */
+        .start-btn {
+            width: 100%;
             padding: 16px;
-            border-radius: 14px;
-            background: #1a1a1a;
-            margin: 12px 0 20px;
-            font-weight: 600;
-            font-size: 15px;
-            display: none;
-            word-break: break-all;
-            border-left: 4px solid transparent;
-        }
-
-        .result-box.approved {
-            display: block;
-            border-left-color: #00e676;
-            color: #00e676;
-        }
-
-        .result-box.declined {
-            display: block;
-            border-left-color: #ff1744;
-            color: #ff1744;
-        }
-
-        .result-box.loading {
-            display: block;
-            border-left-color: #ffd700;
-            color: #ffd700;
-            animation: pulse 1.2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        /* ===== STATS (basit) ===== */
-        .stats {
+            background: linear-gradient(135deg, #ffd700, #f57c00);
+            border: none;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.3s;
             display: flex;
-            justify-content: space-around;
-            margin: 20px 0 12px;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .stats div {
+        .start-btn:active {
+            transform: scale(0.97);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.5;
+            transform: none;
+        }
+
+        /* STATS BAR */
+        .stats-bar {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0 16px;
+        }
+
+        .stats-bar .stat {
+            flex: 1;
             text-align: center;
+            padding: 10px 0;
+            background: #141414;
+            border-radius: 12px;
+            border: 1px solid #1a1a1a;
         }
 
-        .stats .number {
-            font-size: 24px;
+        .stats-bar .stat .number {
+            font-size: 20px;
             font-weight: 700;
         }
 
-        .stats .label {
-            font-size: 11px;
+        .stats-bar .stat .label {
+            font-size: 10px;
             color: #666;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .stats .approved .number { color: #00e676; }
-        .stats .declined .number { color: #ff1744; }
+        .stats-bar .stat.live .number { color: #ffd700; }
+        .stats-bar .stat.approved .number { color: #00e676; }
+        .stats-bar .stat.declined .number { color: #ff1744; }
 
-        /* ===== FOOTER ===== */
-        .footer {
-            text-align: center;
+        /* RESULTS */
+        .results-area {
+            margin-top: 12px;
+        }
+
+        .results-area .results-title {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: #141414;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            border-left: 3px solid #333;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .result-item.approved {
+            border-left-color: #00e676;
+        }
+
+        .result-item.approved .status {
+            color: #00e676;
+        }
+
+        .result-item.declined {
+            border-left-color: #ff1744;
+        }
+
+        .result-item.declined .status {
+            color: #ff1744;
+        }
+
+        .result-item .cc {
+            color: #aaa;
+        }
+
+        .result-item .status {
+            font-weight: 600;
             font-size: 12px;
-            color: #333;
-            margin-top: 20px;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #444;
+            font-size: 14px;
+            padding: 20px 0;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 420px) {
+            .app { padding: 16px; }
+            .thread-buttons { gap: 4px; }
+            .thread-btn { font-size: 12px; padding: 8px 0; }
+            .stats-bar { gap: 6px; }
+            .stats-bar .stat { padding: 8px 0; }
+            .stats-bar .stat .number { font-size: 16px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Logo -->
-        <div class="logo">
-            <img src="https://i.imgur.com/3wQkz7M.png" alt="GTA Logo" 
-                 onerror="this.src='https://via.placeholder.com/100x100/1a1a1a/FFD700?text=GTA'">
-        </div>
 
-        <div class="brand">Dorksk Checker</div>
-        <div class="sub">Premium Card Verification</div>
-
-        <!-- Kart girişi -->
-        <div class="card-input-area">
-            <input type="text" id="cc-input" placeholder="4111111111111111 | 12 | 26 | 123" 
-                   autocomplete="off" spellcheck="false" />
-            <button onclick="checkCard()">Check</button>
-        </div>
-
-        <!-- Sonuç -->
-        <div id="result" class="result-box"></div>
-
-        <!-- Basit istatistikler -->
-        <div class="stats">
-            <div class="approved">
-                <div class="number" id="approved-count">0</div>
-                <div class="label">✅ Approved</div>
-            </div>
-            <div class="declined">
-                <div class="number" id="declined-count">0</div>
-                <div class="label">❌ Declined</div>
-            </div>
-        </div>
-
-        <div class="footer">Telegram Mini App · v1.0</div>
+<div class="app">
+    <!-- HEADER -->
+    <div class="header">
+        <span class="brand">Lynx</span>
+        <span class="online"><i>●</i> <span id="online-count">0</span> online</span>
     </div>
 
-    <script>
-        // ==================== TELEGRAM ====================
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+    <!-- CARD INPUT -->
+    <div class="card-area">
+        <textarea id="card-input" placeholder="4111111111111111 | 12 | 2027 | 118&#10;5200000000000000 | 06 | 2028 | 456"></textarea>
+        <div class="card-count"><span id="card-count">0</span> cards</div>
+    </div>
 
-        const user = tg.initDataUnsafe?.user || { id: 'guest', username: 'Guest' };
+    <!-- GATE -->
+    <div class="gate-area">
+        <div class="gate-label">
+            <span>Gate</span>
+            <span class="status" id="gate-status">0 cr/live  0 cr/decline</span>
+        </div>
+        <select id="gate-select">
+            <option value="stripe_auth_free">Stripe Auth FREE</option>
+            <option value="stripe_auth_live">Stripe Auth LIVE</option>
+            <option value="ontraport" selected>Ontraport</option>
+        </select>
+    </div>
 
-        // ==================== DOM REFS ====================
-        const input = document.getElementById('cc-input');
-        const resultDiv = document.getElementById('result');
-        const approvedSpan = document.getElementById('approved-count');
-        const declinedSpan = document.getElementById('declined-count');
+    <!-- THREADS -->
+    <div class="thread-area">
+        <div class="thread-label">Threads — parallel checks</div>
+        <div class="thread-buttons" id="thread-buttons">
+            <button class="thread-btn" data-threads="1">1</button>
+            <button class="thread-btn active" data-threads="3">3</button>
+            <button class="thread-btn" data-threads="5">5</button>
+            <button class="thread-btn" data-threads="10">10</button>
+            <button class="thread-btn" data-threads="15">15</button>
+        </div>
+    </div>
 
-        let approvedCount = 0;
-        let declinedCount = 0;
+    <!-- START -->
+    <button class="start-btn" id="start-btn" onclick="startCheck()">
+        <span>▶</span> Start
+    </button>
 
-        // ==================== F12 ENGELLEME ====================
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) ||
-                (e.ctrlKey && e.key === 'u')) {
-                e.preventDefault();
-                tg.showAlert('🔒 Developer tools disabled.');
-            }
+    <!-- STATS -->
+    <div class="stats-bar">
+        <div class="stat live">
+            <div class="number" id="live-count">0</div>
+            <div class="label">Live</div>
+        </div>
+        <div class="stat approved">
+            <div class="number" id="approved-count">0</div>
+            <div class="label">Approved</div>
+        </div>
+        <div class="stat declined">
+            <div class="number" id="declined-count">0</div>
+            <div class="label">Declined</div>
+        </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-area">
+        <div class="results-title">Live Results</div>
+        <div id="results-container">
+            <div class="no-results">No live results</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==================== TELEGRAM ====================
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    const user = tg.initDataUnsafe?.user || { id: 'guest', username: 'Guest' };
+
+    // ==================== DOM REFS ====================
+    const input = document.getElementById('card-input');
+    const cardCount = document.getElementById('card-count');
+    const resultsContainer = document.getElementById('results-container');
+    const liveCount = document.getElementById('live-count');
+    const approvedCount = document.getElementById('approved-count');
+    const declinedCount = document.getElementById('declined-count');
+    const startBtn = document.getElementById('start-btn');
+
+    let live = 0, approved = 0, declined = 0;
+    let isRunning = false;
+
+    // ==================== CARD COUNT ====================
+    input.addEventListener('input', function() {
+        const lines = this.value.split('\n').filter(l => l.trim() !== '');
+        cardCount.textContent = lines.length;
+    });
+
+    // ==================== THREADS ====================
+    document.querySelectorAll('.thread-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.thread-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
         });
-        document.addEventListener('contextmenu', (e) => e.preventDefault());
+    });
 
-        // ==================== INPUT TEMİZLE ====================
-        input.addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9|]/g, '');
-        });
+    // ==================== F12 + SAĞ TIK ====================
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) || (e.ctrlKey && e.key === 'u')) {
+            e.preventDefault();
+            tg.showAlert('🔒 Disabled');
+        }
+    });
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
 
-        // ==================== KART KONTROL ====================
-        async function checkCard() {
-            const raw = input.value.trim();
-            if (!raw) {
-                tg.showAlert('⚠️ Enter a card.');
-                return;
-            }
+    // ==================== START CHECK ====================
+    async function startCheck() {
+        if (isRunning) return;
 
-            // Format kontrolü: 15-19 rakam | 1-2 rakam | 2-4 rakam | 3-4 rakam
-            const cleaned = raw.replace(/\s/g, '');
-            const regex = /^(\d{15,19})\|(\d{1,2})\|(\d{2,4})\|(\d{3,4})$/;
-            if (!regex.test(cleaned)) {
-                tg.showAlert('❌ Invalid format. Use: NUMBER|MM|YY|CVV');
-                return;
-            }
-
-            // Loading
-            resultDiv.textContent = '⏳ Processing...';
-            resultDiv.className = 'result-box loading';
-
-            try {
-                const response = await fetch('/api/check', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        cc: cleaned,
-                        user_id: user.id,
-                        user_name: user.username || 'Anonymous'
-                    })
-                });
-
-                const data = await response.json();
-
-                // Sonucu göster
-                resultDiv.textContent = data.result;
-                resultDiv.className = `result-box ${data.status}`;
-
-                // İstatistikleri güncelle
-                if (data.status === 'approved') {
-                    approvedCount++;
-                    approvedSpan.textContent = approvedCount;
-                    tg.showAlert('✅ Card Approved!');
-                } else {
-                    declinedCount++;
-                    declinedSpan.textContent = declinedCount;
-                    tg.showAlert('❌ Card Declined.');
-                }
-
-            } catch (err) {
-                resultDiv.textContent = '❌ Server error. Try again.';
-                resultDiv.className = 'result-box declined';
-                tg.showAlert('⚠️ Connection error.');
-            }
+        const raw = input.value.trim();
+        if (!raw) {
+            tg.showAlert('⚠️ Paste at least one card.');
+            return;
         }
 
-        // ==================== ENTER İLE GÖNDER ====================
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') checkCard();
-        });
-    </script>
+        const cards = raw.split('\n').filter(l => l.trim() !== '');
+        const gate = document.getElementById('gate-select').value;
+        const threads = parseInt(document.querySelector('.thread-btn.active').dataset.threads);
+
+        isRunning = true;
+        startBtn.disabled = true;
+        startBtn.innerHTML = '<span>⏳</span> Checking...';
+
+        // Reset stats
+        live = approved = declined = 0;
+        updateStats();
+        resultsContainer.innerHTML = '';
+
+        // Kartları thread sayısına göre böl
+        const chunks = [];
+        for (let i = 0; i < cards.length; i += threads) {
+            chunks.push(cards.slice(i, i + threads));
+        }
+
+        for (const chunk of chunks) {
+            const promises = chunk.map(async (cc) => {
+                const trimmed = cc.trim();
+                try {
+                    const res = await fetch('/api/check', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            cc: trimmed,
+                            user_id: user.id,
+                            gate: gate
+                        })
+                    });
+                    const data = await res.json();
+                    showResult(trimmed, data.status, data.result);
+                    if (data.status === 'approved') approved++;
+                    else if (data.status === 'declined') declined++;
+                    else declined++;
+                    live++;
+                    updateStats();
+                    return data;
+                } catch (err) {
+                    showResult(trimmed, 'declined', '❌ Error');
+                    declined++;
+                    live++;
+                    updateStats();
+                    return { status: 'declined' };
+                }
+            });
+
+            await Promise.all(promises);
+        }
+
+        isRunning = false;
+        startBtn.disabled = false;
+        startBtn.innerHTML = '<span>▶</span> Start';
+        tg.showAlert(`✅ Done! Approved: ${approved}, Declined: ${declined}`);
+    }
+
+    // ==================== SHOW RESULT ====================
+    function showResult(cc, status, message) {
+        const div = document.createElement('div');
+        div.className = `result-item ${status}`;
+        const masked = cc.slice(0, 4) + '****' + cc.slice(-4);
+        div.innerHTML = `
+            <span class="cc">${masked}</span>
+            <span class="status">${status === 'approved' ? '✅ Approved' : '❌ Declined'}</span>
+        `;
+        resultsContainer.appendChild(div);
+        // Remove no-results if exists
+        const noResult = resultsContainer.querySelector('.no-results');
+        if (noResult) noResult.remove();
+        // Scroll to bottom
+        resultsContainer.scrollTop = resultsContainer.scrollHeight;
+    }
+
+    // ==================== UPDATE STATS ====================
+    function updateStats() {
+        liveCount.textContent = live;
+        approvedCount.textContent = approved;
+        declinedCount.textContent = declined;
+    }
+
+    // ==================== ONLINE PING ====================
+    setInterval(async () => {
+        try {
+            const res = await fetch('/api/online', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: user.id })
+            });
+            const data = await res.json();
+            document.getElementById('online-count').textContent = data.online || 0;
+        } catch (_) {}
+    }, 30000);
+
+    // ==================== BAŞLANGIÇ ====================
+    // İlk card count
+    cardCount.textContent = input.value.split('\n').filter(l => l.trim() !== '').length;
+</script>
 </body>
 </html>
