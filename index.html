@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CC Checker</title>
+    <title>⭐ CC CHECKER PRO</title>
     <style>
+        /* ===== RESET & BASE ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #0a0a0a;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #07080a;
+            color: #e8edf5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -17,434 +18,666 @@
             -webkit-user-select: none;
             overflow: hidden;
         }
-        /* F12 Koruma - Developer Tools engeli */
-        .dev-tools-block {
+
+        /* ===== F12 KORUMA ===== */
+        #devBlock {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #0a0a0a;
-            z-index: 9999;
+            inset: 0;
+            background: #07080a;
+            z-index: 99999;
             display: none;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            color: #ff4444;
+            backdrop-filter: blur(20px);
         }
-        .dev-tools-block.active { display: flex; }
-        /* Üst Bar */
+        #devBlock.active { display: flex; }
+        #devBlock .icon { font-size: 56px; margin-bottom: 16px; }
+        #devBlock h2 { font-size: 22px; color: #ff4757; }
+        #devBlock p { color: #6a6f7a; margin-top: 8px; font-size: 14px; }
+
+        /* ===== ÜST BAR ===== */
         .header {
-            background: #141414;
-            padding: 12px 16px;
+            background: #0c0e12;
+            padding: 14px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #2a2a2a;
-            min-height: 56px;
+            border-bottom: 1px solid #1e2229;
             flex-shrink: 0;
+            min-height: 64px;
         }
-        .user-info {
+        .user-area {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         .avatar {
-            width: 36px;
-            height: 36px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            background: #2a2a2a;
+            background: linear-gradient(135deg, #2d3436, #1e2229);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
+            font-weight: 700;
+            font-size: 16px;
             color: #fff;
+            border: 2px solid #2d3436;
             overflow: hidden;
-            border: 1px solid #3a3a3a;
+            flex-shrink: 0;
         }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .username { font-weight: 600; font-size: 14px; color: #fff; }
-        .user-id { font-size: 11px; color: #888; }
-        /* Alt Menü - 3 Buton */
+        .user-text .name { font-weight: 600; font-size: 15px; color: #f0f4fa; }
+        .user-text .id { font-size: 11px; color: #6a6f7a; }
+        .right-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .premium-badge {
+            background: linear-gradient(135deg, #f9a825, #ffca28);
+            color: #1a1a1a;
+            font-weight: 800;
+            font-size: 10px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .limit-box {
+            background: #14181f;
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: 1px solid #2a2f38;
+            font-size: 13px;
+            font-weight: 600;
+            color: #aab;
+        }
+        .limit-box span { color: #fff; font-weight: 700; }
+        .profile-btn {
+            background: none;
+            border: none;
+            color: #6a6f7a;
+            font-size: 22px;
+            cursor: pointer;
+            padding: 4px;
+            transition: 0.2s;
+        }
+        .profile-btn:hover { color: #fff; }
+
+        /* ===== ANA İÇERİK ===== */
+        .main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 18px 10px 18px;
+        }
+        .main::-webkit-scrollbar { width: 3px; }
+        .main::-webkit-scrollbar-track { background: #0c0e12; }
+        .main::-webkit-scrollbar-thumb { background: #2a2f38; border-radius: 10px; }
+
+        /* ===== SAYFALAR ===== */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* ===== GATE SELECTOR ===== */
+        .gate-box {
+            background: #0c0e12;
+            border: 1px solid #1e2229;
+            border-radius: 14px;
+            padding: 14px 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .gate-box label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6a6f7a;
+            letter-spacing: 0.5px;
+        }
+        .gate-box select {
+            background: #14181f;
+            color: #e8edf5;
+            border: 1px solid #2a2f38;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+            flex: 1;
+            min-width: 140px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+        .gate-box select:focus { border-color: #4a5568; }
+        .gate-box select option { background: #14181f; }
+
+        /* ===== CC LİSTESİ ===== */
+        .cc-panel {
+            background: #0c0e12;
+            border: 1px solid #1e2229;
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+        }
+        .cc-panel .panel-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #4a5568;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cc-panel .panel-title .count-badge {
+            background: #14181f;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #aab;
+        }
+        #ccContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+        #ccContainer::-webkit-scrollbar { width: 3px; }
+        #ccContainer::-webkit-scrollbar-thumb { background: #2a2f38; border-radius: 10px; }
+
+        .cc-row {
+            background: #0f1219;
+            border: 1px solid #1a1e26;
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.15s;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 13px;
+        }
+        .cc-row:hover { border-color: #2d3436; }
+        .cc-row .card-text { color: #c8d0dc; letter-spacing: 0.3px; }
+        .cc-row .status-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 14px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: inherit;
+        }
+        .status-badge.pending { background: #1e2229; color: #6a6f7a; }
+        .status-badge.live { background: #00c85320; color: #00e676; border: 1px solid #00c85340; }
+        .status-badge.dead { background: #d32f2f20; color: #ff5252; border: 1px solid #d32f2f40; }
+        .status-badge.error { background: #ff6f0020; color: #ffab40; border: 1px solid #ff6f0040; }
+
+        .empty-cc {
+            text-align: center;
+            color: #3d424a;
+            padding: 24px 0;
+            font-size: 14px;
+        }
+        .empty-cc .big { font-size: 32px; display: block; margin-bottom: 8px; }
+
+        /* ===== BUTONLAR ===== */
+        .action-row {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0 14px 0;
+            flex-wrap: wrap;
+        }
+        .action-row button {
+            flex: 1;
+            min-width: 80px;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-start {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: #fff;
+            box-shadow: 0 4px 16px #1a73e840;
+        }
+        .btn-start:hover { transform: scale(0.98); opacity: 0.9; }
+        .btn-start:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        .btn-paste {
+            background: #14181f;
+            color: #e8edf5;
+            border: 1px solid #2a2f38;
+        }
+        .btn-paste:hover { background: #1e2229; }
+
+        .btn-clean {
+            background: #14181f;
+            color: #ff5252;
+            border: 1px solid #2a2f38;
+        }
+        .btn-clean:hover { background: #1e2229; border-color: #ff525240; }
+
+        /* ===== STATS ===== */
+        .stats-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 6px 0 4px 0;
+        }
+        .stats-row .stat {
+            background: #0c0e12;
+            border: 1px solid #1a1e26;
+            border-radius: 10px;
+            padding: 6px 16px;
+            font-size: 13px;
+            color: #6a6f7a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .stats-row .stat .num {
+            font-weight: 700;
+            color: #e8edf5;
+            font-size: 15px;
+        }
+        .stat.live .num { color: #00e676; }
+        .stat.dead .num { color: #ff5252; }
+        .stat.limit .num { color: #ffab40; }
+
+        /* ===== ALT NAV ===== */
         .bottom-nav {
-            background: #141414;
+            background: #0c0e12;
+            border-top: 1px solid #1e2229;
             display: flex;
             justify-content: space-around;
-            padding: 8px 0 12px 0;
-            border-top: 1px solid #2a2a2a;
+            padding: 8px 0 14px 0;
             flex-shrink: 0;
-            position: relative;
-            z-index: 10;
         }
-        .nav-item {
+        .bottom-nav .nav-item {
+            background: none;
+            border: none;
+            color: #4a5568;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 2px;
             font-size: 10px;
-            color: #888;
             cursor: pointer;
-            padding: 4px 12px;
+            padding: 4px 16px;
             transition: 0.2s;
-            background: transparent;
-            border: none;
             font-family: inherit;
+            position: relative;
         }
-        .nav-item.active { color: #fff; }
-        .nav-item .icon { font-size: 22px; line-height: 1; }
-        .nav-item .badge {
-            background: #ff4444;
+        .bottom-nav .nav-item .icon { font-size: 24px; line-height: 1; }
+        .bottom-nav .nav-item.active { color: #e8edf5; }
+        .bottom-nav .nav-item .badge {
+            background: #ff4757;
             color: #fff;
             font-size: 9px;
-            padding: 1px 6px;
-            border-radius: 10px;
-            margin-left: 4px;
-        }
-        /* Ana İçerik */
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-            padding-bottom: 8px;
-        }
-        .main-content::-webkit-scrollbar { width: 3px; }
-        .main-content::-webkit-scrollbar-track { background: #141414; }
-        .main-content::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-        /* Ana Sayfa */
-        .page { display: none; }
-        .page.active { display: block; }
-        /* Select Gate */
-        .gate-selector {
-            background: #141414;
+            font-weight: 700;
+            padding: 1px 8px;
             border-radius: 12px;
-            padding: 12px 16px;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border: 1px solid #2a2a2a;
+            position: absolute;
+            top: -4px;
+            right: -4px;
         }
-        .gate-selector label { font-size: 13px; color: #aaa; font-weight: 500; }
-        .gate-selector select {
-            background: #1e1e1e;
-            color: #fff;
-            border: 1px solid #333;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            flex: 1;
-            outline: none;
-            font-family: inherit;
-        }
-        .gate-selector select option { background: #1e1e1e; }
-        /* CC List - Dikdörtgen */
-        .cc-list-container {
-            background: #141414;
-            border-radius: 12px;
-            border: 1px solid #2a2a2a;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-        .cc-list-container .title {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-        .cc-item {
-            background: #1a1a1a;
-            padding: 10px 12px;
-            border-radius: 8px;
-            margin-bottom: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: 0.2s;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            color: #ccc;
-        }
-        .cc-item:hover { border-color: #444; }
-        .cc-item .status {
-            font-size: 11px;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-weight: 600;
-        }
-        .status.pending { background: #2a2a2a; color: #888; }
-        .status.live { background: #00c853; color: #fff; }
-        .status.dead { background: #d32f2f; color: #fff; }
-        .status.error { background: #ff6f00; color: #fff; }
-        /* Butonlar */
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            margin: 12px 0;
-            flex-wrap: wrap;
-        }
-        .action-buttons button {
-            flex: 1;
-            min-width: 80px;
-            padding: 10px 16px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: inherit;
-        }
-        .btn-start { background: #1a73e8; color: #fff; }
-        .btn-start:hover { background: #1557b0; }
-        .btn-paste { background: #2a2a2a; color: #fff; border: 1px solid #444; }
-        .btn-paste:hover { background: #3a3a3a; }
-        .btn-clean { background: #d32f2f; color: #fff; }
-        .btn-clean:hover { background: #b71c1c; }
-        /* Stats */
-        .stats {
-            display: flex;
-            gap: 12px;
-            margin: 8px 0 12px 0;
-            font-size: 12px;
-            color: #888;
-        }
-        .stats span { background: #141414; padding: 4px 12px; border-radius: 6px; border: 1px solid #2a2a2a; }
-        .stats .count { font-weight: 700; color: #fff; }
-        /* Live Listesi - Açılır Pencere */
+
+        /* ===== LİVE OVERLAY ===== */
         .live-overlay {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 70vh;
-            background: #0d0d0d;
-            border-top-left-radius: 24px;
-            border-top-right-radius: 24px;
-            z-index: 100;
+            height: 72vh;
+            background: #0c0e12;
+            border-top-left-radius: 28px;
+            border-top-right-radius: 28px;
+            z-index: 1000;
             transform: translateY(100%);
-            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            padding: 20px 16px 30px 16px;
-            border-top: 1px solid #2a2a2a;
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            padding: 20px 18px 30px 18px;
+            border-top: 1px solid #1e2229;
             display: flex;
             flex-direction: column;
         }
         .live-overlay.open { transform: translateY(0); }
         .live-overlay .handle {
-            width: 40px;
+            width: 44px;
             height: 4px;
-            background: #333;
+            background: #2a2f38;
             border-radius: 4px;
             margin: 0 auto 16px auto;
         }
-        .live-overlay .header-live {
+        .live-overlay .top-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
-        .live-overlay .header-live h3 { font-size: 16px; color: #fff; }
-        .live-overlay .header-live .close-live {
-            background: #2a2a2a;
-            border: none;
-            color: #fff;
-            padding: 6px 16px;
-            border-radius: 8px;
+        .live-overlay .top-row h3 {
+            font-size: 18px;
+            color: #e8edf5;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .live-overlay .top-row .close-btn {
+            background: #14181f;
+            border: 1px solid #2a2f38;
+            color: #aab;
+            padding: 6px 18px;
+            border-radius: 10px;
             font-size: 13px;
             cursor: pointer;
             font-family: inherit;
+            transition: 0.2s;
         }
+        .live-overlay .top-row .close-btn:hover { background: #1e2229; color: #fff; }
         .live-list {
             flex: 1;
             overflow-y: auto;
             padding-right: 4px;
         }
         .live-list::-webkit-scrollbar { width: 3px; }
-        .live-list::-webkit-scrollbar-track { background: #141414; }
-        .live-list::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        .live-list::-webkit-scrollbar-thumb { background: #2a2f38; border-radius: 10px; }
         .live-item {
-            background: #141414;
-            padding: 10px 12px;
-            border-radius: 8px;
+            background: #0f1219;
+            border: 1px solid #1a1e26;
+            border-radius: 10px;
+            padding: 10px 14px;
             margin-bottom: 6px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #222;
-            font-family: 'Courier New', monospace;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
             font-size: 12px;
         }
-        .live-item .cc { color: #00c853; }
+        .live-item .cc { color: #00e676; font-weight: 500; }
+        .live-item .result { color: #6a6f7a; font-size: 11px; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .live-item .copy-btn {
-            background: #2a2a2a;
-            border: none;
-            color: #fff;
-            padding: 4px 12px;
-            border-radius: 6px;
+            background: #14181f;
+            border: 1px solid #2a2f38;
+            color: #aab;
+            padding: 3px 14px;
+            border-radius: 8px;
             font-size: 11px;
             cursor: pointer;
             font-family: inherit;
+            transition: 0.2s;
         }
-        .live-item .copy-btn:hover { background: #3a3a3a; }
-        /* Loading */
-        .loader {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid #333;
-            border-top-color: #1a73e8;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
+        .live-item .copy-btn:hover { background: #1e2229; color: #fff; border-color: #4a5568; }
+        .live-empty {
+            text-align: center;
+            color: #3d424a;
+            padding: 40px 0;
+            font-size: 14px;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        /* Toast */
+
+        /* ===== TOAST ===== */
         .toast {
             position: fixed;
-            bottom: 80px;
+            bottom: 90px;
             left: 50%;
             transform: translateX(-50%);
-            background: #1e1e1e;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-size: 13px;
-            border: 1px solid #333;
-            z-index: 999;
+            background: #14181f;
+            color: #e8edf5;
+            padding: 12px 24px;
+            border-radius: 14px;
+            border: 1px solid #2a2f38;
+            font-size: 14px;
+            z-index: 99999;
             opacity: 0;
             transition: opacity 0.3s;
             pointer-events: none;
+            max-width: 90%;
+            text-align: center;
+            font-weight: 500;
+            box-shadow: 0 8px 32px #00000060;
         }
         .toast.show { opacity: 1; }
-        /* Limit ve Premium */
-        .header-right {
+
+        /* ===== PROFİL SAYFASI ===== */
+        .profile-card {
+            background: #0c0e12;
+            border: 1px solid #1e2229;
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .profile-card .big-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
             display: flex;
             align-items: center;
-            gap: 12px;
-        }
-        .premium-badge {
-            background: linear-gradient(135deg, #f7971e, #ffd200);
-            color: #000;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 10px;
+            justify-content: center;
+            font-size: 28px;
             font-weight: 700;
+            color: #fff;
+            margin: 0 auto 12px auto;
+            border: 3px solid #2a2f38;
         }
-        .limit-badge {
-            background: #1e1e1e;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            color: #aaa;
-            border: 1px solid #333;
+        .profile-card .pname { font-size: 20px; font-weight: 700; color: #f0f4fa; }
+        .profile-card .pid { font-size: 13px; color: #6a6f7a; margin-top: 4px; }
+        .profile-card .pstats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0 24px 0;
         }
-        .limit-badge .num { color: #fff; font-weight: 700; }
-        .profil-btn {
-            background: none;
+        .profile-card .pstats div { text-align: center; }
+        .profile-card .pstats .num { font-size: 22px; font-weight: 700; color: #e8edf5; }
+        .profile-card .pstats .label { font-size: 11px; color: #4a5568; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .btn-logout {
+            background: #d32f2f;
+            color: #fff;
             border: none;
-            color: #888;
-            font-size: 20px;
+            padding: 12px 40px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
             cursor: pointer;
-            padding: 4px;
+            transition: 0.2s;
+            font-family: inherit;
         }
-        /* Responsive */
+        .btn-logout:hover { background: #b71c1c; }
+
+        /* ===== PAKET SATIN AL (Stars) ===== */
+        .packages {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 14px 0;
+        }
+        .package-card {
+            background: #0c0e12;
+            border: 1px solid #1e2229;
+            border-radius: 14px;
+            padding: 16px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .package-card:hover { border-color: #4a5568; transform: scale(0.97); }
+        .package-card .price { font-size: 22px; font-weight: 800; color: #ffca28; }
+        .package-card .price small { font-size: 13px; color: #6a6f7a; font-weight: 400; }
+        .package-card .desc { font-size: 13px; color: #6a6f7a; margin-top: 4px; }
+        .package-card .stars { font-size: 11px; color: #4a5568; margin-top: 6px; }
+
+        .buy-btn {
+            background: linear-gradient(135deg, #f9a825, #ffca28);
+            color: #1a1a1a;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 8px;
+            font-family: inherit;
+            transition: 0.2s;
+        }
+        .buy-btn:hover { opacity: 0.8; }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
-            .gate-selector { flex-wrap: wrap; }
-            .action-buttons button { min-width: 60px; font-size: 11px; padding: 8px 10px; }
+            .header { padding: 10px 14px; flex-wrap: wrap; gap: 6px; }
+            .user-text .name { font-size: 13px; }
+            .right-area { gap: 8px; }
+            .gate-box { flex-direction: column; align-items: stretch; gap: 8px; }
+            .action-row button { font-size: 12px; padding: 10px 12px; min-width: 60px; }
+            .stats-row .stat { font-size: 11px; padding: 4px 12px; }
+            .packages { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .package-card .price { font-size: 18px; }
+            .cc-row { font-size: 11px; padding: 8px 10px; flex-wrap: wrap; gap: 4px; }
+            .live-item { flex-wrap: wrap; gap: 6px; font-size: 11px; }
+        }
+        @media (max-width: 380px) {
+            .packages { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-<!-- F12 Koruma -->
-<div class="dev-tools-block" id="devToolsBlock">
-    <div style="font-size:48px; margin-bottom:16px;">🛡️</div>
-    <div style="font-size:18px; font-weight:600;">Developer Tools Devre Dışı</div>
-    <div style="font-size:13px; color:#666; margin-top:8px;">Bu uygulama F12 ile açılamaz.</div>
+<!-- ===== F12 KORUMA ===== -->
+<div id="devBlock">
+    <div class="icon">🛡️</div>
+    <h2>Developer Tools Devre Dışı</h2>
+    <p>Bu uygulama F12 veya sağ tık ile açılamaz.</p>
 </div>
 
-<!-- Toast -->
+<!-- ===== TOAST ===== -->
 <div class="toast" id="toast"></div>
 
-<!-- Üst Bar -->
+<!-- ===== ÜST BAR ===== -->
 <div class="header">
-    <div class="user-info">
+    <div class="user-area">
         <div class="avatar" id="userAvatar">👤</div>
-        <div>
-            <div class="username" id="userName">Kullanıcı</div>
-            <div class="user-id" id="userId">ID: -</div>
+        <div class="user-text">
+            <div class="name" id="userName">Kullanıcı</div>
+            <div class="id" id="userId">ID: -</div>
         </div>
     </div>
-    <div class="header-right">
+    <div class="right-area">
         <div class="premium-badge">⭐ PREMIUM</div>
-        <div class="limit-badge">🔒 <span class="num" id="limitCount">40</span></div>
-        <button class="profil-btn" id="profileBtn">⚙️</button>
+        <div class="limit-box">🔒 <span id="limitDisplay">40</span></div>
+        <button class="profile-btn" id="profileBtn">⚙️</button>
     </div>
 </div>
 
-<!-- Ana İçerik -->
-<div class="main-content" id="mainContent">
+<!-- ===== ANA İÇERİK ===== -->
+<div class="main" id="mainContent">
 
-    <!-- Sayfa: Ana Menü -->
+    <!-- ===== ANA SAYFA ===== -->
     <div class="page active" id="pageHome">
-        <!-- Gate Selector -->
-        <div class="gate-selector">
-            <label>🚪 Select Gate</label>
+
+        <!-- Gate -->
+        <div class="gate-box">
+            <label>🚪 GATE</label>
             <select id="gateSelect">
-                <option value="stripe">Stripe Auth</option>
-                <option value="adyen">Adyen (Yakında)</option>
-                <option value="braintree">Braintree (Yakında)</option>
+                <option value="stripe">💳 Stripe Auth</option>
+                <option value="adyen" disabled>🏦 Adyen (Yakında)</option>
+                <option value="braintree" disabled>🌿 Braintree (Yakında)</option>
             </select>
         </div>
 
-        <!-- CC Listesi -->
-        <div class="cc-list-container" id="ccListContainer">
-            <div class="title">📋 CC List</div>
-            <div id="ccList">
-                <div class="cc-item">
-                    <span>517040*******2821|05|27|620</span>
-                    <span class="status pending">PENDING</span>
-                </div>
-                <div class="cc-item">
-                    <span>453201*******1234|08|26|321</span>
-                    <span class="status pending">PENDING</span>
-                </div>
-                <div class="cc-item">
-                    <span>555555*******4444|12|25|999</span>
-                    <span class="status pending">PENDING</span>
+        <!-- CC Panel -->
+        <div class="cc-panel">
+            <div class="panel-title">
+                <span>📋 CC LİSTESİ</span>
+                <span class="count-badge" id="ccCount">0 kart</span>
+            </div>
+            <div id="ccContainer">
+                <div class="empty-cc">
+                    <span class="big">💳</span>
+                    Kart eklemek için <strong>PASTE</strong> yapın
                 </div>
             </div>
         </div>
 
         <!-- Butonlar -->
-        <div class="action-buttons">
+        <div class="action-row">
             <button class="btn-start" id="startBtn">▶ START</button>
             <button class="btn-paste" id="pasteBtn">📋 PASTE</button>
             <button class="btn-clean" id="cleanBtn">🗑️ CLEAN</button>
         </div>
 
         <!-- Stats -->
-        <div class="stats">
-            <span>Live <span class="count" id="liveCount">0</span></span>
-            <span>False <span class="count" id="falseCount">0</span></span>
-            <span>⚠️ Yetersiz Limit <span class="count" id="limitErrorCount">0</span></span>
+        <div class="stats-row">
+            <div class="stat live">✅ LIVE <span class="num" id="liveCount">0</span></div>
+            <div class="stat dead">❌ DEAD <span class="num" id="deadCount">0</span></div>
+            <div class="stat limit">⚠️ HATA <span class="num" id="errorCount">0</span></div>
+        </div>
+
+        <!-- Paketler -->
+        <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:13px; font-weight:600; color:#4a5568;">⭐ YILDIZLA LİMAN</span>
+            <span style="font-size:11px; color:#6a6f7a;">Hediye → @Anxietyss</span>
+        </div>
+        <div class="packages">
+            <div class="package-card" data-stars="10" data-limit="10">
+                <div class="price">10 ⭐ <small>⭐</small></div>
+                <div class="desc">+10 Limit</div>
+                <div class="stars">🔹 10 Yıldız</div>
+                <button class="buy-btn" data-stars="10">⭐ SATIN AL</button>
+            </div>
+            <div class="package-card" data-stars="25" data-limit="30">
+                <div class="price">25 ⭐ <small>⭐</small></div>
+                <div class="desc">+30 Limit</div>
+                <div class="stars">🔹 25 Yıldız</div>
+                <button class="buy-btn" data-stars="25">⭐ SATIN AL</button>
+            </div>
+            <div class="package-card" data-stars="50" data-limit="70">
+                <div class="price">50 ⭐ <small>⭐</small></div>
+                <div class="desc">+70 Limit</div>
+                <div class="stars">🔹 50 Yıldız</div>
+                <button class="buy-btn" data-stars="50">⭐ SATIN AL</button>
+            </div>
+            <div class="package-card" data-stars="100" data-limit="150">
+                <div class="price">100 ⭐ <small>⭐</small></div>
+                <div class="desc">+150 Limit</div>
+                <div class="stars">🔹 100 Yıldız</div>
+                <button class="buy-btn" data-stars="100">⭐ SATIN AL</button>
+            </div>
         </div>
     </div>
 
-    <!-- Sayfa: Diğer (Profil vs) - Boş -->
+    <!-- ===== PROFİL SAYFASI ===== -->
     <div class="page" id="pageProfile">
-        <div style="text-align:center; padding:40px 0; color:#666;">
-            <div style="font-size:40px;">👤</div>
-            <h3 style="color:#fff; margin-top:12px;">Profil Ayarları</h3>
-            <p style="font-size:13px; margin-top:8px;">Telegram ID ile oturum açıldı.</p>
-            <button style="margin-top:20px; background:#d32f2f; color:#fff; border:none; padding:10px 30px; border-radius:8px; font-size:14px; cursor:pointer;" id="logoutBtn">Çıkış Yap</button>
+        <div class="profile-card">
+            <div class="big-avatar" id="profileAvatar">👤</div>
+            <div class="pname" id="profileName">Kullanıcı</div>
+            <div class="pid" id="profileId">ID: -</div>
+            <div class="pstats">
+                <div><div class="num" id="pLimit">40</div><div class="label">Kalan Limit</div></div>
+                <div><div class="num" id="pLive">0</div><div class="label">Live</div></div>
+                <div><div class="num" id="pChecked">0</div><div class="label">Kontrol</div></div>
+            </div>
+            <button class="btn-logout" id="logoutBtn">🚪 Çıkış Yap</button>
         </div>
     </div>
 </div>
 
-<!-- Alt Menü -->
+<!-- ===== ALT NAV ===== -->
 <div class="bottom-nav">
     <button class="nav-item active" data-page="pageHome">
         <span class="icon">🏠</span>
@@ -452,7 +685,8 @@
     </button>
     <button class="nav-item" data-page="pageLive">
         <span class="icon">📡</span>
-        <span>Live <span class="badge" id="liveBadge">0</span></span>
+        <span>Live</span>
+        <span class="badge" id="liveBadge">0</span>
     </button>
     <button class="nav-item" data-page="pageProfile">
         <span class="icon">👤</span>
@@ -460,34 +694,37 @@
     </button>
 </div>
 
-<!-- Live Açılır Pencere -->
+<!-- ===== LİVE OVERLAY ===== -->
 <div class="live-overlay" id="liveOverlay">
     <div class="handle"></div>
-    <div class="header-live">
-        <h3>📡 Live Listesi</h3>
-        <button class="close-live" id="closeLive">✕ Kapat</button>
+    <div class="top-row">
+        <h3>📡 LIVE LİSTESİ <span id="liveOverlayCount" style="font-size:13px; color:#4a5568; font-weight:400;"></span></h3>
+        <button class="close-btn" id="closeLive">✕ Kapat</button>
     </div>
     <div class="live-list" id="liveList">
-        <!-- Dinamik olarak doldurulacak -->
-        <div style="text-align:center; color:#666; padding:20px;">Henüz live yok.</div>
+        <div class="live-empty">📭 Henüz live yok.</div>
     </div>
 </div>
 
-<script src="auth.js"></script>
+<!-- ===== JAVASCRIPT ===== -->
 <script>
-    // ===== F12 KORUMA =====
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
-            e.preventDefault();
-            document.getElementById('devToolsBlock').classList.add('active');
-            return false;
-        }
-    });
-    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+// ============================================================
+//  F12 KORUMA
+// ============================================================
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key)) || (e.ctrlKey && e.key === 'u')) {
+        e.preventDefault();
+        document.getElementById('devBlock').classList.add('active');
+        return false;
+    }
+});
+document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 
-    // ===== TELEGRAM BAŞLAT =====
-    let tgUser = { id: '123456', username: 'test_user', first_name: 'Test' };
-    // Gerçek Telegram Mini App'te şu şekilde alınır:
+// ============================================================
+//  TELEGRAM KULLANICI
+// ============================================================
+let tgUser = { id: '123456789', username: 'test_user', first_name: 'Test', last_name: '' };
+try {
     if (window.Telegram && Telegram.WebApp) {
         const initData = Telegram.WebApp.initDataUnsafe;
         if (initData && initData.user) {
@@ -496,272 +733,104 @@
         Telegram.WebApp.ready();
         Telegram.WebApp.expand();
     }
+} catch(e) {}
 
-    document.getElementById('userName').textContent = tgUser.first_name || tgUser.username || 'Kullanıcı';
-    document.getElementById('userId').textContent = 'ID: ' + (tgUser.id || '-');
-    if (tgUser.photo_url) {
-        document.getElementById('userAvatar').innerHTML = `<img src="${tgUser.photo_url}" alt="">`;
-    } else {
-        document.getElementById('userAvatar').textContent = (tgUser.first_name || 'U')[0].toUpperCase();
+// ============================================================
+//  DOM REF
+// ============================================================
+const $ = id => document.getElementById(id);
+const userName = $('userName');
+const userId = $('userId');
+const userAvatar = $('userAvatar');
+const limitDisplay = $('limitDisplay');
+const ccContainer = $('ccContainer');
+const ccCount = $('ccCount');
+const startBtn = $('startBtn');
+const pasteBtn = $('pasteBtn');
+const cleanBtn = $('cleanBtn');
+const liveCount = $('liveCount');
+const deadCount = $('deadCount');
+const errorCount = $('errorCount');
+const liveBadge = $('liveBadge');
+const liveOverlay = $('liveOverlay');
+const liveList = $('liveList');
+const liveOverlayCount = $('liveOverlayCount');
+const closeLive = $('closeLive');
+const toast = $('toast');
+const profileBtn = $('profileBtn');
+const logoutBtn = $('logoutBtn');
+const profileName = $('profileName');
+const profileId = $('profileId');
+const profileAvatar = $('profileAvatar');
+const pLimit = $('pLimit');
+const pLive = $('pLive');
+const pChecked = $('pChecked');
+
+// ============================================================
+//  STATE
+// ============================================================
+let ccList = [];
+let liveResults = [];
+let dailyLimit = 40;
+let usedLimit = 0;
+let isRunning = false;
+let totalChecked = 0;
+
+// ============================================================
+//  TELEGRAM BİLGİLERİ GÖSTER
+// ============================================================
+const fullName = (tgUser.first_name || '') + (tgUser.last_name ? ' ' + tgUser.last_name : '') || tgUser.username || 'Kullanıcı';
+userName.textContent = fullName;
+userId.textContent = 'ID: ' + (tgUser.id || '-');
+profileName.textContent = fullName;
+profileId.textContent = 'ID: ' + (tgUser.id || '-');
+
+if (tgUser.photo_url) {
+    userAvatar.innerHTML = `<img src="${tgUser.photo_url}" alt="">`;
+    profileAvatar.innerHTML = `<img src="${tgUser.photo_url}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+} else {
+    const initial = (tgUser.first_name || 'U')[0].toUpperCase();
+    userAvatar.textContent = initial;
+    profileAvatar.textContent = initial;
+}
+
+// ============================================================
+//  RENDER CC
+// ============================================================
+function renderCC() {
+    ccContainer.innerHTML = '';
+    if (ccList.length === 0) {
+        ccContainer.innerHTML = `<div class="empty-cc"><span class="big">💳</span>Kart eklemek için <strong>PASTE</strong> yapın</div>`;
+        ccCount.textContent = '0 kart';
+        return;
     }
-
-    // ===== STATE =====
-    let ccList = [];
-    let liveList = [];
-    let dailyLimit = 40;
-    let usedLimit = 0;
-    let isRunning = false;
-
-    // ===== DOM REF =====
-    const ccListEl = document.getElementById('ccList');
-    const startBtn = document.getElementById('startBtn');
-    const pasteBtn = document.getElementById('pasteBtn');
-    const cleanBtn = document.getElementById('cleanBtn');
-    const liveCount = document.getElementById('liveCount');
-    const falseCount = document.getElementById('falseCount');
-    const limitErrorCount = document.getElementById('limitErrorCount');
-    const liveBadge = document.getElementById('liveBadge');
-    const liveOverlay = document.getElementById('liveOverlay');
-    const liveListEl = document.getElementById('liveList');
-    const closeLive = document.getElementById('closeLive');
-    const toast = document.getElementById('toast');
-    const limitCount = document.getElementById('limitCount');
-
-    // ===== SAYFA GEÇİŞİ =====
-    document.querySelectorAll('.nav-item').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            const pageId = this.dataset.page;
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            if (pageId === 'pageLive') {
-                liveOverlay.classList.add('open');
-                return;
-            }
-            const target = document.getElementById(pageId);
-            if (target) target.classList.add('active');
-        });
+    ccList.forEach((cc, idx) => {
+        const row = document.createElement('div');
+        row.className = 'cc-row';
+        const statusText = cc.status || 'pending';
+        row.innerHTML = `
+            <span class="card-text">${cc.card}</span>
+            <span class="status-badge ${statusText}">${statusText === 'pending' ? '⏳ Bekliyor' : statusText === 'live' ? '✅ LIVE' : statusText === 'dead' ? '❌ DEAD' : '⚠️ HATA'}</span>
+        `;
+        row.addEventListener('click', () => showLiveForCC(idx));
+        ccContainer.appendChild(row);
     });
-
-    closeLive.addEventListener('click', () => liveOverlay.classList.remove('open'));
-
-    // ===== CC İŞLEMLERİ =====
-    function renderCCList() {
-        ccListEl.innerHTML = '';
-        if (ccList.length === 0) {
-            ccListEl.innerHTML = '<div style="text-align:center; color:#555; padding:20px; font-size:13px;">CC eklemek için PASTE yapın</div>';
-            return;
-        }
-        ccList.forEach((cc, index) => {
-            const div = document.createElement('div');
-            div.className = 'cc-item';
-            div.innerHTML = `
-                <span>${cc.card}</span>
-                <span class="status ${cc.status}">${cc.status.toUpperCase()}</span>
-            `;
-            div.addEventListener('click', () => showLiveForCC(index));
-            ccListEl.appendChild(div);
-        });
-    }
-
-    function showLiveForCC(index) {
-        // O CC'ye ait live'ları göster
-        const filtered = liveList.filter(l => l.ccIndex === index);
-        liveListEl.innerHTML = '';
-        if (filtered.length === 0) {
-            liveListEl.innerHTML = '<div style="text-align:center; color:#666; padding:20px;">Bu CC için live yok.</div>';
-        } else {
-            filtered.forEach((item) => {
-                const div = document.createElement('div');
-                div.className = 'live-item';
-                div.innerHTML = `
-                    <span class="cc">${item.card}</span>
-                    <span style="color:#888; font-size:11px;">${item.result}</span>
-                    <button class="copy-btn" data-card="${item.card}">📋 Kopyala</button>
-                `;
-                liveListEl.appendChild(div);
-            });
-        }
-        liveOverlay.classList.add('open');
-        // Kopyala butonları
-        document.querySelectorAll('.live-item .copy-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const card = this.dataset.card;
-                navigator.clipboard.writeText(card).then(() => showToast('Kopyalandı: ' + card));
-            });
-        });
-    }
-
-    // ===== PASTE =====
-    pasteBtn.addEventListener('click', async function() {
-        try {
-            const text = await navigator.clipboard.readText();
-            const lines = text.split('\n').filter(l => l.trim() !== '');
-            let added = 0;
-            lines.forEach(line => {
-                const clean = line.trim();
-                if (clean.match(/\d{15,19}[\s|/:-]+\d{1,2}[\s|/:-]+\d{2,4}[\s|/:-]+\d{3,4}/)) {
-                    ccList.push({ card: clean, status: 'pending' });
-                    added++;
-                }
-            });
-            renderCCList();
-            showToast(`${added} CC eklendi.`);
-        } catch (e) {
-            showToast('Paste yapılamadı, izin verin.');
-        }
-    });
-
-    // ===== CLEAN =====
-    cleanBtn.addEventListener('click', function() {
-        ccList = ccList.filter(c => c.status === 'live' || c.status === 'pending');
-        renderCCList();
-        showToast('Temizlendi.');
-    });
-
-    // ===== START =====
-    startBtn.addEventListener('click', function() {
-        if (isRunning) return;
-        const pending = ccList.filter(c => c.status === 'pending');
-        if (pending.length === 0) {
-            showToast('Bekleyen CC yok.');
-            return;
-        }
-        const remaining = dailyLimit - usedLimit;
-        if (remaining <= 0) {
-            showToast('⚠️ Günlük limit doldu! (40)');
-            return;
-        }
-        isRunning = true;
-        startBtn.textContent = '⏳ Çalışıyor...';
-        startBtn.disabled = true;
-
-        const toCheck = pending.slice(0, remaining);
-        let processed = 0;
-
-        toCheck.forEach((cc, idx) => {
-            const realIdx = ccList.indexOf(cc);
-            setTimeout(() => {
-                processCC(realIdx, () => {
-                    processed++;
-                    if (processed >= toCheck.length) {
-                        isRunning = false;
-                        startBtn.textContent = '▶ START';
-                        startBtn.disabled = false;
-                        updateStats();
-                        showToast('✅ Kontrol tamamlandı!');
-                    }
-                });
-            }, idx * 2000); // 2sn bekleme
-        });
-    });
-
-    function processCC(index, callback) {
-        const cc = ccList[index];
-        if (!cc || cc.status !== 'pending') { callback(); return; }
-
-        const used = usedLimit + 1;
-        if (used > dailyLimit) {
-            cc.status = 'error';
-            renderCCList();
-            callback();
-            return;
-        }
-
-        // Auth.js'den check fonksiyonunu çağır
-        if (typeof checkCard === 'function') {
-            try {
-                const result = checkCard(cc.card);
-                const isLive = result.includes('Approved') || result.includes('Success');
-                cc.status = isLive ? 'live' : 'dead';
-                usedLimit = used;
-                limitCount.textContent = dailyLimit - usedLimit;
-
-                // Live list'e ekle
-                liveList.push({
-                    ccIndex: index,
-                    card: cc.card,
-                    result: result
-                });
-
-                // Live badge güncelle
-                const liveItems = liveList.filter(l => l.result.includes('Approved') || l.result.includes('Success'));
-                liveBadge.textContent = liveItems.length;
-
-                renderCCList();
-                updateStats();
-                showToast(result);
-            } catch(e) {
-                cc.status = 'error';
-                renderCCList();
-                showToast('Hata: ' + e.message);
-            }
-        } else {
-            // Fallback - simülasyon (gerçekte auth.js yüklü olacak)
-            const rand = Math.random();
-            cc.status = rand > 0.5 ? 'live' : 'dead';
-            usedLimit = used;
-            limitCount.textContent = dailyLimit - usedLimit;
-            liveList.push({
-                ccIndex: index,
-                card: cc.card,
-                result: cc.status === 'live' ? 'Approved! - (Stripe Auth Success!)' : 'Declined! - (Insufficient funds)'
-            });
-            renderCCList();
-            updateStats();
-        }
-        callback();
-    }
-
-    function updateStats() {
-        const lives = ccList.filter(c => c.status === 'live').length;
-        const deads = ccList.filter(c => c.status === 'dead').length;
-        const errors = ccList.filter(c => c.status === 'error').length;
-        liveCount.textContent = lives;
-        falseCount.textContent = deads;
-        limitErrorCount.textContent = errors;
-        const liveItems = liveList.filter(l => l.result.includes('Approved') || l.result.includes('Success'));
-        liveBadge.textContent = liveItems.length;
-    }
-
-    // ===== TOAST =====
-    function showToast(msg) {
-        toast.textContent = msg;
-        toast.classList.add('show');
-        clearTimeout(toast._timer);
-        toast._timer = setTimeout(() => toast.classList.remove('show'), 4000);
-    }
-
-    // ===== PROFİL BUTON =====
-    document.getElementById('profileBtn').addEventListener('click', function() {
-        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-        document.querySelector('.nav-item[data-page="pageProfile"]').classList.add('active');
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('pageProfile').classList.add('active');
-    });
-
-    // ===== ÇIKIŞ =====
-    document.getElementById('logoutBtn').addEventListener('click', function() {
-        if (window.Telegram && Telegram.WebApp) {
-            Telegram.WebApp.close();
-        } else {
-            showToast('Telegram'dan çıkış yapılıyor...');
-            window.close();
-        }
-    });
-
-    // ===== BAŞLAT =====
-    renderCCList();
+    ccCount.textContent = ccList.length + ' kart';
     updateStats();
-    limitCount.textContent = dailyLimit;
+}
 
-    // Live Overlay dışına tıklayınca kapanma
-    liveOverlay.addEventListener('click', function(e) {
-        if (e.target === this) this.classList.remove('open');
-    });
-
-    console.log('✅ CC Checker Mini App Hazır - F12 Korumalı');
-</script>
-</body>
-</html>
+// ============================================================
+//  LIVE GÖSTER
+// ============================================================
+function showLiveForCC(index) {
+    const filtered = liveResults.filter(l => l.ccIndex === index);
+    liveList.innerHTML = '';
+    if (filtered.length === 0) {
+        liveList.innerHTML = '<div class="live-empty">📭 Bu kart için live kaydı yok.</div>';
+        liveOverlayCount.textContent = '(0)';
+    } else {
+        filtered.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'live-item';
+            div.innerHTML = `
+                <span class="cc">${item
