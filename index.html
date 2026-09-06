@@ -104,6 +104,32 @@
             font-size: 14px;
             margin-top: 6px;
             min-height: 20px;
+            text-align: center;
+        }
+        .auth-extra {
+            width: 100%;
+            margin-top: 10px;
+        }
+        .auth-extra input {
+            width: 100%;
+            background: #2c2c2e;
+            border-radius: 14px;
+            padding: 16px 18px;
+            border: none;
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 10px;
+            outline: none;
+            transition: 0.2s;
+        }
+        .auth-extra input:focus {
+            background: #3a3a3c;
+        }
+        .auth-extra input::placeholder {
+            color: #8e8e93;
+        }
+        .hidden {
+            display: none !important;
         }
 
         /* ----- PANEL SCREEN ----- */
@@ -133,6 +159,17 @@
             font-size: 22px;
             font-weight: 600;
             color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .panel-header .panel-title .premium-badge {
+            font-size: 12px;
+            background: #ffd60a;
+            color: #000;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-weight: 700;
         }
         .panel-header .user-badge {
             background: #2c2c2e;
@@ -144,6 +181,13 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            cursor: pointer;
+        }
+        .panel-header .user-badge .fa-crown {
+            color: #ffd60a;
+        }
+        .panel-header .user-badge .fa-check-circle {
+            color: #007aff;
         }
 
         /* Stats */
@@ -172,7 +216,7 @@
             font-weight: 500;
         }
 
-        /* Chat preview */
+        /* Chat preview & area */
         .chat-preview {
             background: #2c2c2e;
             border-radius: 24px;
@@ -254,6 +298,11 @@
         .query-btn:disabled {
             opacity: 0.6;
             transform: none;
+        }
+        .query-btn.premium-locked {
+            background: #8e8e93;
+            box-shadow: none;
+            cursor: not-allowed;
         }
 
         /* Results */
@@ -363,6 +412,9 @@
             margin-bottom: 16px;
             padding-bottom: 8px;
             border-bottom: 2px solid #007aff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .side-menu .menu-item {
             padding: 14px 0;
@@ -401,6 +453,223 @@
             border-radius: 30px;
             letter-spacing: 0.5px;
         }
+        .side-menu .menu-item .badge-premium {
+            background: #ffd60a;
+            color: #000;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 30px;
+            letter-spacing: 0.3px;
+        }
+        .side-menu .menu-item .badge-locked {
+            background: #8e8e93;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 30px;
+        }
+
+        /* ----- CHAT PANEL (modal) ----- */
+        .chat-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .chat-overlay.active {
+            display: flex;
+        }
+        .chat-modal {
+            background: #1c1c1e;
+            border-radius: 44px;
+            max-width: 480px;
+            width: 90%;
+            max-height: 80vh;
+            padding: 24px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #3a3a3c;
+        }
+        .chat-modal .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #2c2c2e;
+        }
+        .chat-modal .chat-header h3 {
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .chat-modal .chat-header .close-chat {
+            color: #8e8e93;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .chat-modal .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 0;
+            max-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .chat-modal .chat-messages .msg {
+            background: #2c2c2e;
+            padding: 10px 14px;
+            border-radius: 18px;
+            max-width: 80%;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        .chat-modal .chat-messages .msg.own {
+            align-self: flex-end;
+            background: #007aff;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-modal .chat-messages .msg .user {
+            font-weight: 600;
+            font-size: 13px;
+            color: #007aff;
+        }
+        .chat-modal .chat-messages .msg .user.own {
+            color: #fff;
+        }
+        .chat-modal .chat-messages .msg .text {
+            color: #ffffff;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .chat-modal .chat-messages .msg .time {
+            color: #8e8e93;
+            font-size: 10px;
+            margin-top: 4px;
+            display: block;
+        }
+        .chat-modal .chat-input-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            border-top: 1px solid #2c2c2e;
+            padding-top: 12px;
+        }
+        .chat-modal .chat-input-area input {
+            flex: 1;
+            background: #2c2c2e;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 18px;
+            color: #ffffff;
+            outline: none;
+        }
+        .chat-modal .chat-input-area input::placeholder {
+            color: #8e8e93;
+        }
+        .chat-modal .chat-input-area button {
+            background: #007aff;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 20px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* ----- ADMIN PANEL ----- */
+        .admin-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 4000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .admin-overlay.active {
+            display: flex;
+        }
+        .admin-modal {
+            background: #1c1c1e;
+            border-radius: 44px;
+            max-width: 480px;
+            width: 90%;
+            max-height: 80vh;
+            padding: 24px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #3a3a3c;
+        }
+        .admin-modal .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #2c2c2e;
+        }
+        .admin-modal .admin-header h3 {
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .admin-modal .admin-header .close-admin {
+            color: #8e8e93;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .admin-modal .admin-body {
+            overflow-y: auto;
+            padding: 12px 0;
+            max-height: 60vh;
+        }
+        .admin-modal .admin-body .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #2c2c2e;
+            color: #ffffff;
+        }
+        .admin-modal .admin-body .user-item .info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .admin-modal .admin-body .user-item .info .premium-tag {
+            background: #ffd60a;
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .admin-modal .admin-body .user-item .actions button {
+            background: #2c2c2e;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 14px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.15s;
+        }
+        .admin-modal .admin-body .user-item .actions button:active {
+            background: #3a3a3c;
+        }
+        .admin-modal .admin-body .user-item .actions button.premium-btn {
+            background: #ffd60a;
+            color: #000;
+        }
 
         /* ----- TOAST ----- */
         .toast {
@@ -415,7 +684,7 @@
             left: 50%;
             transform: translateX(-50%) scale(0.95);
             box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
-            z-index: 2000;
+            z-index: 5000;
             opacity: 0;
             transition: 0.25s ease;
             pointer-events: none;
@@ -433,6 +702,7 @@
             .stat-card .number { font-size: 22px; }
             .side-menu { width: 270px; padding: 24px 16px; }
             .toast { font-size: 13px; padding: 10px 20px; white-space: normal; max-width: 85%; }
+            .chat-modal, .admin-modal { max-width: 95%; padding: 16px; }
         }
     </style>
 </head>
@@ -446,6 +716,9 @@
             <div class="app-sub">Sorgu Paneli</div>
             <input class="auth-input" id="authEmail" type="email" placeholder="E-posta" value="apomuhammed@hotmail.com">
             <input class="auth-input" id="authPassword" type="password" placeholder="Şifre" value="Allahyok">
+            <div class="auth-extra hidden" id="registerExtra">
+                <input type="password" id="authPassword2" placeholder="Şifre Tekrar">
+            </div>
             <button class="auth-btn" id="authActionBtn">Giriş Yap</button>
             <div class="auth-error" id="authError"></div>
             <div class="auth-toggle" id="authToggle">Hesabın yok mu? Kayıt ol</div>
@@ -455,8 +728,16 @@
         <div class="panel-screen" id="panelScreen">
             <div class="panel-header">
                 <div class="menu-icon" id="menuToggle"><i class="fas fa-bars"></i></div>
-                <div class="panel-title">Elif</div>
-                <div class="user-badge"><i class="fas fa-user-circle"></i> Admin</div>
+                <div class="panel-title" id="panelTitle">
+                    Elif
+                    <span class="premium-badge hidden" id="premiumBadge">PREMIUM</span>
+                </div>
+                <div class="user-badge" id="userBadge">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">Admin</span>
+                    <i class="fas fa-crown hidden" id="crownIcon"></i>
+                    <i class="fas fa-check-circle hidden" id="verifyIcon"></i>
+                </div>
             </div>
 
             <div class="stats-grid">
@@ -477,7 +758,7 @@
                     Ad Soyad Sorgu
                 </div>
                 <div class="query-input-group" id="queryInputGroup">
-                    <!-- Dinamik olarak doldurulacak -->
+                    <!-- Dinamik -->
                 </div>
                 <button class="query-btn" id="queryBtn"><i class="fas fa-arrow-right"></i> Sorgula</button>
                 <div class="result-area" id="resultArea">
@@ -487,80 +768,140 @@
         </div>
     </div>
 
-    <!-- ===== SIDE MENU (fotoğraftaki gibi) ===== -->
+    <!-- ===== SIDE MENU ===== -->
     <div class="side-menu" id="sideMenu">
         <div class="close-menu" id="closeMenu"><i class="fas fa-times"></i></div>
         <div class="menu-section">
-            <div class="section-title"><i class="fas fa-address-card" style="margin-right:8px;"></i> ADRES</div>
-
-            <div class="menu-item" data-query="vergisor">
-                <span class="item-left"><i class="fas fa-file-invoice"></i> Vergi Sorgu</span>
+            <div class="section-title"><i class="fas fa-address-card"></i> ADRES</div>
+            <!-- Ücretsiz sorgular -->
+            <div class="menu-item" data-query="adsoyad" data-premium="false">
+                <span class="item-left"><i class="fas fa-user"></i> Ad Soyad</span>
                 <span class="badge-active">Aktif</span>
             </div>
-            <div class="menu-item" data-query="hanesor">
-                <span class="item-left"><i class="fas fa-home"></i> Hane Sorgu</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-            <div class="menu-item" data-query="tcvip">
-                <span class="item-left"><i class="fas fa-crown"></i> TC Vip Sorgu</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-            <div class="menu-item" data-query="medenihal">
-                <span class="item-left"><i class="fas fa-ring"></i> Medeni Hali / Eşi Sorgu</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-            <div class="menu-item" data-query="evlilik">
-                <span class="item-left"><i class="fas fa-heart"></i> Evlilik Sorgu</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-            <div class="menu-item" data-query="ehliyet">
-                <span class="item-left"><i class="fas fa-id-card"></i> Ehliyet Sınav Sorgu</span>
-                <span class="badge-active">Aktif</span>
-            </div>
-            <div class="menu-item" data-query="tcsorgu">
+            <div class="menu-item" data-query="tc" data-premium="false">
                 <span class="item-left"><i class="fas fa-id-card"></i> TC Sorgu</span>
                 <span class="badge-active">Aktif</span>
             </div>
-            <div class="menu-item" data-query="kizliksoyad">
+            <div class="menu-item" data-query="aile" data-premium="false">
+                <span class="item-left"><i class="fas fa-users"></i> Aile Sorgu</span>
+                <span class="badge-active">Aktif</span>
+            </div>
+            <div class="menu-item" data-query="sulale" data-premium="false">
+                <span class="item-left"><i class="fas fa-tree"></i> Sülale Sorgu</span>
+                <span class="badge-active">Aktif</span>
+            </div>
+            <div class="menu-item" data-query="tcgsm" data-premium="false">
+                <span class="item-left"><i class="fas fa-phone-alt"></i> TC GSM Sorgu</span>
+                <span class="badge-active">Aktif</span>
+            </div>
+            <div class="menu-item" data-query="gsmtc" data-premium="false">
+                <span class="item-left"><i class="fas fa-phone"></i> GSM TC Sorgu</span>
+                <span class="badge-active">Aktif</span>
+            </div>
+            <div class="menu-item" data-query="adres" data-premium="false">
+                <span class="item-left"><i class="fas fa-map-pin"></i> Adres Sorgu</span>
+                <span class="badge-active">Aktif</span>
+            </div>
+            <div class="menu-item" data-query="vesika" data-premium="false">
+                <span class="item-left"><i class="fas fa-file-alt"></i> Vesika Sorgu</span>
+                <span class="badge-active">Aktif</span>
+            </div>
+            <!-- Premium sorgular -->
+            <div class="menu-item" data-query="vergisor" data-premium="true">
+                <span class="item-left"><i class="fas fa-file-invoice"></i> Vergi Sorgu</span>
+                <span class="badge-premium">Premium</span>
+            </div>
+            <div class="menu-item" data-query="hanesor" data-premium="true">
+                <span class="item-left"><i class="fas fa-home"></i> Hane Sorgu</span>
+                <span class="badge-premium">Premium</span>
+            </div>
+            <div class="menu-item" data-query="tcvip" data-premium="true">
+                <span class="item-left"><i class="fas fa-crown"></i> TC Vip Sorgu</span>
+                <span class="badge-premium">Premium</span>
+            </div>
+            <div class="menu-item" data-query="medenihal" data-premium="true">
+                <span class="item-left"><i class="fas fa-ring"></i> Medeni Hali / Eşi Sorgu</span>
+                <span class="badge-premium">Premium</span>
+            </div>
+            <div class="menu-item" data-query="evlilik" data-premium="true">
+                <span class="item-left"><i class="fas fa-heart"></i> Evlilik Sorgu</span>
+                <span class="badge-premium">Premium</span>
+            </div>
+            <div class="menu-item" data-query="ehliyet" data-premium="true">
+                <span class="item-left"><i class="fas fa-id-card"></i> Ehliyet Sınav Sorgu</span>
+                <span class="badge-premium">Premium</span>
+            </div>
+            <div class="menu-item" data-query="kizliksoyad" data-premium="true">
                 <span class="item-left"><i class="fas fa-venus"></i> Kızlık Soyad Sorgu</span>
-                <span class="badge-active">Aktif</span>
+                <span class="badge-premium">Premium</span>
             </div>
-            <div class="menu-item" data-query="burc">
+            <div class="menu-item" data-query="burc" data-premium="true">
                 <span class="item-left"><i class="fas fa-star"></i> Burç Sorgu</span>
-                <span class="badge-active">Aktif</span>
+                <span class="badge-premium">Premium</span>
             </div>
-            <div class="menu-item" data-query="yikim">
+            <div class="menu-item" data-query="yikim" data-premium="true">
                 <span class="item-left"><i class="fas fa-building"></i> Yıkım Talimatı Sorgu</span>
-                <span class="badge-active">Aktif</span>
+                <span class="badge-premium">Premium</span>
             </div>
-            <div class="menu-item" data-query="iban">
+            <div class="menu-item" data-query="iban" data-premium="true">
                 <span class="item-left"><i class="fas fa-university"></i> IBAN Sorgu</span>
-                <span class="badge-active">Aktif</span>
+                <span class="badge-premium">Premium</span>
             </div>
-            <div class="menu-item" data-query="hesapno">
+            <div class="menu-item" data-query="hesapno" data-premium="true">
                 <span class="item-left"><i class="fas fa-hashtag"></i> Hesap No Sorgu</span>
-                <span class="badge-active">Aktif</span>
+                <span class="badge-premium">Premium</span>
             </div>
-            <div class="menu-item" data-query="kimlikveren">
+            <div class="menu-item" data-query="kimlikveren" data-premium="true">
                 <span class="item-left"><i class="fas fa-id-badge"></i> Kimlik Veren Kurum Sorgu</span>
-                <span class="badge-active">Aktif</span>
+                <span class="badge-premium">Premium</span>
             </div>
-            <div class="menu-item" data-query="vatandaslik">
+            <div class="menu-item" data-query="vatandaslik" data-premium="true">
                 <span class="item-left"><i class="fas fa-passport"></i> Vatandaşlık Sorgu</span>
-                <span class="badge-active">Aktif</span>
+                <span class="badge-premium">Premium</span>
             </div>
-            <div class="menu-item" data-query="uyruk">
+            <div class="menu-item" data-query="uyruk" data-premium="true">
                 <span class="item-left"><i class="fas fa-flag"></i> Uyruk & Milliyet Sorgu</span>
-                <span class="badge-active">Aktif</span>
+                <span class="badge-premium">Premium</span>
             </div>
-            <div class="menu-item" data-query="dogum">
+            <div class="menu-item" data-query="dogum" data-premium="true">
                 <span class="item-left"><i class="fas fa-calendar"></i> Doğum Sorgu</span>
-                <span class="badge-active">Aktif</span>
+                <span class="badge-premium">Premium</span>
             </div>
-            <!-- Ekstra: Ad Soyad (fotoğrafta yok ama ana sorgu olarak kalsın) -->
-            <div class="menu-item" data-query="adsoyad">
-                <span class="item-left"><i class="fas fa-user"></i> Ad Soyad Sorgu</span>
-                <span class="badge-active">Aktif</span>
+        </div>
+        <!-- Admin panel link (sadece admin görür) -->
+        <div class="menu-section" id="adminMenuSection" style="display:none;">
+            <div class="section-title"><i class="fas fa-user-shield"></i> YÖNETİM</div>
+            <div class="menu-item" id="adminPanelBtn">
+                <span class="item-left"><i class="fas fa-users-cog"></i> Admin Paneli</span>
+                <span class="badge-active">Yetkili</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== CHAT OVERLAY ===== -->
+    <div class="chat-overlay" id="chatOverlay">
+        <div class="chat-modal">
+            <div class="chat-header">
+                <h3><i class="fas fa-comment-dots" style="color:#007aff;"></i> Sohbet</h3>
+                <span class="close-chat" id="closeChat"><i class="fas fa-times"></i></span>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Mesaj yaz...">
+                <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ADMIN OVERLAY ===== -->
+    <div class="admin-overlay" id="adminOverlay">
+        <div class="admin-modal">
+            <div class="admin-header">
+                <h3><i class="fas fa-user-shield" style="color:#007aff;"></i> Admin Paneli</h3>
+                <span class="close-admin" id="closeAdmin"><i class="fas fa-times"></i></span>
+            </div>
+            <div class="admin-body" id="adminBody">
+                <!-- Dinamik -->
             </div>
         </div>
     </div>
@@ -572,7 +913,9 @@
         (function() {
             'use strict';
 
-            // ---------- DEVTOOLS KAPAT ----------
+            // ================================================================
+            // 1. DEVTOOLS KAPAT
+            // ================================================================
             document.onkeydown = function(e) {
                 if (e.key === 'F12' ||
                     (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
@@ -583,7 +926,9 @@
             };
             document.addEventListener('contextmenu', e => e.preventDefault());
 
-            // ---------- TOAST ----------
+            // ================================================================
+            // 2. TOAST
+            // ================================================================
             let toastTimer = null;
 
             function showToast(msg, duration = 2600) {
@@ -594,11 +939,15 @@
                 toastTimer = setTimeout(() => t.classList.remove('show'), duration);
             }
 
-            // ---------- AUTH (login/register) ----------
+            // ================================================================
+            // 3. AUTH (login/register) - GELİŞMİŞ
+            // ================================================================
             const authScreen = document.getElementById('authScreen');
             const panelScreen = document.getElementById('panelScreen');
             const authEmail = document.getElementById('authEmail');
             const authPassword = document.getElementById('authPassword');
+            const authPassword2 = document.getElementById('authPassword2');
+            const registerExtra = document.getElementById('registerExtra');
             const authActionBtn = document.getElementById('authActionBtn');
             const authToggle = document.getElementById('authToggle');
             const authError = document.getElementById('authError');
@@ -606,13 +955,16 @@
             const ADMIN_EMAIL = 'apomuhammed@hotmail.com';
             const ADMIN_PASS = 'Allahyok';
 
+            // Kullanıcı verileri: { email, password, premium: boolean, isAdmin: boolean, name: string }
             let users = JSON.parse(localStorage.getItem('elif_users')) || [];
+            // Admin'i ekle (eğer yoksa)
             if (!users.find(u => u.email === ADMIN_EMAIL)) {
-                users.push({ email: ADMIN_EMAIL, password: ADMIN_PASS });
+                users.push({ email: ADMIN_EMAIL, password: ADMIN_PASS, premium: true, isAdmin: true, name: 'Admin' });
                 localStorage.setItem('elif_users', JSON.stringify(users));
             }
 
             let isLogin = true;
+            let currentUser = null; // Giriş yapan kullanıcı
 
             function setAuthMode(login) {
                 isLogin = login;
@@ -620,52 +972,84 @@
                 authToggle.textContent = login ? 'Hesabın yok mu? Kayıt ol' : 'Zaten hesabın var mı? Giriş yap';
                 authActionBtn.style.background = login ? '#007aff' : '#34c759';
                 authError.textContent = '';
+                registerExtra.classList.toggle('hidden', login);
+                authPassword2.value = '';
             }
 
             authToggle.addEventListener('click', () => {
                 setAuthMode(!isLogin);
                 authEmail.value = '';
                 authPassword.value = '';
+                authPassword2.value = '';
             });
+
+            function validateEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
 
             function handleAuth() {
                 const email = authEmail.value.trim();
                 const pass = authPassword.value.trim();
+                const pass2 = authPassword2.value.trim();
                 authError.textContent = '';
 
                 if (!email || !pass) {
-                    authError.textContent = 'Lütfen e-posta ve şifre girin.';
+                    authError.textContent = 'Lütfen tüm alanları doldurun.';
+                    return;
+                }
+                if (!validateEmail(email)) {
+                    authError.textContent = 'Geçerli bir e-posta adresi girin.';
+                    return;
+                }
+                if (pass.length < 6) {
+                    authError.textContent = 'Şifre en az 6 karakter olmalı.';
                     return;
                 }
 
                 if (isLogin) {
+                    // GİRİŞ
                     const user = users.find(u => u.email === email && u.password === pass);
                     if (user) {
+                        currentUser = user;
                         authScreen.style.display = 'none';
                         panelScreen.style.display = 'flex';
-                        showToast('✨ Hoş geldin, ' + email, 2000);
-                        // istatistikleri güncelle
+                        showToast('✨ Hoş geldin, ' + (user.name || email), 2000);
+                        updateUI(user);
+                        // İstatistikleri güncelle
                         document.getElementById('activeUsers').textContent = Math.floor(Math.random() * 30 + 30);
                         document.getElementById('totalUsers').textContent = users.length + Math.floor(Math.random() * 50);
                         document.getElementById('freeQueries').textContent = Math.floor(Math.random() * 8 + 3);
                         document.getElementById('premiumQueries').textContent = Math.floor(Math.random() * 4 + 1);
-                        // Varsayılan sorguyu yükle
                         loadQuery('adsoyad');
+                        // Admin menüsünü göster
+                        if (user.isAdmin) {
+                            document.getElementById('adminMenuSection').style.display = 'block';
+                        } else {
+                            document.getElementById('adminMenuSection').style.display = 'none';
+                        }
                     } else {
                         authError.textContent = '❌ E-posta veya şifre hatalı!';
                     }
                 } else {
+                    // KAYIT
                     if (users.find(u => u.email === email)) {
                         authError.textContent = '❌ Bu e-posta zaten kayıtlı!';
                         return;
                     }
-                    users.push({ email, password: pass });
+                    if (pass !== pass2) {
+                        authError.textContent = '❌ Şifreler eşleşmiyor!';
+                        return;
+                    }
+                    // Yeni kullanıcı (premium false, admin değil)
+                    const newUser = { email, password: pass, premium: false, isAdmin: false, name: email.split('@')[0] };
+                    users.push(newUser);
                     localStorage.setItem('elif_users', JSON.stringify(users));
                     showToast('✅ Kayıt başarılı! Şimdi giriş yap.', 2500);
                     setAuthMode(true);
                     authEmail.value = email;
                     authPassword.value = pass;
-                    // otomatik giriş
+                    authPassword2.value = '';
+                    // Otomatik giriş yap
                     handleAuth();
                 }
             }
@@ -673,201 +1057,314 @@
             authActionBtn.addEventListener('click', handleAuth);
             authPassword.addEventListener('keydown', e => { if (e.key === 'Enter') handleAuth(); });
             authEmail.addEventListener('keydown', e => { if (e.key === 'Enter') handleAuth(); });
+            authPassword2.addEventListener('keydown', e => { if (e.key === 'Enter') handleAuth(); });
 
-            // ---------- SORGULARIN TANIMI ----------
+            // ================================================================
+            // 4. UI GÜNCELLEME
+            // ================================================================
+            function updateUI(user) {
+                const name = user.name || user.email.split('@')[0];
+                document.getElementById('userName').textContent = name;
+                const crown = document.getElementById('crownIcon');
+                const verify = document.getElementById('verifyIcon');
+                const badge = document.getElementById('premiumBadge');
+                if (user.premium) {
+                    crown.classList.remove('hidden');
+                    verify.classList.remove('hidden');
+                    badge.classList.remove('hidden');
+                } else {
+                    crown.classList.add('hidden');
+                    verify.classList.add('hidden');
+                    badge.classList.add('hidden');
+                }
+                // Admin ise farklı simge
+                if (user.isAdmin) {
+                    document.getElementById('userBadge').innerHTML =
+                        `<i class="fas fa-user-shield"></i> <span id="userName">${name}</span> <i class="fas fa-crown ${user.premium ? '' : 'hidden'}" id="crownIcon"></i> <i class="fas fa-check-circle ${user.premium ? '' : 'hidden'}" id="verifyIcon"></i>`;
+                    // yeniden bağla
+                }
+            }
+
+            // ================================================================
+            // 5. SORGULAR (API + MOCK)
+            // ================================================================
+            const API_BASE = 'https://arastir-01.site/api/';
+
             const queryConfig = {
                 adsoyad: {
                     title: 'Ad Soyad Sorgu',
                     icon: 'fa-user',
+                    premium: false,
                     inputs: [
-                        { type: 'text', placeholder: 'Ad (örn: roket)', id: 'q_ad', value: 'roket' },
-                        { type: 'text', placeholder: 'Soyad (örn: atar)', id: 'q_soyad', value: 'atar' }
+                        { type: 'text', placeholder: 'Ad', id: 'q_ad', value: 'roket' },
+                        { type: 'text', placeholder: 'Soyad', id: 'q_soyad', value: 'atar' }
                     ],
-                    fetch: async (values) => {
-                        const ad = values.q_ad || 'roket';
-                        const soyad = values.q_soyad || 'atar';
-                        // Mock veri
-                        return [{
-                            TC: "27727166918",
-                            ADI: ad.toUpperCase(),
-                            SOYADI: soyad.toUpperCase(),
-                            DOGUMTARIHI: "28.9.1969",
-                            NUFUSIL: "BURSA",
-                            NUFUSILCE: "OSMANGAZİ",
-                            ANNEADI: "DUDU",
-                            ANNETC: "27805164362",
-                            BABAADI: "KAMİL",
-                            BABATC: "27856162614",
-                            UYRUK: "TR"
-                        }];
-                    },
-                    resultFields: ['TC', 'ADI', 'SOYADI', 'DOGUMTARIHI', 'NUFUSIL', 'NUFUSILCE', 'ANNEADI', 'ANNETC',
-                        'BABAADI', 'BABATC', 'UYRUK'
-                    ]
+                    buildUrl: (vals) =>
+                        `${API_BASE}adsoyad.php?ad=${encodeURIComponent(vals.q_ad)}&soyad=${encodeURIComponent(vals.q_soyad)}`,
+                    parseResponse: (data) => {
+                        if (data.success && data.data) {
+                            return Array.isArray(data.data) ? data.data : [data.data];
+                        }
+                        return [];
+                    }
                 },
+                tc: {
+                    title: 'TC Sorgu',
+                    icon: 'fa-id-card',
+                    premium: false,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
+                    buildUrl: (vals) => `${API_BASE}tc.php?tc=${encodeURIComponent(vals.q_tc)}`,
+                    parseResponse: (data) => {
+                        if (data.success && data.data) {
+                            return Array.isArray(data.data) ? data.data : [data.data];
+                        }
+                        return [];
+                    }
+                },
+                aile: {
+                    title: 'Aile Sorgu',
+                    icon: 'fa-users',
+                    premium: false,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
+                    buildUrl: (vals) => `${API_BASE}aile.php?tc=${encodeURIComponent(vals.q_tc)}`,
+                    parseResponse: (data) => {
+                        if (data.success && data.data) {
+                            const result = [];
+                            const d = data.data;
+                            if (d.anne) result.push({ ...d.anne, ilişki: 'Anne' });
+                            if (d.baba) result.push({ ...d.baba, ilişki: 'Baba' });
+                            if (d.kardesler && Array.isArray(d.kardesler)) {
+                                d.kardesler.forEach(k => result.push({ ...k, ilişki: 'Kardeş' }));
+                            }
+                            return result;
+                        }
+                        return [];
+                    }
+                },
+                sulale: {
+                    title: 'Sülale Sorgu',
+                    icon: 'fa-tree',
+                    premium: false,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
+                    buildUrl: (vals) => `${API_BASE}sulale.php?tc=${encodeURIComponent(vals.q_tc)}`,
+                    parseResponse: (data) => {
+                        if (data.success && data.data) {
+                            const result = [];
+                            const d = data.data;
+                            if (d.kendisi) result.push({ ...d.kendisi, ilişki: 'Kendisi' });
+                            if (d.anne) result.push({ ...d.anne, ilişki: 'Anne' });
+                            if (d.baba) result.push({ ...d.baba, ilişki: 'Baba' });
+                            if (d.anneanne) result.push({ ...d.anneanne, ilişki: 'Anneanne' });
+                            if (d.dede_anne_tarafi) result.push({ ...d.dede_anne_tarafi, ilişki: 'Dede (Anne Tarafı)' });
+                            if (d.kardesler && Array.isArray(d.kardesler)) {
+                                d.kardesler.forEach(k => result.push({ ...k, ilişki: 'Kardeş' }));
+                            }
+                            return result;
+                        }
+                        return [];
+                    }
+                },
+                tcgsm: {
+                    title: 'TC GSM Sorgu',
+                    icon: 'fa-phone-alt',
+                    premium: false,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
+                    buildUrl: (vals) => `${API_BASE}tcgsm.php?tc=${encodeURIComponent(vals.q_tc)}`,
+                    parseResponse: (data) => {
+                        if (data.success && data.data) {
+                            if (Array.isArray(data.data)) {
+                                return data.data.map(gsm => ({ GSM: gsm }));
+                            }
+                            return [{ GSM: data.data }];
+                        }
+                        return [];
+                    }
+                },
+                gsmtc: {
+                    title: 'GSM TC Sorgu',
+                    icon: 'fa-phone',
+                    premium: false,
+                    inputs: [{ type: 'text', placeholder: 'GSM Numarası', id: 'q_gsm', value: '5551234567' }],
+                    buildUrl: (vals) => `${API_BASE}gsmtc.php?gsm=${encodeURIComponent(vals.q_gsm)}`,
+                    parseResponse: (data) => {
+                        if (data.success && data.data) {
+                            if (Array.isArray(data.data)) {
+                                return data.data.map(tc => ({ TC: tc }));
+                            }
+                            return [{ TC: data.data }];
+                        }
+                        return [];
+                    }
+                },
+                adres: {
+                    title: 'Adres Sorgu',
+                    icon: 'fa-map-pin',
+                    premium: false,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
+                    buildUrl: (vals) => `${API_BASE}adres.php?tc=${encodeURIComponent(vals.q_tc)}`,
+                    parseResponse: (data) => {
+                        if (data.success && data.data) {
+                            return [data.data];
+                        }
+                        return [];
+                    }
+                },
+                vesika: {
+                    title: 'Vesika Sorgu',
+                    icon: 'fa-file-alt',
+                    premium: false,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '11111111110' }],
+                    buildUrl: (vals) => `${API_BASE}vesika.php?tc=${encodeURIComponent(vals.q_tc)}`,
+                    parseResponse: (data) => {
+                        if (data.success && data.data) {
+                            return Array.isArray(data.data) ? data.data : [data.data];
+                        }
+                        return [];
+                    }
+                },
+                // PREMIUM sorgular (mock)
                 vergisor: {
                     title: 'Vergi Sorgu',
                     icon: 'fa-file-invoice',
+                    premium: true,
                     inputs: [{ type: 'text', placeholder: 'Vergi Numarası', id: 'q_vergi', value: '1234567890' }],
-                    fetch: async (values) => {
-                        return [{ 'Vergi No': values.q_vergi || '1234567890', 'Mükellef': 'AHMET YILMAZ',
-                            'Vergi Dairesi': 'BÜYÜK MÜKELLEFLER', 'Durum': 'Aktif' }];
-                    },
-                    resultFields: ['Vergi No', 'Mükellef', 'Vergi Dairesi', 'Durum']
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'Vergi No': '1234567890', 'Mükellef': 'AHMET YILMAZ', 'Durum': 'Aktif' }],
+                    isMock: true
                 },
                 hanesor: {
                     title: 'Hane Sorgu',
                     icon: 'fa-home',
+                    premium: true,
                     inputs: [{ type: 'text', placeholder: 'Hane ID', id: 'q_hane', value: 'H-12345' }],
-                    fetch: async (values) => {
-                        return [{ 'Hane ID': values.q_hane || 'H-12345', 'Reis': 'MEHMET DEMİR',
-                            'Birey Sayısı': '5', 'Adres': 'İstanbul, Kadıköy' }];
-                    },
-                    resultFields: ['Hane ID', 'Reis', 'Birey Sayısı', 'Adres']
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'Hane ID': 'H-12345', 'Reis': 'MEHMET DEMİR', 'Birey Sayısı': '5' }],
+                    isMock: true
                 },
                 tcvip: {
                     title: 'TC Vip Sorgu',
                     icon: 'fa-crown',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tcvip', value: '12345678901' }],
-                    fetch: async (values) => {
-                        return [{ 'TC': values.q_tcvip || '12345678901', 'Ad': 'ALİ', 'Soyad': 'YILMAZ',
-                            'Doğum': '15.03.1985', 'İl': 'İSTANBUL' }];
-                    },
-                    resultFields: ['TC', 'Ad', 'Soyad', 'Doğum', 'İl']
+                    premium: true,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'TC': '12345678901', 'Ad': 'ALİ', 'Soyad': 'YILMAZ' }],
+                    isMock: true
                 },
                 medenihal: {
                     title: 'Medeni Hali / Eşi Sorgu',
                     icon: 'fa-ring',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_medeni', value: '12345678901' }],
-                    fetch: async (values) => {
-                        return [{ 'TC': values.q_medeni || '12345678901', 'Medeni Hal': 'Evli',
-                            'Eş Adı': 'AYŞE YILMAZ', 'Eş TC': '10987654321' }];
-                    },
-                    resultFields: ['TC', 'Medeni Hal', 'Eş Adı', 'Eş TC']
+                    premium: true,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'TC': '12345678901', 'Medeni Hal': 'Evli', 'Eş Adı': 'AYŞE YILMAZ' }],
+                    isMock: true
                 },
                 evlilik: {
                     title: 'Evlilik Sorgu',
                     icon: 'fa-heart',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_evlilik', value: '12345678901' }],
-                    fetch: async (values) => {
-                        return [{ 'TC': values.q_evlilik || '12345678901', 'Evlilik Tarihi': '10.10.2010',
-                            'Eş': 'AYŞE YILMAZ', 'Çocuk Sayısı': '2' }];
-                    },
-                    resultFields: ['TC', 'Evlilik Tarihi', 'Eş', 'Çocuk Sayısı']
+                    premium: true,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'TC': '12345678901', 'Evlilik Tarihi': '10.10.2010', 'Eş': 'AYŞE YILMAZ' }],
+                    isMock: true
                 },
                 ehliyet: {
                     title: 'Ehliyet Sınav Sorgu',
                     icon: 'fa-id-card',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_ehliyet', value: '12345678901' }],
-                    fetch: async (values) => {
-                        return [{ 'TC': values.q_ehliyet || '12345678901', 'Sınav Tarihi': '20.05.2023',
-                            'Sonuç': 'Başarılı', 'Ehliyet Sınıfı': 'B' }];
-                    },
-                    resultFields: ['TC', 'Sınav Tarihi', 'Sonuç', 'Ehliyet Sınıfı']
-                },
-                tcsorgu: {
-                    title: 'TC Sorgu',
-                    icon: 'fa-id-card',
+                    premium: true,
                     inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
-                    fetch: async (values) => {
-                        return [{ 'TC': values.q_tc || '12345678901', 'Ad': 'MEHMET', 'Soyad': 'KARA',
-                            'Doğum': '05.12.1978', 'İl': 'ANKARA' }];
-                    },
-                    resultFields: ['TC', 'Ad', 'Soyad', 'Doğum', 'İl']
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'TC': '12345678901', 'Sınav Tarihi': '20.05.2023', 'Sonuç': 'Başarılı' }],
+                    isMock: true
                 },
                 kizliksoyad: {
                     title: 'Kızlık Soyad Sorgu',
                     icon: 'fa-venus',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_kizlik', value: '12345678901' }],
-                    fetch: async (values) => {
-                        return [{ 'TC': values.q_kizlik || '12345678901', 'Kızlık Soyadı': 'DEMİR',
-                            'Evlilik Öncesi Ad': 'ZEYNEP' }];
-                    },
-                    resultFields: ['TC', 'Kızlık Soyadı', 'Evlilik Öncesi Ad']
+                    premium: true,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'TC': '12345678901', 'Kızlık Soyadı': 'DEMİR' }],
+                    isMock: true
                 },
                 burc: {
                     title: 'Burç Sorgu',
                     icon: 'fa-star',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_burc', value: '12345678901' }],
-                    fetch: async (values) => {
-                        return [{ 'TC': values.q_burc || '12345678901', 'Burç': 'Koç', 'Yükselen': 'Aslan',
-                            'Gezegen': 'Mars' }];
-                    },
-                    resultFields: ['TC', 'Burç', 'Yükselen', 'Gezegen']
+                    premium: true,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'TC': '12345678901', 'Burç': 'Koç', 'Yükselen': 'Aslan' }],
+                    isMock: true
                 },
                 yikim: {
                     title: 'Yıkım Talimatı Sorgu',
                     icon: 'fa-building',
+                    premium: true,
                     inputs: [{ type: 'text', placeholder: 'Adres / Parsel', id: 'q_yikim', value: 'Parsel 123' }],
-                    fetch: async (values) => {
-                        return [{ 'Parsel': values.q_yikim || 'Parsel 123', 'Durum': 'Yıkım Onaylı',
-                            'Tarih': '01.02.2024', 'Yetkili': 'İMAR MÜDÜRLÜĞÜ' }];
-                    },
-                    resultFields: ['Parsel', 'Durum', 'Tarih', 'Yetkili']
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'Parsel': 'Parsel 123', 'Durum': 'Yıkım Onaylı', 'Tarih': '01.02.2024' }],
+                    isMock: true
                 },
                 iban: {
                     title: 'IBAN Sorgu',
                     icon: 'fa-university',
+                    premium: true,
                     inputs: [{ type: 'text', placeholder: 'IBAN No', id: 'q_iban', value: 'TR12 3456 7890 1234 5678 90' }],
-                    fetch: async (values) => {
-                        return [{ 'IBAN': values.q_iban || 'TR12 3456 7890 1234 5678 90', 'Banka': 'ZİRAAT',
-                            'Hesap Sahibi': 'MEHMET YILMAZ', 'Şube': 'ANKARA' }];
-                    },
-                    resultFields: ['IBAN', 'Banka', 'Hesap Sahibi', 'Şube']
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'IBAN': 'TR12 3456 7890 1234 5678 90', 'Banka': 'ZİRAAT',
+                        'Hesap Sahibi': 'MEHMET YILMAZ' }],
+                    isMock: true
                 },
                 hesapno: {
                     title: 'Hesap No Sorgu',
                     icon: 'fa-hashtag',
+                    premium: true,
                     inputs: [{ type: 'text', placeholder: 'Hesap Numarası', id: 'q_hesap', value: '123456789' }],
-                    fetch: async (values) => {
-                        return [{ 'Hesap No': values.q_hesap || '123456789', 'Banka': 'İŞ BANKASI',
-                            'Hesap Türü': 'Vadesiz', 'Bakiye': '₺15.200' }];
-                    },
-                    resultFields: ['Hesap No', 'Banka', 'Hesap Türü', 'Bakiye']
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'Hesap No': '123456789', 'Banka': 'İŞ BANKASI', 'Bakiye': '₺15.200' }],
+                    isMock: true
                 },
                 kimlikveren: {
                     title: 'Kimlik Veren Kurum Sorgu',
                     icon: 'fa-id-badge',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_kimlik', value: '12345678901' }],
-                    fetch: async (values) => {
-                        return [{ 'TC': values.q_kimlik || '12345678901', 'Veren Kurum': 'NÜFUS MÜDÜRLÜĞÜ',
-                            'Veriş Tarihi': '12.08.2005', 'Belge No': 'A-123456' }];
-                    },
-                    resultFields: ['TC', 'Veren Kurum', 'Veriş Tarihi', 'Belge No']
+                    premium: true,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'TC': '12345678901', 'Veren Kurum': 'NÜFUS MÜDÜRLÜĞÜ',
+                        'Veriş Tarihi': '12.08.2005' }],
+                    isMock: true
                 },
                 vatandaslik: {
                     title: 'Vatandaşlık Sorgu',
                     icon: 'fa-passport',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_vatandas', value: '12345678901' }],
-                    fetch: async (values) => {
-                        return [{ 'TC': values.q_vatandas || '12345678901', 'Vatandaşlık': 'T.C.',
-                            'Durum': 'Aktif', 'Mavi Kart': 'Hayır' }];
-                    },
-                    resultFields: ['TC', 'Vatandaşlık', 'Durum', 'Mavi Kart']
+                    premium: true,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'TC': '12345678901', 'Vatandaşlık': 'T.C.', 'Durum': 'Aktif' }],
+                    isMock: true
                 },
                 uyruk: {
                     title: 'Uyruk & Milliyet Sorgu',
                     icon: 'fa-flag',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_uyruk', value: '12345678901' }],
-                    fetch: async (values) => {
-                        return [{ 'TC': values.q_uyruk || '12345678901', 'Uyruk': 'Türkiye',
-                            'Milliyet': 'Türk', 'Etnik Köken': 'Bilgi Yok' }];
-                    },
-                    resultFields: ['TC', 'Uyruk', 'Milliyet', 'Etnik Köken']
+                    premium: true,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'TC': '12345678901', 'Uyruk': 'Türkiye', 'Milliyet': 'Türk' }],
+                    isMock: true
                 },
                 dogum: {
                     title: 'Doğum Sorgu',
                     icon: 'fa-calendar',
-                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_dogum', value: '12345678901' }],
-                    fetch: async (values) => {
-                        return [{ 'TC': values.q_dogum || '12345678901', 'Doğum Tarihi': '01.01.1990',
-                            'Doğum Yeri': 'İSTANBUL', 'Anne Kızlık Soyad': 'YILDIZ' }];
-                    },
-                    resultFields: ['TC', 'Doğum Tarihi', 'Doğum Yeri', 'Anne Kızlık Soyad']
+                    premium: true,
+                    inputs: [{ type: 'text', placeholder: 'TC Kimlik No', id: 'q_tc', value: '12345678901' }],
+                    buildUrl: () => null,
+                    parseResponse: () => [{ 'TC': '12345678901', 'Doğum Tarihi': '01.01.1990', 'Doğum Yeri': 'İSTANBUL' }],
+                    isMock: true
                 }
             };
 
-            // ---------- QUERY LOADER ----------
+            // ================================================================
+            // 6. SORGU YÜKLEYİCİ
+            // ================================================================
             const queryInputGroup = document.getElementById('queryInputGroup');
             const queryTitle = document.getElementById('queryTitle');
             const resultArea = document.getElementById('resultArea');
@@ -884,7 +1381,7 @@
                 queryTitle.innerHTML =
                     `<i class="fas ${config.icon}" style="margin-right:10px;color:#007aff;"></i> ${config.title}`;
 
-                // Inputları oluştur
+                // Inputlar
                 let html = '';
                 config.inputs.forEach(inp => {
                     html +=
@@ -892,15 +1389,27 @@
                 });
                 queryInputGroup.innerHTML = html;
 
-                // Sonuç alanını temizle
                 resultArea.innerHTML = '<div class="no-result">🔍 Sorgu bekleniyor...</div>';
 
-                // Buton event'ini güncelle (eski listener'ları temizle)
-                // Yeni listener ekle
+                // Buton durumu: premium kontrolü
+                if (config.premium && !currentUser.premium && !currentUser.isAdmin) {
+                    queryBtn.disabled = true;
+                    queryBtn.classList.add('premium-locked');
+                    queryBtn.innerHTML = '<i class="fas fa-lock"></i> Premium Gerekli';
+                } else {
+                    queryBtn.disabled = false;
+                    queryBtn.classList.remove('premium-locked');
+                    queryBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Sorgula';
+                }
+
+                // Buton event
                 queryBtn.onclick = function() {
+                    if (config.premium && !currentUser.premium && !currentUser.isAdmin) {
+                        showToast('⚠️ Bu sorgu premium üyelik gerektirir!', 3000);
+                        return;
+                    }
                     executeQuery(queryKey);
                 };
-                // Enter ile sorgula
                 document.querySelectorAll('.query-input').forEach(inp => {
                     inp.addEventListener('keydown', function(e) {
                         if (e.key === 'Enter') queryBtn.click();
@@ -912,13 +1421,11 @@
                 const config = queryConfig[queryKey];
                 if (!config) return;
 
-                // Değerleri topla
                 const values = {};
                 document.querySelectorAll('.query-input').forEach(inp => {
                     values[inp.id] = inp.value.trim();
                 });
 
-                // Boş kontrol
                 let hasEmpty = false;
                 for (let id in values) {
                     if (!values[id]) {
@@ -933,12 +1440,20 @@
                     queryBtn.disabled = true;
                     queryBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sorgulanıyor...';
 
-                    // Mock veri döndür (gerçek API yok)
-                    const data = await config.fetch(values);
+                    let data;
+                    if (config.isMock) {
+                        data = config.parseResponse({});
+                    } else {
+                        const url = config.buildUrl(values);
+                        if (!url) throw new Error('API URL oluşturulamadı');
+                        const response = await fetch(url);
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                        const json = await response.json();
+                        data = config.parseResponse(json);
+                    }
 
-                    // Sonuçları göster
                     if (data && data.length > 0) {
-                        renderResults(data, config.resultFields);
+                        renderResults(data);
                         showToast(`✅ ${data.length} kayıt bulundu`, 2000);
                     } else {
                         resultArea.innerHTML = '<div class="no-result">😕 Sonuç bulunamadı.</div>';
@@ -954,16 +1469,16 @@
                 }
             }
 
-            function renderResults(people, fields) {
+            function renderResults(people) {
                 let html = '';
                 people.forEach(p => {
                     let rows = '';
-                    fields.forEach(field => {
-                        const label = field;
-                        const value = p[field] || '-';
-                        rows +=
-                            `<div class="row"><span class="label">${label}</span><span class="value">${value}</span></div>`;
-                    });
+                    for (let key in p) {
+                        if (p[key] !== null && p[key] !== undefined) {
+                            rows +=
+                                `<div class="row"><span class="label">${key}</span><span class="value">${p[key]}</span></div>`;
+                        }
+                    }
                     html += `
                         <div class="result-card">
                             ${rows}
@@ -975,14 +1490,15 @@
                 });
                 resultArea.innerHTML = html;
 
-                // İndirme butonları
                 document.querySelectorAll('.download-btn').forEach(btn => {
                     btn.addEventListener('click', function(e) {
                         e.stopPropagation();
                         const data = JSON.parse(this.dataset.data);
                         let content = '';
                         for (let key in data) {
-                            content += `${key}: ${data[key]}\n`;
+                            if (data[key] !== null && data[key] !== undefined) {
+                                content += `${key}: ${data[key]}\n`;
+                            }
                         }
                         content += `\n--- Elif Sorgu Paneli ---\nTarih: ${new Date().toLocaleString()}`;
                         const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
@@ -996,7 +1512,9 @@
                 });
             }
 
-            // ---------- MENU ----------
+            // ================================================================
+            // 7. MENÜ
+            // ================================================================
             const menuToggle = document.getElementById('menuToggle');
             const sideMenu = document.getElementById('sideMenu');
             const closeMenu = document.getElementById('closeMenu');
@@ -1015,11 +1533,10 @@
                 }
             });
 
-            // Menü öğelerine tıklama
             document.querySelectorAll('.side-menu .menu-item[data-query]').forEach(item => {
                 item.addEventListener('click', function() {
                     const q = this.dataset.query;
-                    if (q) {
+                    if (q && queryConfig[q]) {
                         loadQuery(q);
                         toggleMenu(false);
                         showToast(`📌 ${queryConfig[q].title} seçildi`, 1500);
@@ -1027,22 +1544,153 @@
                 });
             });
 
-            // ---------- CHAT ----------
-            document.getElementById('chatPreview').addEventListener('click', () => {
-                showToast('💬 Chat sistemi yakında!', 2000);
+            // Admin panel butonu
+            document.getElementById('adminPanelBtn').addEventListener('click', function() {
+                toggleMenu(false);
+                openAdminPanel();
             });
 
-            // ---------- BAŞLANGIÇ ----------
+            // ================================================================
+            // 8. CHAT SİSTEMİ (localStorage ile)
+            // ================================================================
+            const chatOverlay = document.getElementById('chatOverlay');
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const chatSendBtn = document.getElementById('chatSendBtn');
+            const closeChat = document.getElementById('closeChat');
+
+            let messages = JSON.parse(localStorage.getItem('elif_chat_messages')) || [];
+
+            function renderChat() {
+                chatMessages.innerHTML = '';
+                messages.forEach(msg => {
+                    const div = document.createElement('div');
+                    div.className = 'msg';
+                    if (msg.email === currentUser.email) div.classList.add('own');
+                    div.innerHTML = `
+                        <div class="user ${msg.email === currentUser.email ? 'own' : ''}">${msg.name || msg.email}</div>
+                        <div class="text">${msg.text}</div>
+                        <span class="time">${new Date(msg.time).toLocaleString()}</span>
+                    `;
+                    chatMessages.appendChild(div);
+                });
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function sendMessage() {
+                const text = chatInput.value.trim();
+                if (!text) return;
+                const msg = {
+                    email: currentUser.email,
+                    name: currentUser.name || currentUser.email.split('@')[0],
+                    text: text,
+                    time: Date.now()
+                };
+                messages.push(msg);
+                localStorage.setItem('elif_chat_messages', JSON.stringify(messages));
+                chatInput.value = '';
+                renderChat();
+            }
+
+            chatSendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
+
+            document.getElementById('chatPreview').addEventListener('click', () => {
+                chatOverlay.classList.add('active');
+                renderChat();
+            });
+            closeChat.addEventListener('click', () => chatOverlay.classList.remove('active'));
+            chatOverlay.addEventListener('click', (e) => {
+                if (e.target === chatOverlay) chatOverlay.classList.remove('active');
+            });
+
+            // ================================================================
+            // 9. ADMIN PANELİ
+            // ================================================================
+            const adminOverlay = document.getElementById('adminOverlay');
+            const adminBody = document.getElementById('adminBody');
+            const closeAdmin = document.getElementById('closeAdmin');
+
+            function openAdminPanel() {
+                if (!currentUser || !currentUser.isAdmin) {
+                    showToast('⛔ Yetkisiz erişim!', 2500);
+                    return;
+                }
+                adminOverlay.classList.add('active');
+                renderAdminPanel();
+            }
+
+            function renderAdminPanel() {
+                let html = '';
+                users.forEach((u, index) => {
+                    html += `
+                        <div class="user-item">
+                            <div class="info">
+                                <span>${u.name || u.email}</span>
+                                ${u.isAdmin ? '<span style="color:#007aff;font-size:12px;">(Admin)</span>' : ''}
+                                ${u.premium ? '<span class="premium-tag">PREMIUM</span>' : ''}
+                            </div>
+                            <div class="actions">
+                                ${!u.isAdmin ? `
+                                    <button class="premium-btn" data-index="${index}" data-action="togglepremium">
+                                        ${u.premium ? 'Premium Kaldır' : 'Premium Yap'}
+                                    </button>
+                                    <button data-index="${index}" data-action="deleteuser" style="color:#ff453a;">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                ` : '<span style="color:#8e8e93;">Admin</span>'}
+                            </div>
+                        </div>
+                    `;
+                });
+                adminBody.innerHTML = html;
+
+                // Event listener'lar
+                adminBody.querySelectorAll('[data-action="togglepremium"]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const idx = parseInt(this.dataset.index);
+                        users[idx].premium = !users[idx].premium;
+                        localStorage.setItem('elif_users', JSON.stringify(users));
+                        renderAdminPanel();
+                        showToast(`✅ Premium durumu güncellendi`, 2000);
+                        // Ana UI'ı güncelle (eğer current user ise)
+                        if (currentUser && currentUser.email === users[idx].email) {
+                            currentUser = users[idx];
+                            updateUI(currentUser);
+                        }
+                    });
+                });
+                adminBody.querySelectorAll('[data-action="deleteuser"]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const idx = parseInt(this.dataset.index);
+                        if (confirm(`"${users[idx].email}" kullanıcısını silmek istediğinize emin misiniz?`)) {
+                            users.splice(idx, 1);
+                            localStorage.setItem('elif_users', JSON.stringify(users));
+                            renderAdminPanel();
+                            showToast(`🗑️ Kullanıcı silindi`, 2000);
+                        }
+                    });
+                });
+            }
+
+            closeAdmin.addEventListener('click', () => adminOverlay.classList.remove('active'));
+            adminOverlay.addEventListener('click', (e) => {
+                if (e.target === adminOverlay) adminOverlay.classList.remove('active');
+            });
+
+            // ================================================================
+            // 10. BAŞLANGIÇ
+            // ================================================================
             authScreen.style.display = 'flex';
             panelScreen.style.display = 'none';
             setAuthMode(true);
 
-            // Eğer giriş yapılmışsa panel açık olabilir (test için)
-            // Oturum kontrolü yok, manuel giriş yapılacak
+            console.log('Elif Sorgu Paneli - Ağır Edition çalışıyor.');
+            console.log(`Toplam kullanıcı: ${users.length}`);
+            console.log('Admin: apomuhammed@hotmail.com / Allahyok');
 
-            console.log('Elif Sorgu Paneli Ultimate çalışıyor.');
+            // Eğer oturum açık değilse, giriş yapılmamıştır.
         })();
     </script>
-
 </body>
 </html>
