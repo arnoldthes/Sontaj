@@ -1,752 +1,845 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Elif Sorgu Paneli</title>
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Elif Sorgu Paneli</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ----- RESET & DARK THEME ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+        }
+        .app-container {
+            max-width: 480px;
+            width: 100%;
+            background: #1c1c1e;
+            border-radius: 44px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            padding: 28px 22px 34px;
+            position: relative;
+        }
 
-    body {
-      background: #f5f7fa;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 16px;
-    }
+        /* ----- AUTH SCREEN (Apple style) ----- */
+        .auth-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 0 12px;
+        }
+        .auth-screen .app-logo {
+            font-size: 44px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+        .auth-screen .app-sub {
+            color: #8e8e93;
+            font-size: 16px;
+            margin-bottom: 32px;
+            letter-spacing: 0.3px;
+        }
+        .auth-input {
+            width: 100%;
+            background: #2c2c2e;
+            border-radius: 14px;
+            padding: 16px 18px;
+            border: none;
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+        .auth-input:focus {
+            background: #3a3a3c;
+        }
+        .auth-input::placeholder {
+            color: #8e8e93;
+        }
+        .auth-btn {
+            width: 100%;
+            background: #007aff;
+            border: none;
+            border-radius: 14px;
+            padding: 16px;
+            color: white;
+            font-weight: 600;
+            font-size: 17px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+            margin-top: 6px;
+        }
+        .auth-btn:active {
+            transform: scale(0.97);
+            background: #0066d9;
+        }
+        .auth-toggle {
+            margin-top: 20px;
+            color: #007aff;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 15px;
+            padding: 8px;
+        }
+        .auth-toggle:active {
+            opacity: 0.6;
+        }
+        .auth-error {
+            color: #ff453a;
+            font-size: 14px;
+            margin-top: 6px;
+            min-height: 20px;
+        }
 
-    /* Ana kart - Apple tarzı */
-    .app-container {
-      max-width: 480px;
-      width: 100%;
-      background: #ffffff;
-      border-radius: 40px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04);
-      overflow: hidden;
-      padding: 24px 20px 32px;
-      position: relative;
-      transition: all 0.2s ease;
-    }
+        /* ----- PANEL SCREEN (dark) ----- */
+        .panel-screen {
+            display: none;
+            flex-direction: column;
+        }
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #2c2c2e;
+        }
+        .menu-icon {
+            font-size: 24px;
+            color: #ffffff;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .menu-icon:active {
+            background: #2c2c2e;
+        }
+        .panel-header .panel-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .panel-header .user-badge {
+            background: #2c2c2e;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
-    /* Giriş / Kayıt sayfası (Apple tarzı) */
-    .auth-screen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px 0 10px;
-    }
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0 16px;
+        }
+        .stat-card {
+            background: #2c2c2e;
+            border-radius: 20px;
+            padding: 16px 12px;
+            text-align: center;
+            border: 1px solid #3a3a3c;
+        }
+        .stat-card .number {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+        .stat-card .label {
+            font-size: 13px;
+            color: #8e8e93;
+            font-weight: 500;
+        }
 
-    .auth-screen h1 {
-      font-size: 32px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: #1c1c1e;
-      margin-bottom: 8px;
-    }
+        /* Chat preview */
+        .chat-preview {
+            background: #2c2c2e;
+            border-radius: 24px;
+            padding: 14px 18px;
+            margin: 12px 0 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #3a3a3c;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .chat-preview:active {
+            background: #3a3a3c;
+        }
+        .chat-preview span {
+            font-weight: 500;
+            color: #ffffff;
+        }
+        .chat-preview i {
+            color: #007aff;
+            font-size: 20px;
+        }
 
-    .auth-screen .subhead {
-      color: #8e8e93;
-      font-size: 16px;
-      font-weight: 400;
-      margin-bottom: 32px;
-    }
+        /* Query area */
+        .query-area {
+            margin: 16px 0 8px;
+            background: #2c2c2e;
+            border-radius: 28px;
+            padding: 20px 18px;
+            border: 1px solid #3a3a3c;
+        }
+        .query-area .query-title {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+        .query-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .query-input-group input {
+            background: #1c1c1e;
+            border: 1px solid #3a3a3c;
+            border-radius: 16px;
+            padding: 14px 16px;
+            font-size: 15px;
+            color: #ffffff;
+            outline: none;
+            transition: 0.2s;
+        }
+        .query-input-group input:focus {
+            border-color: #007aff;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+        }
+        .query-input-group input::placeholder {
+            color: #8e8e93;
+        }
+        .query-btn {
+            background: #007aff;
+            border: none;
+            border-radius: 40px;
+            padding: 14px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+            width: 100%;
+        }
+        .query-btn:active {
+            transform: scale(0.97);
+            background: #0066d9;
+        }
+        .query-btn:disabled {
+            opacity: 0.6;
+            transform: none;
+        }
 
-    .auth-input {
-      width: 100%;
-      background: #f2f2f7;
-      border-radius: 14px;
-      padding: 16px 18px;
-      border: none;
-      font-size: 16px;
-      color: #1c1c1e;
-      margin-bottom: 14px;
-      outline: none;
-      transition: background 0.2s;
-    }
+        /* Results */
+        .result-area {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .result-area::-webkit-scrollbar {
+            width: 4px;
+        }
+        .result-area::-webkit-scrollbar-thumb {
+            background: #3a3a3c;
+            border-radius: 10px;
+        }
+        .result-card {
+            background: #1c1c1e;
+            border-radius: 24px;
+            padding: 16px 18px;
+            border: 1px solid #3a3a3c;
+        }
+        .result-card .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #2c2c2e;
+        }
+        .result-card .row:last-child {
+            border-bottom: none;
+        }
+        .result-card .row .label {
+            color: #8e8e93;
+            font-weight: 400;
+            font-size: 14px;
+        }
+        .result-card .row .value {
+            font-weight: 500;
+            color: #ffffff;
+            font-size: 14px;
+            text-align: right;
+            max-width: 60%;
+        }
+        .download-btn {
+            margin-top: 10px;
+            background: #2c2c2e;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 16px;
+            font-weight: 500;
+            color: #007aff;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.1s;
+            width: fit-content;
+            align-self: flex-end;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .download-btn:active {
+            background: #3a3a3c;
+        }
+        .no-result {
+            text-align: center;
+            color: #8e8e93;
+            padding: 20px 0;
+        }
 
-    .auth-input:focus {
-      background: #e5e5ea;
-    }
+        /* ----- SIDE MENU (dark) ----- */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100%;
+            background: #1c1c1e;
+            box-shadow: 4px 0 30px rgba(0, 0, 0, 0.8);
+            padding: 30px 20px 40px;
+            transition: left 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+            z-index: 1000;
+            overflow-y: auto;
+            border-right: 1px solid #2c2c2e;
+        }
+        .side-menu.open {
+            left: 0;
+        }
+        .side-menu .close-menu {
+            text-align: right;
+            font-size: 24px;
+            cursor: pointer;
+            color: #8e8e93;
+            margin-bottom: 30px;
+            padding: 4px 8px;
+        }
+        .side-menu .close-menu:active {
+            opacity: 0.5;
+        }
+        .side-menu .menu-section {
+            margin-bottom: 28px;
+        }
+        .side-menu .menu-section .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #8e8e93;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .side-menu .menu-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #2c2c2e;
+            font-size: 16px;
+            font-weight: 500;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .side-menu .menu-item:active {
+            background: #2c2c2e;
+            border-radius: 12px;
+            padding-left: 10px;
+        }
+        .side-menu .menu-item i:first-child {
+            width: 24px;
+            color: #007aff;
+        }
+        .side-menu .menu-item .arrow-icon {
+            margin-left: auto;
+            font-size: 12px;
+            color: #8e8e93;
+            transition: transform 0.2s;
+        }
+        .sub-menu {
+            margin-left: 38px;
+            margin-top: 4px;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .sub-menu .menu-item {
+            font-size: 15px;
+            font-weight: 400;
+            border-bottom: none;
+            padding: 10px 0;
+            gap: 12px;
+        }
+        .sub-menu .menu-item i:first-child {
+            width: 20px;
+            font-size: 14px;
+            color: #8e8e93;
+        }
 
-    .auth-btn {
-      width: 100%;
-      background: #007aff;
-      border: none;
-      border-radius: 14px;
-      padding: 16px;
-      color: white;
-      font-weight: 600;
-      font-size: 17px;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25);
-      margin-top: 6px;
-    }
+        /* ----- TOAST ----- */
+        .toast {
+            background: #2c2c2e;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.95);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            opacity: 0;
+            transition: 0.25s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
 
-    .auth-btn:active {
-      transform: scale(0.97);
-      background: #0066d9;
-    }
-
-    .auth-toggle {
-      margin-top: 20px;
-      color: #007aff;
-      font-weight: 500;
-      cursor: pointer;
-      font-size: 15px;
-    }
-
-    .auth-toggle:active {
-      opacity: 0.6;
-    }
-
-    /* Panel (giriş yapılmış görünüm) */
-    .panel-screen {
-      display: none;
-      flex-direction: column;
-    }
-
-    /* Header */
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 16px;
-      border-bottom: 1px solid #f0f0f3;
-    }
-
-    .menu-icon {
-      font-size: 24px;
-      color: #1c1c1e;
-      cursor: pointer;
-      padding: 6px 8px;
-      border-radius: 30px;
-      transition: background 0.2s;
-    }
-
-    .menu-icon:active {
-      background: #e5e5ea;
-    }
-
-    .panel-header h2 {
-      font-size: 22px;
-      font-weight: 600;
-      letter-spacing: -0.3px;
-      color: #1c1c1e;
-    }
-
-    .panel-header .user-badge {
-      background: #f2f2f7;
-      padding: 8px 14px;
-      border-radius: 30px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #1c1c1e;
-    }
-
-    /* Kart istatistik */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin: 20px 0 16px;
-    }
-
-    .stat-card {
-      background: #f8f9fc;
-      border-radius: 18px;
-      padding: 16px 12px;
-      text-align: center;
-      transition: 0.1s;
-    }
-
-    .stat-card .number {
-      font-size: 26px;
-      font-weight: 700;
-      color: #1c1c1e;
-      margin-bottom: 4px;
-    }
-
-    .stat-card .label {
-      font-size: 13px;
-      color: #8e8e93;
-      font-weight: 500;
-    }
-
-    /* Chat kısa */
-    .chat-preview {
-      background: #f8f9fc;
-      border-radius: 24px;
-      padding: 16px 18px;
-      margin: 12px 0 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border: 1px solid #ececf0;
-    }
-
-    .chat-preview span {
-      font-weight: 500;
-      color: #1c1c1e;
-    }
-
-    .chat-preview i {
-      color: #007aff;
-      font-size: 20px;
-    }
-
-    /* Menü (sol açılır) */
-    .side-menu {
-      position: fixed;
-      top: 0;
-      left: -300px;
-      width: 280px;
-      height: 100%;
-      background: #ffffff;
-      box-shadow: 4px 0 20px rgba(0,0,0,0.06);
-      padding: 30px 20px;
-      transition: left 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-      z-index: 1000;
-      overflow-y: auto;
-      border-right: 1px solid #f0f0f3;
-    }
-
-    .side-menu.open {
-      left: 0;
-    }
-
-    .side-menu .close-menu {
-      text-align: right;
-      font-size: 24px;
-      cursor: pointer;
-      color: #8e8e93;
-      margin-bottom: 30px;
-    }
-
-    .side-menu .menu-section {
-      margin-bottom: 28px;
-    }
-
-    .side-menu .menu-section .section-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #8e8e93;
-      letter-spacing: 0.3px;
-      margin-bottom: 12px;
-    }
-
-    .side-menu .menu-item {
-      padding: 12px 0;
-      border-bottom: 1px solid #f5f5f8;
-      font-size: 16px;
-      font-weight: 500;
-      color: #1c1c1e;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-      transition: 0.1s;
-    }
-
-    .side-menu .menu-item:active {
-      background: #f2f2f7;
-      border-radius: 12px;
-      padding-left: 8px;
-    }
-
-    .side-menu .menu-item i {
-      width: 24px;
-      color: #007aff;
-    }
-
-    .sub-menu {
-      margin-left: 36px;
-      margin-top: 6px;
-      margin-bottom: 14px;
-    }
-
-    .sub-menu .menu-item {
-      font-size: 15px;
-      font-weight: 400;
-      border-bottom: none;
-      padding: 8px 0;
-    }
-
-    .sub-menu .menu-item i {
-      width: 20px;
-      font-size: 14px;
-      color: #8e8e93;
-    }
-
-    /* Sorgu alanı */
-    .query-area {
-      margin: 16px 0 8px;
-      background: #f8f9fc;
-      border-radius: 28px;
-      padding: 20px 18px;
-    }
-
-    .query-area .query-title {
-      font-weight: 600;
-      font-size: 18px;
-      margin-bottom: 16px;
-      color: #1c1c1e;
-    }
-
-    .query-input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .query-input-group input {
-      background: white;
-      border: 1px solid #e5e5ea;
-      border-radius: 16px;
-      padding: 14px 16px;
-      font-size: 15px;
-      outline: none;
-      transition: 0.2s;
-    }
-
-    .query-input-group input:focus {
-      border-color: #007aff;
-      box-shadow: 0 0 0 3px rgba(0,122,255,0.15);
-    }
-
-    .query-btn {
-      background: #007aff;
-      border: none;
-      border-radius: 40px;
-      padding: 14px;
-      color: white;
-      font-weight: 600;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.2s;
-      box-shadow: 0 4px 12px rgba(0,122,255,0.2);
-      width: 100%;
-    }
-
-    .query-btn:active {
-      transform: scale(0.97);
-      background: #0066d9;
-    }
-
-    .result-area {
-      margin-top: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .result-card {
-      background: white;
-      border-radius: 24px;
-      padding: 16px 18px;
-      border: 1px solid #ececf0;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .result-card .row {
-      display: flex;
-      justify-content: space-between;
-      padding: 4px 0;
-      border-bottom: 1px solid #f2f2f7;
-    }
-
-    .result-card .row:last-child {
-      border-bottom: none;
-    }
-
-    .result-card .row .label {
-      color: #8e8e93;
-      font-weight: 400;
-      font-size: 14px;
-    }
-
-    .result-card .row .value {
-      font-weight: 500;
-      color: #1c1c1e;
-      font-size: 14px;
-    }
-
-    .download-btn {
-      margin-top: 10px;
-      background: #f2f2f7;
-      border: none;
-      border-radius: 30px;
-      padding: 10px;
-      font-weight: 500;
-      color: #007aff;
-      cursor: pointer;
-      font-size: 14px;
-      transition: 0.1s;
-      width: fit-content;
-      align-self: flex-end;
-    }
-
-    .download-btn:active {
-      background: #e5e5ea;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .toast {
-      background: #1c1c1e;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 40px;
-      font-size: 14px;
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-      z-index: 2000;
-      opacity: 0;
-      transition: 0.25s;
-      pointer-events: none;
-    }
-
-    .toast.show {
-      opacity: 1;
-    }
-
-    /* mobil iyileştirme */
-    @media (max-width: 420px) {
-      .app-container { padding: 16px; }
-      .stats-grid { gap: 8px; }
-      .stat-card { padding: 12px 6px; }
-    }
-  </style>
+        @media (max-width: 420px) {
+            .app-container { padding: 18px 14px 24px; border-radius: 32px; }
+            .stats-grid { gap: 8px; }
+            .stat-card { padding: 12px 6px; }
+            .stat-card .number { font-size: 22px; }
+            .side-menu { width: 260px; padding: 24px 16px; }
+            .toast { font-size: 13px; padding: 10px 20px; white-space: normal; max-width: 85%; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="app-container" id="appContainer">
-  <!-- Giriş / Kayıt Ekranı -->
-  <div class="auth-screen" id="authScreen">
-    <h1>Elif</h1>
-    <div class="subhead">Sorgu Paneli</div>
-    <input class="auth-input" id="authEmail" type="email" placeholder="E-posta" value="apomuhammed@hotmail.com">
-    <input class="auth-input" id="authPassword" type="password" placeholder="Şifre" value="Allahyok">
-    <button class="auth-btn" id="authActionBtn">Giriş Yap</button>
-    <div class="auth-toggle" id="authToggle">Hesabın yok mu? Kayıt ol</div>
-  </div>
+    <div class="app-container" id="appContainer">
 
-  <!-- Ana Panel -->
-  <div class="panel-screen" id="panelScreen">
-    <div class="panel-header">
-      <div class="menu-icon" id="menuToggle"><i class="fas fa-bars"></i></div>
-      <h2>Elif</h2>
-      <div class="user-badge"><i class="fas fa-user"></i> Admin</div>
+        <!-- ===== AUTH SCREEN ===== -->
+        <div class="auth-screen" id="authScreen">
+            <div class="app-logo">Elif</div>
+            <div class="app-sub">Sorgu Paneli</div>
+            <input class="auth-input" id="authEmail" type="email" placeholder="E-posta" value="apomuhammed@hotmail.com">
+            <input class="auth-input" id="authPassword" type="password" placeholder="Şifre" value="Allahyok">
+            <button class="auth-btn" id="authActionBtn">Giriş Yap</button>
+            <div class="auth-error" id="authError"></div>
+            <div class="auth-toggle" id="authToggle">Hesabın yok mu? Kayıt ol</div>
+        </div>
+
+        <!-- ===== PANEL ===== -->
+        <div class="panel-screen" id="panelScreen">
+            <div class="panel-header">
+                <div class="menu-icon" id="menuToggle"><i class="fas fa-bars"></i></div>
+                <div class="panel-title">Elif</div>
+                <div class="user-badge"><i class="fas fa-user-circle"></i> Admin</div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card"><div class="number" id="activeUsers">42</div><div class="label">Aktif</div></div>
+                <div class="stat-card"><div class="number" id="totalUsers">128</div><div class="label">Toplam</div></div>
+                <div class="stat-card"><div class="number" id="freeQueries">7</div><div class="label">Ücretsiz</div></div>
+                <div class="stat-card"><div class="number" id="premiumQueries">3</div><div class="label">Premium</div></div>
+            </div>
+
+            <div class="chat-preview" id="chatPreview">
+                <span><i class="fas fa-comment-dots" style="margin-right:10px;color:#007aff;"></i> Sohbet</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+
+            <div class="query-area" id="queryArea">
+                <div class="query-title">
+                    <i class="fas fa-search" style="margin-right:10px;color:#007aff;"></i>
+                    Ad Soyad Sorgu
+                </div>
+                <div class="query-input-group">
+                    <input type="text" id="queryAd" placeholder="Ad (örn: roket)" value="roket">
+                    <input type="text" id="querySoyad" placeholder="Soyad (örn: atar)" value="atar">
+                </div>
+                <button class="query-btn" id="queryBtn"><i class="fas fa-arrow-right"></i> Sorgula</button>
+
+                <div class="result-area" id="resultArea">
+                    <div class="no-result">🔍 Sorgu bekleniyor...</div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- istatistik -->
-    <div class="stats-grid">
-      <div class="stat-card"><div class="number" id="activeUsers">42</div><div class="label">Aktif</div></div>
-      <div class="stat-card"><div class="number" id="totalUsers">128</div><div class="label">Toplam</div></div>
-      <div class="stat-card"><div class="number" id="freeQueries">7</div><div class="label">Ücretsiz</div></div>
-      <div class="stat-card"><div class="number" id="premiumQueries">3</div><div class="label">Premium</div></div>
+    <!-- ===== SIDE MENU ===== -->
+    <div class="side-menu" id="sideMenu">
+        <div class="close-menu" id="closeMenu"><i class="fas fa-times"></i></div>
+        <div class="menu-section">
+            <div class="section-title">Ana Menü</div>
+            <div class="menu-item"><i class="fas fa-user-circle"></i> Profil</div>
+            <div class="menu-item"><i class="fas fa-users"></i> Kullanıcı</div>
+        </div>
+        <div class="menu-section">
+            <div class="section-title">Sorgular</div>
+            <div class="menu-item" id="freeMenuToggle">
+                <i class="fas fa-gem" style="color:#34c759;"></i> Ücretsiz
+                <i class="fas fa-chevron-down arrow-icon"></i>
+            </div>
+            <div class="sub-menu" id="freeSubMenu">
+                <div class="menu-item" data-query="adsoyad"><i class="fas fa-user"></i> Ad Soyad</div>
+                <div class="menu-item" data-query="tc"><i class="fas fa-id-card"></i> TC</div>
+                <div class="menu-item" data-query="aile"><i class="fas fa-users"></i> Aile</div>
+                <div class="menu-item" data-query="sulale"><i class="fas fa-tree"></i> Sülale</div>
+                <div class="menu-item" data-query="gsmtc"><i class="fas fa-phone"></i> GSM TC</div>
+                <div class="menu-item" data-query="tcgsm"><i class="fas fa-phone-alt"></i> TC GSM</div>
+                <div class="menu-item" data-query="adres"><i class="fas fa-map-pin"></i> Adres</div>
+            </div>
+            <div class="menu-item" id="premiumMenuToggle">
+                <i class="fas fa-crown" style="color:#ff9500;"></i> Premium
+                <i class="fas fa-chevron-down arrow-icon"></i>
+            </div>
+            <div class="sub-menu" id="premiumSubMenu">
+                <div class="menu-item" data-query="kk"><i class="fas fa-credit-card"></i> KK</div>
+                <div class="menu-item" data-query="plaka"><i class="fas fa-car"></i> Plaka</div>
+                <div class="menu-item" data-query="iban"><i class="fas fa-university"></i> IBAN</div>
+                <div class="menu-item" data-query="vesika"><i class="fas fa-file-alt"></i> Vesika</div>
+                <div class="menu-item" data-query="mernis"><i class="fas fa-sync-alt"></i> Mernis Güncel</div>
+                <div class="menu-item" data-query="okul"><i class="fas fa-school"></i> Okul</div>
+            </div>
+        </div>
     </div>
 
-    <!-- Chat kısayol -->
-    <div class="chat-preview" id="chatPreview">
-      <span><i class="fas fa-comment-dots" style="margin-right: 8px; color:#007aff;"></i> Sohbet</span>
-      <i class="fas fa-chevron-right"></i>
-    </div>
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast"></div>
 
-    <!-- Sorgu alanı (ücretsiz - ad soyad) -->
-    <div class="query-area" id="queryArea">
-      <div class="query-title"><i class="fas fa-search" style="margin-right: 8px; color:#007aff;"></i> Ad Soyad Sorgu</div>
-      <div class="query-input-group">
-        <input type="text" id="queryAd" placeholder="Ad (örn: roket)" value="roket">
-        <input type="text" id="querySoyad" placeholder="Soyad (örn: atar)" value="atar">
-      </div>
-      <button class="query-btn" id="queryBtn"><i class="fas fa-arrow-right"></i> Sorgula</button>
+    <script>
+        (function() {
+            'use strict';
 
-      <!-- Sonuçlar buraya -->
-      <div class="result-area" id="resultArea"></div>
-    </div>
-  </div>
-</div>
+            // ---------- DEVTOOLS KAPAT ----------
+            document.onkeydown = function(e) {
+                if (e.key === 'F12' ||
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+                    (e.ctrlKey && e.key === 'U')) {
+                    e.preventDefault();
+                    return false;
+                }
+            };
+            document.addEventListener('contextmenu', e => e.preventDefault());
 
-<!-- Sol Menü (Drawer) -->
-<div class="side-menu" id="sideMenu">
-  <div class="close-menu" id="closeMenu"><i class="fas fa-times"></i></div>
-  <div class="menu-section">
-    <div class="section-title">ANA MENÜ</div>
-    <div class="menu-item"><i class="fas fa-user-circle"></i> Profil</div>
-    <div class="menu-item"><i class="fas fa-users"></i> Kullanıcı</div>
-  </div>
-  <div class="menu-section">
-    <div class="section-title">SORGULAR</div>
-    <div class="menu-item" id="freeMenuToggle"><i class="fas fa-gem" style="color: #34c759;"></i> Ücretsiz <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 12px;"></i></div>
-    <div class="sub-menu" id="freeSubMenu">
-      <div class="menu-item" data-query="adsoyad"><i class="fas fa-user"></i> Ad Soyad</div>
-      <div class="menu-item"><i class="fas fa-id-card"></i> TC</div>
-      <div class="menu-item"><i class="fas fa-users"></i> Aile</div>
-      <div class="menu-item"><i class="fas fa-tree"></i> Sülale</div>
-      <div class="menu-item"><i class="fas fa-phone"></i> GSM TC</div>
-      <div class="menu-item"><i class="fas fa-phone-alt"></i> TC GSM</div>
-      <div class="menu-item"><i class="fas fa-map-pin"></i> Adres</div>
-    </div>
-    <div class="menu-item" id="premiumMenuToggle"><i class="fas fa-crown" style="color: #ff9500;"></i> Premium <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 12px;"></i></div>
-    <div class="sub-menu" id="premiumSubMenu">
-      <div class="menu-item"><i class="fas fa-credit-card"></i> KK</div>
-      <div class="menu-item"><i class="fas fa-car"></i> Plaka</div>
-      <div class="menu-item"><i class="fas fa-university"></i> IBAN</div>
-      <div class="menu-item"><i class="fas fa-file-alt"></i> Vesika</div>
-      <div class="menu-item"><i class="fas fa-sync-alt"></i> Mernis Güncel</div>
-      <div class="menu-item"><i class="fas fa-school"></i> Okul</div>
-    </div>
-  </div>
-</div>
+            // ---------- TOAST ----------
+            let toastTimer = null;
 
-<!-- Toast mesaj -->
-<div class="toast" id="toast"></div>
+            function showToast(msg, duration = 2600) {
+                const t = document.getElementById('toast');
+                t.textContent = msg;
+                t.classList.add('show');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => t.classList.remove('show'), duration);
+            }
 
-<script>
-  (function() {
-    // ---------- STATE ----------
-    const state = {
-      isLoggedIn: false,
-      currentQuery: 'adsoyad', // sadece adsoyad aktif
-      apiUrl: 'https://arastir-01.site/api/adsoyad.php?ad=roket&soyad=atar'
-    };
+            // ---------- AUTH (login/register) ----------
+            const authScreen = document.getElementById('authScreen');
+            const panelScreen = document.getElementById('panelScreen');
+            const authEmail = document.getElementById('authEmail');
+            const authPassword = document.getElementById('authPassword');
+            const authActionBtn = document.getElementById('authActionBtn');
+            const authToggle = document.getElementById('authToggle');
+            const authError = document.getElementById('authError');
 
-    // DOM referansları
-    const authScreen = document.getElementById('authScreen');
-    const panelScreen = document.getElementById('panelScreen');
-    const authEmail = document.getElementById('authEmail');
-    const authPassword = document.getElementById('authPassword');
-    const authActionBtn = document.getElementById('authActionBtn');
-    const authToggle = document.getElementById('authToggle');
-    const menuToggle = document.getElementById('menuToggle');
-    const sideMenu = document.getElementById('sideMenu');
-    const closeMenu = document.getElementById('closeMenu');
-    const freeSubMenu = document.getElementById('freeSubMenu');
-    const premiumSubMenu = document.getElementById('premiumSubMenu');
-    const freeMenuToggle = document.getElementById('freeMenuToggle');
-    const premiumMenuToggle = document.getElementById('premiumMenuToggle');
-    const queryBtn = document.getElementById('queryBtn');
-    const queryAd = document.getElementById('queryAd');
-    const querySoyad = document.getElementById('querySoyad');
-    const resultArea = document.getElementById('resultArea');
-    const toast = document.getElementById('toast');
+            const ADMIN_EMAIL = 'apomuhammed@hotmail.com';
+            const ADMIN_PASS = 'Allahyok';
 
-    // Admin bilgileri (hardcoded)
-    const ADMIN_EMAIL = 'apomuhammed@hotmail.com';
-    const ADMIN_PASS = 'Allahyok';
+            // Kullanıcıları localStorage'da tut
+            let users = JSON.parse(localStorage.getItem('elif_users')) || [];
+            // admin'i ekle (eğer yoksa)
+            if (!users.find(u => u.email === ADMIN_EMAIL)) {
+                users.push({ email: ADMIN_EMAIL, password: ADMIN_PASS });
+                localStorage.setItem('elif_users', JSON.stringify(users));
+            }
 
-    // ---------- TOAST ----------
-    function showToast(msg, duration = 2500) {
-      toast.textContent = msg;
-      toast.classList.add('show');
-      clearTimeout(toast._timer);
-      toast._timer = setTimeout(() => toast.classList.remove('show'), duration);
-    }
+            let isLogin = true;
 
-    // ---------- AUTH ----------
-    function handleAuth() {
-      const email = authEmail.value.trim();
-      const pass = authPassword.value.trim();
-      if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
-        state.isLoggedIn = true;
-        authScreen.style.display = 'none';
-        panelScreen.style.display = 'flex';
-        showToast('Hoş geldin, Admin! 🎉');
-        // istatistikleri güncelle (mock)
-        document.getElementById('activeUsers').textContent = Math.floor(Math.random() * 30 + 30);
-        document.getElementById('totalUsers').textContent = Math.floor(Math.random() * 100 + 80);
-        document.getElementById('freeQueries').textContent = Math.floor(Math.random() * 8 + 3);
-        document.getElementById('premiumQueries').textContent = Math.floor(Math.random() * 4 + 1);
-      } else {
-        showToast('E-posta veya şifre hatalı!', 3000);
-      }
-    }
+            function setAuthMode(login) {
+                isLogin = login;
+                authActionBtn.textContent = login ? 'Giriş Yap' : 'Kayıt Ol';
+                authToggle.textContent = login ? 'Hesabın yok mu? Kayıt ol' : 'Zaten hesabın var mı? Giriş yap';
+                authActionBtn.style.background = login ? '#007aff' : '#34c759';
+                authError.textContent = '';
+            }
 
-    authActionBtn.addEventListener('click', handleAuth);
-    authPassword.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
-    authEmail.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
+            authToggle.addEventListener('click', () => {
+                setAuthMode(!isLogin);
+                authEmail.value = '';
+                authPassword.value = '';
+            });
 
-    // Kayıt / Giriş toggle
-    let isLogin = true;
-    authToggle.addEventListener('click', () => {
-      isLogin = !isLogin;
-      authActionBtn.textContent = isLogin ? 'Giriş Yap' : 'Kayıt Ol';
-      authToggle.textContent = isLogin ? 'Hesabın yok mu? Kayıt ol' : 'Zaten hesabın var mı? Giriş yap';
-      authEmail.value = isLogin ? ADMIN_EMAIL : '';
-      authPassword.value = isLogin ? ADMIN_PASS : '';
-    });
+            function handleAuth() {
+                const email = authEmail.value.trim();
+                const pass = authPassword.value.trim();
+                authError.textContent = '';
 
-    // ---------- MENU TOGGLE ----------
-    function toggleMenu(open) {
-      if (open !== undefined) {
-        sideMenu.classList.toggle('open', open);
-      } else {
-        sideMenu.classList.toggle('open');
-      }
-    }
+                if (!email || !pass) {
+                    authError.textContent = 'Lütfen e-posta ve şifre girin.';
+                    return;
+                }
 
-    menuToggle.addEventListener('click', () => toggleMenu(true));
-    closeMenu.addEventListener('click', () => toggleMenu(false));
-    document.addEventListener('click', (e) => {
-      if (sideMenu.classList.contains('open') && !sideMenu.contains(e.target) && !menuToggle.contains(e.target)) {
-        toggleMenu(false);
-      }
-    });
+                if (isLogin) {
+                    // Giriş
+                    const user = users.find(u => u.email === email && u.password === pass);
+                    if (user) {
+                        // Başarılı giriş
+                        authScreen.style.display = 'none';
+                        panelScreen.style.display = 'flex';
+                        showToast('✨ Hoş geldin, ' + email, 2000);
+                        // istatistikleri güncelle
+                        document.getElementById('activeUsers').textContent = Math.floor(Math.random() * 30 + 30);
+                        document.getElementById('totalUsers').textContent = users.length + Math.floor(Math.random() * 50);
+                        document.getElementById('freeQueries').textContent = Math.floor(Math.random() * 8 + 3);
+                        document.getElementById('premiumQueries').textContent = Math.floor(Math.random() * 4 + 1);
+                    } else {
+                        authError.textContent = '❌ E-posta veya şifre hatalı!';
+                    }
+                } else {
+                    // Kayıt
+                    if (users.find(u => u.email === email)) {
+                        authError.textContent = '❌ Bu e-posta zaten kayıtlı!';
+                        return;
+                    }
+                    users.push({ email, password: pass });
+                    localStorage.setItem('elif_users', JSON.stringify(users));
+                    showToast('✅ Kayıt başarılı! Şimdi giriş yap.', 2500);
+                    setAuthMode(true);
+                    authEmail.value = email;
+                    authPassword.value = pass;
+                    // otomatik giriş yap
+                    handleAuth(); // tekrar dene (giriş modunda)
+                }
+            }
 
-    // Menü alt açılımlar
-    freeMenuToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      freeSubMenu.style.display = freeSubMenu.style.display === 'none' ? 'block' : 'none';
-      const icon = freeMenuToggle.querySelector('.fa-chevron-down');
-      if (icon) icon.style.transform = freeSubMenu.style.display === 'none' ? 'rotate(0deg)' : 'rotate(180deg)';
-    });
-    premiumMenuToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      premiumSubMenu.style.display = premiumSubMenu.style.display === 'none' ? 'block' : 'none';
-      const icon = premiumMenuToggle.querySelector('.fa-chevron-down');
-      if (icon) icon.style.transform = premiumSubMenu.style.display === 'none' ? 'rotate(0deg)' : 'rotate(180deg)';
-    });
-    // başlangıçta açık olsun
-    freeSubMenu.style.display = 'block';
-    premiumSubMenu.style.display = 'block';
+            authActionBtn.addEventListener('click', handleAuth);
+            authPassword.addEventListener('keydown', e => { if (e.key === 'Enter') handleAuth(); });
+            authEmail.addEventListener('keydown', e => { if (e.key === 'Enter') handleAuth(); });
 
-    // Menü itemleri (ad soyad hariç diğerleri mock)
-    document.querySelectorAll('.menu-item[data-query]').forEach(item => {
-      item.addEventListener('click', () => {
-        const q = item.dataset.query;
-        if (q === 'adsoyad') {
-          document.querySelector('.query-title').innerHTML = '<i class="fas fa-search" style="margin-right:8px;color:#007aff;"></i> Ad Soyad Sorgu';
-          queryAd.placeholder = 'Ad';
-          querySoyad.placeholder = 'Soyad';
-          queryAd.value = 'roket';
-          querySoyad.value = 'atar';
-          state.currentQuery = 'adsoyad';
-          resultArea.innerHTML = '';
-          toggleMenu(false);
-          showToast('Ad Soyad sorgusu seçildi');
-        } else {
-          showToast('Bu sorgu henüz aktif değil 😅', 2000);
-          toggleMenu(false);
-        }
-      });
-    });
+            // ---------- MENU ----------
+            const menuToggle = document.getElementById('menuToggle');
+            const sideMenu = document.getElementById('sideMenu');
+            const closeMenu = document.getElementById('closeMenu');
+            const freeSubMenu = document.getElementById('freeSubMenu');
+            const premiumSubMenu = document.getElementById('premiumSubMenu');
+            const freeMenuToggle = document.getElementById('freeMenuToggle');
+            const premiumMenuToggle = document.getElementById('premiumMenuToggle');
 
-    // ---------- API SORGULA (Ad Soyad) ----------
-    async function fetchAdSoyad(ad, soyad) {
-      if (!ad.trim() || !soyad.trim()) {
-        showToast('Ad ve soyad girmelisin!', 2500);
-        return;
-      }
-      const url = `https://arastir-01.site/api/adsoyad.php?ad=${encodeURIComponent(ad.trim())}&soyad=${encodeURIComponent(soyad.trim())}`;
-      try {
-        queryBtn.disabled = true;
-        queryBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sorgulanıyor...';
-        const response = await fetch(url);
-        const data = await response.json();
-        queryBtn.disabled = false;
-        queryBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Sorgula';
+            function toggleMenu(open) {
+                if (open !== undefined) sideMenu.classList.toggle('open', open);
+                else sideMenu.classList.toggle('open');
+            }
 
-        if (data.success && data.data && data.data.length > 0) {
-          renderResults(data.data);
-          showToast(`✅ ${data.count} kişi bulundu`, 2000);
-        } else {
-          resultArea.innerHTML = `<div class="result-card" style="text-align:center; color:#8e8e93;">⚠️ Sonuç bulunamadı.</div>`;
-          showToast('Sonuç yok', 2000);
-        }
-      } catch (err) {
-        queryBtn.disabled = false;
-        queryBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Sorgula';
-        resultArea.innerHTML = `<div class="result-card" style="text-align:center; color:#ff3b30;">⛔ API hatası: ${err.message}</div>`;
-        showToast('API bağlantı hatası', 2500);
-      }
-    }
+            menuToggle.addEventListener('click', () => toggleMenu(true));
+            closeMenu.addEventListener('click', () => toggleMenu(false));
+            document.addEventListener('click', (e) => {
+                if (sideMenu.classList.contains('open') && !sideMenu.contains(e.target) && !menuToggle.contains(e
+                    .target)) {
+                    toggleMenu(false);
+                }
+            });
 
-    function renderResults(people) {
-      let html = '';
-      people.forEach((p, idx) => {
-        html += `
-          <div class="result-card">
-            <div class="row"><span class="label">TC</span><span class="value">${p.TC || '-'}</span></div>
-            <div class="row"><span class="label">Ad</span><span class="value">${p.ADI || '-'}</span></div>
-            <div class="row"><span class="label">Soyad</span><span class="value">${p.SOYADI || '-'}</span></div>
-            <div class="row"><span class="label">Doğum</span><span class="value">${p.DOGUMTARIHI || '-'}</span></div>
-            <div class="row"><span class="label">İl</span><span class="value">${p.NUFUSIL || '-'}</span></div>
-            <div class="row"><span class="label">İlçe</span><span class="value">${p.NUFUSILCE || '-'}</span></div>
-            <div class="row"><span class="label">Anne Ad</span><span class="value">${p.ANNEADI || '-'}</span></div>
-            <div class="row"><span class="label">Baba Ad</span><span class="value">${p.BABAADI || '-'}</span></div>
-            <div class="row"><span class="label">Uyruk</span><span class="value">${p.UYRUK || '-'}</span></div>
-            <button class="download-btn" data-tc="${p.TC || ''}" data-ad="${p.ADI || ''}" data-soyad="${p.SOYADI || ''}"><i class="fas fa-download"></i> TXT İndir</button>
-          </div>
-        `;
-      });
-      resultArea.innerHTML = html;
+            // alt menü aç/kapa
+            freeMenuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const hidden = freeSubMenu.style.display === 'none';
+                freeSubMenu.style.display = hidden ? 'block' : 'none';
+                const icon = freeMenuToggle.querySelector('.arrow-icon');
+                if (icon) icon.style.transform = hidden ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+            premiumMenuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const hidden = premiumSubMenu.style.display === 'none';
+                premiumSubMenu.style.display = hidden ? 'block' : 'none';
+                const icon = premiumMenuToggle.querySelector('.arrow-icon');
+                if (icon) icon.style.transform = hidden ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+            // başlangıçta açık
+            freeSubMenu.style.display = 'block';
+            premiumSubMenu.style.display = 'block';
+            document.querySelector('#freeMenuToggle .arrow-icon').style.transform = 'rotate(180deg)';
+            document.querySelector('#premiumMenuToggle .arrow-icon').style.transform = 'rotate(180deg)';
 
-      // indirme butonları
-      document.querySelectorAll('.download-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          const tc = this.dataset.tc || 'Bilinmiyor';
-          const ad = this.dataset.ad || 'Bilinmiyor';
-          const soyad = this.dataset.soyad || 'Bilinmiyor';
-          const content = `TC: ${tc}\nAd: ${ad}\nSoyad: ${soyad}\n--- Elif Sorgu ---`;
-          const blob = new Blob([content], { type: 'text/plain' });
-          const link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = `${tc}_${ad}_${soyad}.txt`;
-          link.click();
-          URL.revokeObjectURL(link.href);
-          showToast('TXT indiriliyor...', 1500);
-        });
-      });
-    }
+            // menü öğeleri
+            const queryTitle = document.querySelector('.query-title');
+            const queryAd = document.getElementById('queryAd');
+            const querySoyad = document.getElementById('querySoyad');
+            const resultArea = document.getElementById('resultArea');
+            const queryBtn = document.getElementById('queryBtn');
 
-    queryBtn.addEventListener('click', () => {
-      if (state.currentQuery === 'adsoyad') {
-        fetchAdSoyad(queryAd.value, querySoyad.value);
-      } else {
-        showToast('Bu sorgu tipi henüz desteklenmiyor.', 2000);
-      }
-    });
+            document.querySelectorAll('.sub-menu .menu-item[data-query]').forEach(item => {
+                item.addEventListener('click', function() {
+                    const q = this.dataset.query;
+                    if (q === 'adsoyad') {
+                        queryTitle.innerHTML =
+                            '<i class="fas fa-search" style="margin-right:10px;color:#007aff;"></i> Ad Soyad Sorgu';
+                        queryAd.placeholder = 'Ad';
+                        querySoyad.placeholder = 'Soyad';
+                        queryAd.value = 'roket';
+                        querySoyad.value = 'atar';
+                        resultArea.innerHTML = '<div class="no-result">🔍 Sorgu bekleniyor...</div>';
+                        toggleMenu(false);
+                        showToast('📝 Ad Soyad sorgusu seçildi', 1500);
+                    } else {
+                        showToast('⏳ Bu sorgu henüz aktif değil', 2000);
+                        toggleMenu(false);
+                    }
+                });
+            });
 
-    // Enter ile sorgula
-    queryAd.addEventListener('keydown', (e) => { if (e.key === 'Enter') queryBtn.click(); });
-    querySoyad.addEventListener('keydown', (e) => { if (e.key === 'Enter') queryBtn.click(); });
+            // ---------- API SORGULA (Mock + Gerçek) ----------
+            async function fetchAdSoyad(ad, soyad) {
+                const adTrim = ad.trim();
+                const soyadTrim = soyad.trim();
+                if (!adTrim || !soyadTrim) {
+                    showToast('⚠️ Ad ve soyad girmelisin!', 2500);
+                    return;
+                }
 
-    // Chat preview
-    document.getElementById('chatPreview').addEventListener('click', () => {
-      showToast('💬 Chat sistemi yakında!', 2000);
-    });
+                // Önce mock veri döndürelim (gerçek API çalışmazsa)
+                const mockData = {
+                    success: true,
+                    data: [{
+                        TC: "27727166918",
+                        ADI: adTrim.toUpperCase(),
+                        SOYADI: soyadTrim.toUpperCase(),
+                        DOGUMTARIHI: "28.9.1969",
+                        NUFUSIL: "BURSA",
+                        NUFUSILCE: "OSMANGAZİ",
+                        ANNEADI: "DUDU",
+                        ANNETC: "27805164362",
+                        BABAADI: "KAMİL",
+                        BABATC: "27856162614",
+                        UYRUK: "TR"
+                    }],
+                    count: 1
+                };
 
-    // ---------- BAŞLAT ----------
-    // Varsayılan olarak giriş ekranı görünür, panel gizli
-    authScreen.style.display = 'flex';
-    panelScreen.style.display = 'none';
-    // Eğer oturum açık değilse
-    state.isLoggedIn = false;
+                try {
+                    queryBtn.disabled = true;
+                    queryBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sorgulanıyor...';
 
-    // demo: eğer inputlarda admin bilgileri varsa direkt butona tıklayabilir
-    console.log('Elif Sorgu Paneli çalışıyor.');
-  })();
-</script>
+                    // Gerçek API'yi dene (CORS hatası muhtemel)
+                    const url =
+                        `https://arastir-01.site/api/adsoyad.php?ad=${encodeURIComponent(adTrim)}&soyad=${encodeURIComponent(soyadTrim)}`;
+                    const response = await fetch(url, { mode: 'cors' });
+                    if (!response.ok) throw new Error('API yanıt vermedi');
+                    const data = await response.json();
+                    if (data.success && data.data && data.data.length > 0) {
+                        renderResults(data.data);
+                        showToast(`✅ ${data.count} kişi bulundu`, 2000);
+                    } else {
+                        // API başarısızsa mock kullan
+                        renderResults(mockData.data);
+                        showToast('⚠️ API verisi yok, mock gösteriliyor', 2500);
+                    }
+                } catch (err) {
+                    // Hata durumunda mock göster
+                    renderResults(mockData.data);
+                    showToast('⚠️ API bağlantı hatası, örnek veri gösteriliyor', 3000);
+                } finally {
+                    queryBtn.disabled = false;
+                    queryBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Sorgula';
+                }
+            }
+
+            function renderResults(people) {
+                let html = '';
+                people.forEach(p => {
+                    html += `
+                        <div class="result-card">
+                            <div class="row"><span class="label">TC</span><span class="value">${p.TC || '-'}</span></div>
+                            <div class="row"><span class="label">Ad</span><span class="value">${p.ADI || '-'}</span></div>
+                            <div class="row"><span class="label">Soyad</span><span class="value">${p.SOYADI || '-'}</span></div>
+                            <div class="row"><span class="label">Doğum</span><span class="value">${p.DOGUMTARIHI || '-'}</span></div>
+                            <div class="row"><span class="label">İl</span><span class="value">${p.NUFUSIL || '-'}</span></div>
+                            <div class="row"><span class="label">İlçe</span><span class="value">${p.NUFUSILCE || '-'}</span></div>
+                            <div class="row"><span class="label">Anne Ad</span><span class="value">${p.ANNEADI || '-'}</span></div>
+                            <div class="row"><span class="label">Anne TC</span><span class="value">${p.ANNETC || '-'}</span></div>
+                            <div class="row"><span class="label">Baba Ad</span><span class="value">${p.BABAADI || '-'}</span></div>
+                            <div class="row"><span class="label">Baba TC</span><span class="value">${p.BABATC || '-'}</span></div>
+                            <div class="row"><span class="label">Uyruk</span><span class="value">${p.UYRUK || '-'}</span></div>
+                            <button class="download-btn" data-tc="${p.TC || ''}" data-ad="${p.ADI || ''}" data-soyad="${p.SOYADI || ''}">
+                                <i class="fas fa-download"></i> TXT İndir
+                            </button>
+                        </div>
+                    `;
+                });
+                resultArea.innerHTML = html;
+
+                // İndirme butonları
+                document.querySelectorAll('.download-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const tc = this.dataset.tc || 'Bilinmiyor';
+                        const ad = this.dataset.ad || 'Bilinmiyor';
+                        const soyad = this.dataset.soyad || 'Bilinmiyor';
+                        const content =
+                            `TC: ${tc}\nAd: ${ad}\nSoyad: ${soyad}\n--- Elif Sorgu Paneli ---\nTarih: ${new Date().toLocaleString()}`;
+                        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = `${tc}_${ad}_${soyad}.txt`;
+                        link.click();
+                        URL.revokeObjectURL(link.href);
+                        showToast('✅ TXT indirildi', 1500);
+                    });
+                });
+            }
+
+            // Sorgula butonu
+            queryBtn.addEventListener('click', () => {
+                fetchAdSoyad(queryAd.value, querySoyad.value);
+            });
+            queryAd.addEventListener('keydown', e => { if (e.key === 'Enter') queryBtn.click(); });
+            querySoyad.addEventListener('keydown', e => { if (e.key === 'Enter') queryBtn.click(); });
+
+            // Chat preview
+            document.getElementById('chatPreview').addEventListener('click', () => {
+                showToast('💬 Chat sistemi yakında!', 2000);
+            });
+
+            // Başlangıçta auth ekranı açık
+            authScreen.style.display = 'flex';
+            panelScreen.style.display = 'none';
+            setAuthMode(true);
+
+            console.log('Elif Sorgu Paneli çalışıyor (koyu tema, mock API)');
+        })();
+    </script>
 
 </body>
 </html>
