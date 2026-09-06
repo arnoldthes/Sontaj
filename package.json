@@ -1,8 +1,10 @@
+// package.json
 {
-    "name": "dorksk-checker",
+    "name": "checker",
     "version": "1.0.0",
     "type": "module",
     "dependencies": {
+        "@vercel/kv": "^1.0.0",
         "@vercel/node": "^2.0.0",
         "node-fetch": "^3.3.0"
     }
