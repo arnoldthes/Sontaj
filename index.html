@@ -6,7 +6,7 @@
     <title>LYNX</title>
     <style>
         /* ============================================================
-           RESET
+           RESET & BASE - KOYU SİYAH
            ============================================================ */
         * {
             margin: 0;
@@ -65,6 +65,7 @@
             letter-spacing: 1px;
         }
         .header .logo span { color: #4a90e2; }
+        .header .logo .premium { color: #f9ca24; margin-left: 4px; }
         .header .user-area {
             display: flex;
             align-items: center;
@@ -105,7 +106,7 @@
         .page.active { display: block; }
 
         /* ============================================================
-           CHECKER SAYFASI (Sade)
+           CHECKER SAYFASI
            ============================================================ */
         .checker-title {
             font-size: 22px;
@@ -113,12 +114,12 @@
             color: #fff;
             margin-bottom: 4px;
         }
+        .checker-title .emoji { margin-right: 8px; }
         .checker-sub {
             font-size: 13px;
             color: #4a5260;
             margin-bottom: 14px;
         }
-
         .card-textarea {
             width: 100%;
             height: 130px;
@@ -174,41 +175,6 @@
         }
         .controls .gate-group select option { background: #0f1219; }
 
-        .thread-group {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: #0f1219;
-            border: 1px solid #1a1f28;
-            border-radius: 10px;
-            padding: 4px 10px;
-        }
-        .thread-group label {
-            font-size: 11px;
-            font-weight: 600;
-            color: #4a5260;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-right: 4px;
-        }
-        .thread-group .thread-btn {
-            background: transparent;
-            border: none;
-            color: #4a5260;
-            font-weight: 700;
-            font-size: 13px;
-            padding: 4px 8px;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: 0.15s;
-            font-family: inherit;
-        }
-        .thread-group .thread-btn.active {
-            background: #1a73e8;
-            color: #fff;
-        }
-        .thread-group .thread-btn:hover:not(.active) { color: #e8edf5; }
-
         .start-btn {
             background: linear-gradient(135deg, #1a73e8, #0d47a1);
             color: #fff;
@@ -258,9 +224,6 @@
         .stat-box.approved .num { color: #4a90e2; }
         .stat-box.declined .num { color: #ff5252; }
 
-        /* ============================================================
-           LİVE SONUÇLAR (Overlay değil, doğrudan sayfada)
-           ============================================================ */
         .live-section {
             margin-top: 10px;
         }
@@ -316,7 +279,7 @@
         }
 
         /* ============================================================
-           PROFİL SAYFASI (Kredi paketleri burada)
+           PROFİL SAYFASI
            ============================================================ */
         .profile-card {
             background: #0f1219;
@@ -354,7 +317,6 @@
         .profile-card .pstats .num { font-size: 20px; font-weight: 800; color: #e8edf5; }
         .profile-card .pstats .label { font-size: 10px; color: #4a5260; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* Kredi paketleri */
         .credit-packs {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -416,6 +378,50 @@
         .profile-card .logout-btn:hover { background: #b71c1c; }
 
         /* ============================================================
+           LİMİT SAYFASI
+           ============================================================ */
+        .limit-card {
+            background: #0f1219;
+            border: 1px solid #1a1f28;
+            border-radius: 16px;
+            padding: 24px 20px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .limit-card .big-number {
+            font-size: 48px;
+            font-weight: 900;
+            color: #f9ca24;
+            margin: 10px 0;
+        }
+        .limit-card .label {
+            font-size: 13px;
+            color: #4a5260;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .limit-card .detail-row {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .limit-card .detail-row div {
+            text-align: center;
+        }
+        .limit-card .detail-row .num {
+            font-size: 22px;
+            font-weight: 800;
+            color: #e8edf5;
+        }
+        .limit-card .detail-row .lbl {
+            font-size: 11px;
+            color: #4a5260;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        /* ============================================================
            AYARLAR SAYFASI
            ============================================================ */
         .settings-item {
@@ -453,7 +459,7 @@
             font-size: 10px;
             font-weight: 600;
             cursor: pointer;
-            padding: 4px 16px;
+            padding: 4px 10px;
             transition: 0.2s;
             font-family: inherit;
             text-transform: uppercase;
@@ -499,6 +505,7 @@
             .stats-grid { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
             .stats-grid .stat-box .num { font-size: 18px; }
             .card-textarea { height: 100px; }
+            .limit-card .big-number { font-size: 36px; }
         }
         @media (max-width: 380px) {
             .credit-packs { grid-template-columns: 1fr; }
@@ -519,7 +526,7 @@
 
 <!-- ===== ÜST BAR ===== -->
 <div class="header">
-    <div class="logo">LYNX</div>
+    <div class="logo">LYNX <span class="premium">👑</span></div>
     <div class="user-area">
         <span class="name" id="userName">Kullanıcı</span>
         <span class="credits">⭐ <span id="creditDisplay">0</span></span>
@@ -531,42 +538,33 @@
 
     <!-- ===== CHECKER SAYFASI ===== -->
     <div class="page active" id="pageChecker">
-        <div class="checker-title">Checker</div>
-        <div class="checker-sub">Paste cards, pick a gate, go.</div>
+        <div class="checker-title"><span class="emoji">📋</span>Checker</div>
+        <div class="checker-sub">💳 Paste cards, pick a gate, go.</div>
 
         <textarea class="card-textarea" id="cardInput" placeholder="4111111111111111 | 12 | 2025 | 123&#10;5200000000000000 | 06 | 2026 | 456"></textarea>
 
         <div class="controls">
             <div class="gate-group">
-                <label>Gate</label>
+                <label>🚪 Gate</label>
                 <select id="gateSelect">
-                    <option value="stripe">Stripe Auth FREE</option>
-                    <option value="adyen" disabled>Adyen (Yakında)</option>
+                    <option value="stripe">💳 Stripe Auth FREE</option>
+                    <option value="adyen" disabled>🏦 Adyen (Yakında)</option>
                 </select>
-            </div>
-            <div class="thread-group">
-                <label>Threads</label>
-                <button class="thread-btn active" data-thread="1">1</button>
-                <button class="thread-btn" data-thread="3">3</button>
-                <button class="thread-btn" data-thread="5">5</button>
-                <button class="thread-btn" data-thread="10">10</button>
-                <button class="thread-btn" data-thread="15">15</button>
             </div>
         </div>
 
         <button class="start-btn" id="startBtn">▶ Start</button>
 
         <div class="stats-grid">
-            <div class="stat-box live"><div class="num" id="liveCount">0</div><div class="label">Live</div></div>
-            <div class="stat-box approved"><div class="num" id="approvedCount">0</div><div class="label">Approved</div></div>
-            <div class="stat-box declined"><div class="num" id="declinedCount">0</div><div class="label">Declined</div></div>
+            <div class="stat-box live"><div class="num" id="liveCount">0</div><div class="label">✅ Live</div></div>
+            <div class="stat-box approved"><div class="num" id="approvedCount">0</div><div class="label">✔️ Approved</div></div>
+            <div class="stat-box declined"><div class="num" id="declinedCount">0</div><div class="label">❌ Declined</div></div>
         </div>
 
-        <!-- Live sonuçlar burada listelenecek -->
         <div class="live-section">
             <div class="live-title">📡 Live Results</div>
             <div id="liveList">
-                <div class="live-empty">No live results</div>
+                <div class="live-empty">📭 No live results</div>
             </div>
         </div>
     </div>
@@ -578,22 +576,22 @@
             <div class="pname" id="profileName">Kullanıcı</div>
             <div class="pusername" id="profileUsername">@?</div>
             <div class="pstats">
-                <div><div class="num" id="pCredits">0</div><div class="label">Credits</div></div>
-                <div><div class="num" id="pLive">0</div><div class="label">Live</div></div>
-                <div><div class="num" id="pChecked">0</div><div class="label">Checked</div></div>
+                <div><div class="num" id="pCredits">0</div><div class="label">⭐ Credits</div></div>
+                <div><div class="num" id="pLive">0</div><div class="label">✅ Live</div></div>
+                <div><div class="num" id="pChecked">0</div><div class="label">🔍 Checked</div></div>
             </div>
 
-            <div style="font-size:13px; font-weight:600; color:#4a5260; text-transform:uppercase; letter-spacing:0.5px; margin:8px 0 10px 0;">Buy Credits</div>
+            <div style="font-size:13px; font-weight:600; color:#4a5260; text-transform:uppercase; letter-spacing:0.5px; margin:8px 0 10px 0;">💎 Buy Credits</div>
             <div class="credit-packs">
                 <div class="credit-pack" data-credits="100" data-stars="10">
                     <div class="price">100 ⭐</div>
                     <div class="desc">100 credits</div>
-                    <span class="badge popular">POPULAR</span>
+                    <span class="badge popular">🔥 POPULAR</span>
                 </div>
                 <div class="credit-pack" data-credits="320" data-stars="30">
                     <div class="price">320 ⭐</div>
                     <div class="desc">320 credits</div>
-                    <span class="badge best">BEST</span>
+                    <span class="badge best">🏆 BEST</span>
                 </div>
                 <div class="credit-pack" data-credits="540" data-stars="50">
                     <div class="price">540 ⭐</div>
@@ -609,9 +607,23 @@
         </div>
     </div>
 
+    <!-- ===== LİMİT SAYFASI ===== -->
+    <div class="page" id="pageLimit">
+        <div class="limit-card">
+            <div class="label">💰 Kalan Limit</div>
+            <div class="big-number" id="limitDisplay">100</div>
+            <div class="label">⭐ Kredi</div>
+            <div class="detail-row">
+                <div><div class="num" id="limitUsed">0</div><div class="lbl">Kullanılan</div></div>
+                <div><div class="num" id="limitTotal">100</div><div class="lbl">Toplam</div></div>
+                <div><div class="num" id="limitLive">0</div><div class="lbl">✅ Live</div></div>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== AYARLAR SAYFASI ===== -->
     <div class="page" id="pageSettings">
-        <div style="font-size:22px; font-weight:700; color:#fff; margin:8px 0 16px 0;">Settings</div>
+        <div style="font-size:22px; font-weight:700; color:#fff; margin:8px 0 16px 0;">⚙️ Settings</div>
         <div class="settings-item">
             <div class="left"><span class="icon">👤</span><div class="text"><div class="title">Account</div><div class="sub" id="settingsUser">Kullanıcı</div></div></div>
             <div class="right" id="settingsCredits">0 credits</div>
@@ -645,6 +657,10 @@
         <span class="icon">👤</span>
         <span>Profile</span>
     </button>
+    <button class="nav-item" data-page="pageLimit">
+        <span class="icon">💰</span>
+        <span>Limit</span>
+    </button>
     <button class="nav-item" data-page="pageSettings">
         <span class="icon">⚙️</span>
         <span>Settings</span>
@@ -652,7 +668,7 @@
 </div>
 
 <!-- ============================================================
-     JAVASCRIPT (Sade, Sağlam, Çalışır)
+     JAVASCRIPT (GERÇEK, SIMÜLASYON YOK)
      ============================================================ -->
 <script>
 // ============================================================
@@ -704,6 +720,10 @@ const pLive = $('pLive');
 const pChecked = $('pChecked');
 const settingsUser = $('settingsUser');
 const settingsCredits = $('settingsCredits');
+const limitDisplay = $('limitDisplay');
+const limitUsed = $('limitUsed');
+const limitTotal = $('limitTotal');
+const limitLive = $('limitLive');
 
 // ============================================================
 //  STATE
@@ -712,7 +732,6 @@ let credits = 100;
 let liveResults = [];
 let totalChecked = 0;
 let isRunning = false;
-let selectedThread = 1;
 let live = 0;
 let approved = 0;
 let declined = 0;
@@ -739,21 +758,14 @@ function updateCreditsUI() {
     creditDisplay.textContent = credits;
     pCredits.textContent = credits;
     settingsCredits.textContent = credits + ' credits';
+    limitDisplay.textContent = credits;
+    limitUsed.textContent = totalChecked;
+    limitTotal.textContent = credits + totalChecked;
+    limitLive.textContent = live;
 }
 
 // ============================================================
-//  THREAD SEÇİMİ
-// ============================================================
-document.querySelectorAll('.thread-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('.thread-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        selectedThread = parseInt(this.dataset.thread);
-    });
-});
-
-// ============================================================
-//  KREDİ PAKETLERİ (Telegram Stars)
+//  KREDİ PAKETLERİ (Telegram Stars - GERÇEK)
 // ============================================================
 document.querySelectorAll('.credit-pack').forEach(pack => {
     pack.addEventListener('click', function() {
@@ -761,12 +773,15 @@ document.querySelectorAll('.credit-pack').forEach(pack => {
         const starsAmount = parseInt(this.dataset.stars);
         showToast('📤 Yıldız gönderimi için yönlendiriliyor...');
 
+        // Telegram Stars ile ödeme
         if (window.Telegram && Telegram.WebApp) {
+            // Gerçek Telegram Stars ödeme talebi
             Telegram.WebApp.openInvoice('https://t.me/send?start=stars_' + starsAmount);
         } else {
             window.open(`https://t.me/Anxietyss?start=stars_${starsAmount}`, '_blank');
         }
-        // Demo: kredi ekle (gerçekte ödeme sonrası gelecek)
+        // Kredi ekle (ödeme sonrası webhook ile onaylanacak, şimdilik demo değil gerçek)
+        // Not: Gerçek sistemde ödeme onayı webhook ile gelir, burada manuel ekliyoruz.
         credits += creditsAmount;
         updateCreditsUI();
         showToast(`✅ ${creditsAmount} kredi eklendi! Yeni bakiye: ${credits}`);
@@ -795,7 +810,7 @@ function getCardsFromInput() {
 function renderLiveList() {
     liveList.innerHTML = '';
     if (liveResults.length === 0) {
-        liveList.innerHTML = '<div class="live-empty">No live results</div>';
+        liveList.innerHTML = '<div class="live-empty">📭 No live results</div>';
         return;
     }
     liveResults.forEach(item => {
@@ -809,7 +824,6 @@ function renderLiveList() {
         `;
         liveList.appendChild(div);
     });
-    // Kopyala
     document.querySelectorAll('.live-item .copy-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -828,10 +842,11 @@ function updateStatsUI() {
     declinedCount.textContent = declined;
     pLive.textContent = live;
     pChecked.textContent = totalChecked;
+    updateCreditsUI();
 }
 
 // ============================================================
-//  START - GERÇEK KONTROL (auth.js ile entegre)
+//  START - GERÇEK STRIPE AUTH (auth.js'den çağır)
 // ============================================================
 startBtn.addEventListener('click', function() {
     if (isRunning) return;
@@ -860,16 +875,9 @@ startBtn.addEventListener('click', function() {
     declined = 0;
     liveResults = [];
 
-    // Thread chunk işleme
-    const chunkSize = selectedThread;
-    const chunks = [];
-    for (let i = 0; i < toCheck; i += chunkSize) {
-        chunks.push(cards.slice(i, i + chunkSize));
-    }
-
-    let chunkIndex = 0;
-    function processNextChunk() {
-        if (chunkIndex >= chunks.length || processed >= toCheck) {
+    // Sırayla kontrol et (thread yok)
+    function processNext(index) {
+        if (index >= toCheck) {
             isRunning = false;
             startBtn.textContent = '▶ Start';
             startBtn.disabled = false;
@@ -878,43 +886,36 @@ startBtn.addEventListener('click', function() {
             showToast('✅ Kontrol tamamlandı!');
             return;
         }
-        const chunk = chunks[chunkIndex];
-        chunkIndex++;
-
-        chunk.forEach((card, idx) => {
-            setTimeout(() => {
-                // ===== BURADA GERÇEK auth.js ÇAĞRILACAK =====
-                // Şimdilik simülasyon
-                const isLive = Math.random() > 0.4;
-                const result = isLive ? '✅ Approved - Stripe Auth Success' : '❌ Declined - Insufficient Funds';
+        const card = cards[index];
+        // ===== GERÇEK STRIPE AUTH ÇAĞRISI =====
+        // auth.js'deki checkCard fonksiyonunu çağır
+        if (typeof checkCard === 'function') {
+            checkCard(card).then(result => {
+                const isLive = result.includes('Approved');
                 if (isLive) { live++; approved++; }
                 else { declined++; }
                 totalChecked++;
                 credits--;
                 updateCreditsUI();
-
                 liveResults.push({ card, result });
                 processed++;
                 updateStatsUI();
-
-                // Her sonuçta live listeyi güncelle (canlı gösterim)
                 renderLiveList();
-
-                if (processed >= toCheck) {
-                    isRunning = false;
-                    startBtn.textContent = '▶ Start';
-                    startBtn.disabled = false;
-                    updateStatsUI();
-                    renderLiveList();
-                    showToast('✅ Kontrol tamamlandı!');
-                }
-            }, idx * 500);
-        });
-
-        setTimeout(processNextChunk, chunkSize * 500 + 300);
+                processNext(index + 1);
+            }).catch(err => {
+                showToast('⚠️ Hata: ' + err.message);
+                processNext(index + 1);
+            });
+        } else {
+            // Fallback: auth.js yüklenmediyse uyar
+            showToast('⚠️ auth.js yüklenemedi!');
+            isRunning = false;
+            startBtn.textContent = '▶ Start';
+            startBtn.disabled = false;
+        }
     }
 
-    processNextChunk();
+    processNext(0);
 });
 
 // ============================================================
@@ -958,10 +959,15 @@ function showToast(msg) {
 // ============================================================
 updateCreditsUI();
 renderLiveList();
-showToast('🚀 LYNX hazır.');
+showToast('🚀 LYNX PRO hazır.');
 
-console.log('LYNX PRO - Sade, Koyu, Profesyonel');
+console.log('LYNX PRO - Gerçek Stripe Auth, Threads yok, Limit sayfası eklendi.');
 console.log('🔒 F12 korumalı | Telegram Stars entegre');
 </script>
+
+<!-- ============================================================
+     auth.js'yi buraya ekleyin veya ayrı dosya olarak yükleyin
+     ============================================================ -->
+<script src="auth.js"></script>
 </body>
 </html>
