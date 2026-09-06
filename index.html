@@ -9,42 +9,60 @@
 </head>
 <body>
     <div id="app">
-        <!-- LOGO -->
+        <!-- GTA Logo -->
         <div class="logo-container">
-            <img src="https://via.placeholder.com/120x120/000000/FFFFFF?text=D" alt="Logo" id="logo">
+            <img src="https://i.imgur.com/YOUR_GTA_LOGO.png" alt="GTA Logo" id="logo" 
+                 onerror="this.src='https://via.placeholder.com/150x150/000/FFF?text=GTA'">
+            <div class="logo-glow"></div>
         </div>
 
-        <!-- ANA BUTONLAR -->
+        <h1 class="title">💎 Dorksk Checker</h1>
+        <p class="subtitle">Premium Card Verification Service</p>
+
+        <!-- Channel Buttons -->
         <div class="main-buttons">
-            <button class="btn-primary" onclick="joinChannel()">📢 Join Channel</button>
-            <button class="btn-primary" onclick="joinChat()">💬 Join Chat</button>
+            <button class="btn-primary" onclick="joinChannel()">
+                <span>📢</span> Join Channel
+            </button>
+            <button class="btn-primary" onclick="joinChat()">
+                <span>💬</span> Join Chat
+            </button>
         </div>
 
-        <!-- VERIFICATION -->
-        <div class="verify-section">
-            <button class="btn-verify" onclick="verify()">🔓 Verify</button>
+        <!-- Card Input -->
+        <div class="input-section">
+            <input type="text" id="cc-input" placeholder="4111111111111111|12|26|123" 
+                   class="cc-input" spellcheck="false">
+            <button class="btn-check" onclick="checkCard()">🚀 Check</button>
         </div>
 
-        <!-- HIDDEN AUTH (Verify sonrası görünür) -->
+        <!-- Result -->
+        <div id="result" class="result-box"></div>
+
+        <!-- Quick Stats -->
+        <div class="stats-container" id="stats">
+            <div class="stat-item approved">
+                <span class="stat-number" id="approved-count">0</span>
+                <span class="stat-label">✅ Approved</span>
+            </div>
+            <div class="stat-item declined">
+                <span class="stat-number" id="declined-count">0</span>
+                <span class="stat-label">❌ Declined</span>
+            </div>
+            <div class="stat-item insufficient">
+                <span class="stat-number" id="insufficient-count">0</span>
+                <span class="stat-label">⚠️ Insufficient</span>
+            </div>
+        </div>
+
+        <!-- Admin Button -->
+        <button class="btn-admin" onclick="openAdmin()">🔐 Admin Panel</button>
+
+        <!-- Auth Section (Hidden) -->
         <div id="auth-section" style="display:none;">
-            <h2>Welcome!</h2>
+            <h2>🎯 Welcome!</h2>
             <button class="btn-auth" onclick="register()">📝 Register</button>
             <button class="btn-auth" onclick="login()">🔑 Login</button>
-        </div>
-
-        <!-- CARD CHECKER (Login sonrası) -->
-        <div id="card-section" style="display:none;">
-            <h3>💳 Card Checker</h3>
-            <input type="text" id="cc-input" placeholder="4111111111111111|12|26|123">
-            <button onclick="checkCard()">Check</button>
-            <div id="result"></div>
-
-            <!-- Kart Listesi -->
-            <div id="card-list">
-                <div class="card-item approved">✅ Approved - 4111****1111</div>
-                <div class="card-item declined">❌ Declined - 5111****2222</div>
-                <div class="card-item insufficient">⚠️ Insufficient Funds - 6111****3333</div>
-            </div>
         </div>
     </div>
     <script src="script.js"></script>
